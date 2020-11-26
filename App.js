@@ -2,11 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import  WelcomeScreen  from "./Screens/WelcomePage";
-import SignIn from "./Screens/SignIn"
+import SignIn from "./Screens/SignIn";
+import SignUp from "./Screens/SignUp"
 
 export default function App() {
   return (
-      <SignIn />
+      <SignUp />
     );
 }
 
