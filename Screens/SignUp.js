@@ -29,8 +29,10 @@ const SignUp=({navigation})=>{
 
         </View>
         <View style={styles.button}>
-        <CustomButton style={{margin: 10}} text="Sign Up" />
-        <CustomButton style={{margin: 10}} text="Sign In" />
+        <CustomButton  text="Sign Up" />
+        </View>
+        <View>
+            <Text>or Already A Member</Text>
         </View>
         
       </View>
