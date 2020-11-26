@@ -11,7 +11,7 @@ import Search from "./Screens/Search";
 
 export default function App() {
   return (
-      <WelcomeScreen />
+      <SignUp />
     );
 }
 

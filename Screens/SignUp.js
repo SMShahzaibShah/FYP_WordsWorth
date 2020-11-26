@@ -9,25 +9,25 @@ const SignUp=({navigation})=>{
         <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
         <View style={styles.internalContents}>
           <Text style={styles.text}>Sign Up</Text>
-          <Text style={styles.label}>First Name</Text>
+          <Text style={{...styles.label, marginBottom: -5}}>First Name</Text>
           <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
                 placeholder="Enter First Name"/>
         </View>
-        <Text style={styles.label}>Last Name</Text>
+        <Text style={{...styles.label, marginBottom: -5}}>Last Name</Text>
         <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
                 placeholder="Enter Last Name"/>
         </View>
-        <Text style={styles.label}>Email</Text>
+        <Text style={{...styles.label, marginBottom: -5}}>Email</Text>
         <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
                 placeholder="Enter Email"/>
         </View>
-        <Text style={styles.label}>Password</Text>
+        <Text style={{...styles.label, marginBottom: -5}}>Password</Text>
         <View style={styles.inputContainer}>
         <TextInput 
                 style={styles.textInput}
