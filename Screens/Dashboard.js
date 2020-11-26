@@ -1,45 +1,63 @@
-import React from 'react';
-import { ScrollView, TextInput,StyleSheet, Text, View, Button, Image, ScrollView, TouchableOpacity } from 'react-native';
-import CustomButton from "../component/ButtonComponent";
+import React ,{useState} from 'react';
+import { ScrollView,StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
+import {DashboardData} from "../constants/DashboardData";
 
 const DashBoard=({navigation})=>{
+    const[getList, setList]=useState(DashboardData);
+    
+    const scrolView=(
+        <ScrollView style={styles.scrollView}>
+        {getList.map((item) => 
+        <TouchableOpacity
+        activeOpacity={0.7}
+        key={item.key}
+        onPress={()=>{}}>
+            <View style={{...styles.scrollViewItem, backgroundColor: item.backColor}}>
+              <Text style={styles.scrollViewText}> {item.data}</Text>
+            </View>
+        </TouchableOpacity>
+          )}
+      </ScrollView>
+      );
+    
     return(
       <View style={styles.container}>
-          <Text style={styles.text}>Dashboard</Text>
-          <ScrollView>
-                <TouchableOpacity key={Math.random()} activeOpacity={0.7}>
-                    <View>
-                        <Text>Search a Book</Text>
-                    </View>
-                    
-                </TouchableOpacity>
-          </ScrollView>
-
-        <View style={styles.divContainer}>
-            <Text style={styles.divText} >Search a Book</Text>
-        </View >
-        <View style={styles.divContainer}>
-            <Text style={styles.divText}>Libray</Text>
-        </View>
-        <View style={styles.divContainer}>
-            <Text style={styles.divText}>Conversion To Audio book</Text>
-        </View>
-        <View style={styles.divContainer}>
-            <Text style={styles.divText}>Audio Player</Text>
-        </View>
-        
+          <Text style={styles.text}>DashBoard</Text>
+        {scrolView}
       </View>
   );
   }
   
   const styles = StyleSheet.create({
-    container:{
+    crossScrollViewText:{
+        fontSize: 16,
+        color:'white',
+        fontWeight: "bold"
+      }
+      ,scrollViewText:{
+        fontSize: 22,
+        color: 'white'
+      },scrollView:{
+        width: '80%',
+      },
+      scrollViewItem:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+       // backgroundColor:"grey",
+        alignSelf: "center",
+        padding: 10,
+        margin:5,
+        width: '97%',
+        height: 100,
+        borderRadius: 10,
+      },
+      container:{
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
-       //paddingTop: 40,
+       // justifyContent: 'center',
+       paddingTop: 40,
     },
     text:{
         fontSize: 32,
