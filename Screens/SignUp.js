@@ -6,33 +6,41 @@ import CustomButton from "../component/ButtonComponent";
 const SignUp=({navigation})=>{
     return(
       <View style={styles.container}>
+        <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
+        <View style={styles.internalContents}>
           <Text style={styles.text}>Sign Up</Text>
-        <View style={styles.inputContainer}>
+          <Text style={styles.label}>First Name</Text>
+          <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
                 placeholder="Enter First Name"/>
         </View>
+        <Text style={styles.label}>Last Name</Text>
         <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
                 placeholder="Enter Last Name"/>
         </View>
+        <Text style={styles.label}>Email</Text>
         <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
                 placeholder="Enter Email"/>
         </View>
+        <Text style={styles.label}>Password</Text>
         <View style={styles.inputContainer}>
         <TextInput 
                 style={styles.textInput}
                 placeholder="Enter Password"/>
+        </View>
+        </View>
 
-        </View>
         <View style={styles.button}>
-        <CustomButton  text="Sign Up" />
+        <CustomButton  text="Countinue" color='red' />
         </View>
-        <View>
-            <Text>or Already A Member</Text>
+        <View style={{flexDirection:"row", margin: 20, justifyContent: "space-between", width: "50%", alignSelf: "center"}}>
+        <Text style={styles.Hitext}>Have an Account ?</Text>
+        <Text style={{...styles.label, alignSelf: "center"}}>SignIn</Text>
         </View>
         
       </View>
@@ -40,39 +48,61 @@ const SignUp=({navigation})=>{
   }
   
   const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-       //paddingTop: 40,
+    label:{
+      fontSize: 16,
+      color: 'red',
+      //alignSelf:'center'
+  },
+  internalContents:{
+    width: "85%", 
+  }
+  ,container:{
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+     // justifyContent: 'center',
+     //paddingTop: 40,
+  },
+  ImagesSty:{
+    width: 200,
+    height: 60,
+    marginTop: 100,
+    marginBottom: 50,
+    //justifyContent: "center"
+  },
+  textInput:{
+      borderColor: "grey",
+      //borderWidth: 2,
+      borderBottomWidth: 2,
+      width: '95%',
+      //borderRadius: 50,
+      fontSize: 16,
+      padding: 10,
     },
-    textInput:{
-        borderColor: "red",
-        //borderWidth: 2,
-        borderBottomWidth: 2,
-        width: '78%',
-        //borderRadius: 50,
-        fontSize: 16,
-        padding: 10,
-      },inputContainer:{
-        flexDirection: "row",
-        width: '75%',
-        justifyContent: "space-between",
-        alignItems: "flex-end"
-    
-      },
-      text:{
-        fontSize: 32,
-        color: 'darkgrey',
-      },button:{
-          margin: 10,
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "row",
-          padding: 10,
-      }
-
+    inputContainer:{
+      flexDirection: "row",
+      width: '100%',
+      justifyContent: "space-between",
+      alignItems: "flex-end",
+      paddingBottom: 10,
+      paddingTop: 0,
+    },
+    text:{
+      fontSize: 30,
+      color: 'black',
+      marginBottom: 5,
+    },button:{
+        margin: 10,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    Hitext:{
+      fontStyle:"italic",
+      color: "lightgrey",
+      fontSize: 16,
+      paddingTop: 10,
+      paddingBottom: 10,
+    }
   });
 
   export default SignUp;

@@ -6,7 +6,7 @@ const WelcomeScreen=({navigation})=>{
       <View style={styles.container}>
         <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
         <Text style={styles.SecondText}>Words Worth helps you search books conversion to audiobook, save time and stay organized</Text>
-        <CustomButton text="Get Started" color="grey" />
+        <CustomButton text="Get Started" color="red" />
 
         <View style={styles.bottom}>
           <Text style={styles.thirdText}>By Joining you agree to share information with people in your friendlist</Text>

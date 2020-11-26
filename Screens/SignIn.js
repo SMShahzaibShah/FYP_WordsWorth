@@ -27,11 +27,11 @@ const SignIn=({navigation})=>{
         <View style={styles.button}>
         <CustomButton text="Sign In" color='red' />
         </View>
-        <View style={{flexDirection:"row", margin: 20, justifyContent: "space-between", width: "80%"}}>
-        <Text style={styles.label}>Forget Password</Text>
-        <Text style={styles.label}>SignUp</Text>
+        <View style={{flexDirection:"row", margin: 20, justifyContent: "space-between", width: "55%"}}>
+        <Text style={styles.Hitext}>Create an Account</Text>
+        <Text style={{...styles.label, alignSelf:'center'}}>SignUp</Text>
         </View>
-        
+        <Text style={{...styles.label, marginTop: -10}}>Forgot Password ?</Text>
         
       </View>
   );
@@ -79,8 +79,6 @@ const SignIn=({navigation})=>{
       text:{
         fontSize: 30,
         color: 'black',
-        
-
       },button:{
           margin: 10,
           alignItems: "center",
