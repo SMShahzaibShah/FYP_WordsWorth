@@ -4,11 +4,12 @@ import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import  WelcomeScreen  from "./Screens/WelcomePage";
 import SignIn from "./Screens/SignIn";
 import SignUp from "./Screens/SignUp";
-import Prefrences from "./Screens/Prefrences"
+import Prefrences from "./Screens/Prefrences";
+import Dashboard from "./Screens/Dashboard";
 
 export default function App() {
   return (
-      <Prefrences />
+      <Dashboard />
     );
 }
 
