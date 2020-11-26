@@ -26,7 +26,8 @@ const WelcomeScreen=({navigation})=>{
       height: 70,
       marginTop: 300,
       justifyContent: "center"
-    },SecondText:{
+    },
+    SecondText:{
       fontSize: 16,
       paddingTop: 20,
       width: "75%",
