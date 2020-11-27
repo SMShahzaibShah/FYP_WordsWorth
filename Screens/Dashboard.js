@@ -1,5 +1,5 @@
 import React ,{useState} from 'react';
-import { ScrollView,StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { ScrollView,StyleSheet, Text, View, TouchableOpacity ,Image} from 'react-native';
 
 import {DashboardData} from "../constants/DashboardData";
 
@@ -23,13 +23,27 @@ const DashBoard=({navigation})=>{
     
     return(
       <View style={styles.container}>
-          <Text style={styles.text}>DashBoard</Text>
+          <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
+          <Text style={styles.text}>Dashboard</Text>
+          <View style={styles.internalContents}> 
+
+          </View>
         {scrolView}
       </View>
   );
   }
   
   const styles = StyleSheet.create({
+    internalContents:{
+      width: "85%", 
+    },
+    ImagesSty:{
+      width: 200,
+      height: 60,
+      marginTop: 50,
+      marginBottom: 20,
+      //justifyContent: "center"
+    },
     crossScrollViewText:{
         fontSize: 16,
         color:'white',
@@ -49,7 +63,7 @@ const DashBoard=({navigation})=>{
         padding: 10,
         margin:5,
         width: '97%',
-        height: 100,
+        height: 60,
         borderRadius: 10,
       },
       container:{
@@ -57,11 +71,11 @@ const DashBoard=({navigation})=>{
         backgroundColor: '#fff',
         alignItems: 'center',
        // justifyContent: 'center',
-       paddingTop: 40,
+       //paddingTop: 40,
     },
     text:{
-        fontSize: 32,
-        color: 'darkgrey',
+      fontSize: 30,
+      color: 'black',
       }
       ,divContainer:{
           width: "90%",

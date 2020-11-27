@@ -12,7 +12,7 @@ const Search=({navigation})=>{
                 placeholder="Search a Book"/>
             <Ionicons style={styles.iconStyle} name="ios-mic" size={35} color="black" />
         </View>
-        <CustomButton text="Search"/>
+        <CustomButton text="Search" color='red'/>
       </View>
   );
   }
