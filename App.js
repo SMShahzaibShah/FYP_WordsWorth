@@ -13,7 +13,7 @@ import ListDisplay from './Screens/ListDisplay';
 export default function App() {
   const [getText, setText] = useState('Nothing');
   const changeName=()=>{
-    setText('Sjajz')
+    setText('Shahzaib')
   }
 
   return (
