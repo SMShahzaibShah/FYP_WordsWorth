@@ -5,7 +5,7 @@ import CustomButton from "../component/ButtonComponent";
 import * as firebase from "firebase"
 
 
-const SignUp=({navigation,route})=>{
+const UpdateProfileScreen=({navigation,route})=>{
   const [email,setemail]=useState("");
   const [pass,setpass]=useState("");
   const [name,setname]=useState("")
@@ -126,4 +126,4 @@ const SignUp=({navigation,route})=>{
     }
   });
 
-  export default SignUp;
+  export default UpdateProfileScreen;

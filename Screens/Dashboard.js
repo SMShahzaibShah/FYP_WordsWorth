@@ -3,8 +3,9 @@ import { ScrollView,StyleSheet, Text, View, TouchableOpacity ,Image} from 'react
 
 import {DashboardData} from "../constants/DashboardData";
 
-const DashBoard=({navigation})=>{
+const DashBoard=({navigation,route})=>{
     const[getList, setList]=useState(DashboardData);
+    
     
     const scrolView=(
         <ScrollView style={styles.scrollView}>
@@ -12,15 +13,19 @@ const DashBoard=({navigation})=>{
         <TouchableOpacity
         activeOpacity={0.7}
         key={item.key}
-        onPress={()=>{}}>
+        onPress={()=>{displayAscreen(item)}}>
             <View style={{...styles.scrollViewItem, backgroundColor: item.backColor}}>
-              <Text style={styles.scrollViewText}> {item.data}</Text>
+              <Text style={styles.scrollViewText}> {item.data} </Text>
             </View>
         </TouchableOpacity>
           )}
       </ScrollView>
       );
-    
+      const displayAscreen=(item)=>{
+        if(item.data === "Search A Book"){
+          navigation.navigate('Search')
+        }  
+      }
     return(
       <View style={styles.container}>
           <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>

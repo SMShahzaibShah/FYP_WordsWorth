@@ -1,9 +1,23 @@
-import React from 'react';
-import { TextInput,StyleSheet, Text, View, Button, Image } from 'react-native';
+import   React ,{useEffect,useState} from 'react';
+import { TextInput,StyleSheet, Text, View, Button, Image, TouchableOpacity } from 'react-native';
 import CustomButton from "../component/ButtonComponent";
-
-
-const SignIn=({navigation})=>{
+import * as firebase from "firebase"
+const SignIn=({navigation,route})=>{
+  const [email,setemail]=useState("");
+  const [pass,setpass]=useState("");
+  
+  const onSignIn=()=>{
+    firebase.auth().signInWithEmailAndPassword(email, pass)
+    .then((user) => {
+      console.log("User INformation is ", user)
+      navigation.navigate('Dashboard')
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      alert(errorCode)
+    });  
+  }
     return(
       <View style={styles.container}>
         <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
@@ -14,22 +28,33 @@ const SignIn=({navigation})=>{
         <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
-                placeholder="Enter username/Email"/>
+                placeholder="Enter username/Email"
+                value={email}
+                onChangeText={(text)=>setemail(text)}
+                />
         </View>
         <Text style={styles.label}>Password</Text>
         <View style={styles.inputContainer}>
         <TextInput 
                 style={styles.textInput}
-                placeholder="Enter Password"/>
-
+                placeholder="Enter Password"
+                secureTextEntry
+                value={pass}
+                onChangeText={(text)=>setpass(text)}
+                />
+                
         </View>
         </View>
         <View style={styles.button}>
-        <CustomButton text="Sign In" color='red' />
+        <CustomButton text="Sign In" color='red' onPressEvent={()=>onSignIn()}/>
         </View>
         <View style={{flexDirection:"row", margin: 20, justifyContent: "space-between", width: "55%"}}>
         <Text style={styles.Hitext}>Create an Account</Text>
-        <Text style={{...styles.label, alignSelf:'center'}}>SignUp</Text>
+        <TouchableOpacity 
+        onPress={()=>navigation.navigate("Signup")}>
+          <Text style={{...styles.label, alignSelf:'center'}}>SignUp</Text>
+        </TouchableOpacity>
+                
         </View>
         <Text style={{...styles.label, marginTop: -10}}>Forgot Password ?</Text>
         
