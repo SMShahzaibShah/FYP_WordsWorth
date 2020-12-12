@@ -28,11 +28,21 @@ const DashBoard=({navigation,route})=>{
       }
     return(
       <View style={styles.container}>
-          <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
-          <Text style={styles.text}>Dashboard</Text>
-          <View style={styles.internalContents}> 
 
+          <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
+          <View style={{flexDirection: "row", width: "70%", justifyContent:"space-between", alignSelf:"center"}}>
+            <Text style={styles.text}>Dashboard</Text>
+            <TouchableOpacity onPress={()=> navigation.navigate('EditProfile', {
+        usersname: route.params.users
+        } )}>
+              <Text style={{fontSize: 20}}>Edit Profile</Text>
+            </TouchableOpacity>
           </View>
+         {         
+          //<View style={styles.internalContents}> 
+           // {alert(route.params.users.user.email)}
+         // </View>
+          }
         {scrolView}
       </View>
   );

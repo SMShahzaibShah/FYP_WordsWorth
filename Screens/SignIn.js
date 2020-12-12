@@ -10,12 +10,15 @@ const SignIn=({navigation,route})=>{
     firebase.auth().signInWithEmailAndPassword(email, pass)
     .then((user) => {
       console.log("User INformation is ", user)
-      navigation.navigate('Dashboard')
+      navigation.navigate('Dashboard' , {
+        users: user
+        })
     })
     .catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
       alert(errorCode)
+     // navigation.navigate('SignIn')
     });  
   }
     return(

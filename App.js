@@ -13,6 +13,8 @@ import Prefrences from "./Screens/Prefrences";
 import Search from "./Screens/Search";
 import DashBoard from './Screens/Dashboard';
 import ListDisplay from './Screens/ListDisplay';
+import EditProfile from './Screens/EditProfile';
+
 
 import * as firebase from "firebase"
 
@@ -42,6 +44,7 @@ const stacknavigator =(
     <Stack.Navigator initialRouteName={"Signin"}
     screenOptions={
       {
+        headerShown: false,
         headerTitleAlign: "center",
         headerTintColor: 'black', // change header color
         headerStyle:{
@@ -62,9 +65,14 @@ const stacknavigator =(
         // }
         headerRight: () => {}
       }}/>
-      <Stack.Screen name="Signup" component={SignUp} />
+      <Stack.Screen name="Signup" component={SignUp} 
+      options={{
+        //headerShown: true,
+      }}
+      />
       <Stack.Screen name="Dashboard" component={DashBoard} />
       <Stack.Screen name="Search" component={Search} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   </NavigationContainer>
 )

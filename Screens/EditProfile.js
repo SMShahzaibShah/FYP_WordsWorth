@@ -5,55 +5,46 @@ import CustomButton from "../component/ButtonComponent";
 import * as firebase from "firebase"
 
 
-const SignUp=({navigation,route})=>{
+const EditProfile=({navigation,route})=>{
   const [email,setemail]=useState("");
   const [pass,setpass]=useState("");
-  const [name,setname]=useState({fName: '' , LName:''})
+  const [name,setname]=useState({FName:'', LName:''})
   
-  
-  const onSignUp=()=>{
-    firebase.auth().createUserWithEmailAndPassword(email,pass)
-    .then((user) => {
-      console.log("User INformation is ", user)
-      firebase.auth().signInWithEmailAndPassword(email, pass)
-        .then((user) => {
-        user=firebase.auth().currentUser;
-          
-      user.updateProfile({
-        displayName: name.fName +","+ name.LName
-      })
-      alert("User Created")
-      setemail("")
-      setpass("")
-      setname({fName: '', LName:''})
-    })
-    .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      alert(errorCode)
-     // navigation.navigate('SignIn')
+  const onUpdateProfile=()=>{
+    var user = firebase.auth().currentUser;
+    user.updateProfile({
+      displayName: name.fName +","+ name.LName
+    }).then(function() {
+    // Update successful.
+    }).catch(function(error) {
+    // An error happened.
     });
-    })
-    .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      alert(errorCode)
-     // navigation.navigate('SignIn')
-    });    
+    user.updatePassword(pass).then(function() {
+      // Update successful.
+    }).catch(function(error) {
+      // An error happened.
+    });  
   }
- 
+
+  useEffect(()=>{
+    var disName = route.params.usersname.user.displayName
+    var  disNamear = disName.split(',')
+    setname({FName: disNamear[0], LName: disNamear[1]})
+    setemail(route.params.usersname.user.email)
+  },[]) 
     return(
       <View style={styles.container}>
+        {console.log(name)}
+        
         <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
         <View style={styles.internalContents}>
-          <Text style={styles.text}>Sign Up</Text>
+          <Text style={styles.text}>Edit Profile</Text>
           <Text style={{...styles.label, marginBottom: -5}}>First Name</Text>
           <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
-                value={name.fName}
+                value={name.FName}
                 onChangeText={(text)=>setname({fName: text, LName: name.LName})}
-                placeholder="Enter First Name"
                 
                 />
         </View>
@@ -61,39 +52,32 @@ const SignUp=({navigation,route})=>{
         <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
-                value={name.LName}
-                onChangeText={(text)=>setname({fName: name.fName, LName: text})}
                 placeholder="Enter Last Name"
-                />
-        </View>
-        <Text style={{...styles.label, marginBottom: -5}}>Email</Text>
-        <View style={styles.inputContainer}>
-            <TextInput 
-                style={styles.textInput}
-                placeholder="Enter Email"
-                value={email}
-                onChangeText={(text)=>setemail(text)}
+                value={name.LName}
+                onChangeText={(text)=>setname({fName: name.FName, LName: text})}
                 />
         </View>
         <Text style={{...styles.label, marginBottom: -5}}>Password</Text>
         <View style={styles.inputContainer}>
         <TextInput 
                 style={styles.textInput}
-                placeholder="Enter Password"
+                placeholder=" Password"
                 value={pass}
                 onChangeText={(text)=>setpass(text)}
+                secureTextEntry
                 />
         </View>
         </View>
 
-        <View style={styles.button}>
-        <CustomButton  text="Countinue" color='red' onPressEvent={()=>onSignUp()} />
+        <View style={{...styles.button, marginBottom: -5, flexDirection: 'row', marginLeft: 5, justifyContent: "space-between", width: "60%"}}>
+            <CustomButton  text="Update" color='green' onPressEvent={()=>onUpdateProfile()} />
+            <CustomButton  text="Cancel" color='red' onPressEvent={()=>navigation.navigate("Dashboard", {user: route.params.username})} />
         </View>
         <View style={{flexDirection:"row", margin: 20, justifyContent: "space-between", width: "50%", alignSelf: "center"}}>
         <Text style={styles.Hitext}>Have an Account ?</Text>
         <TouchableOpacity 
         onPress={()=>navigation.navigate('Signin')}>
-        <Text style={{...styles.label, alignSelf: "center"}}>SignIn</Text>
+        <Text style={{...styles.label, alignSelf: "center", margin: 9}}>SignIn</Text>
         </TouchableOpacity>
         </View>
         
@@ -159,4 +143,4 @@ const SignUp=({navigation,route})=>{
     }
   });
 
-  export default SignUp;
+  export default EditProfile;
