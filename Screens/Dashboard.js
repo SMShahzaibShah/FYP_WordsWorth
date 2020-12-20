@@ -32,9 +32,7 @@ const DashBoard=({navigation,route})=>{
           <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
           <View style={{flexDirection: "row", width: "70%", justifyContent:"space-between", alignSelf:"center"}}>
             <Text style={styles.text}>Dashboard</Text>
-            <TouchableOpacity onPress={()=> navigation.navigate('EditProfile', {
-        usersname: route.params.users
-        } )}>
+            <TouchableOpacity onPress={()=> navigation.navigate('EditProfile')}>
               <Text style={{fontSize: 20}}>Edit Profile</Text>
             </TouchableOpacity>
           </View>

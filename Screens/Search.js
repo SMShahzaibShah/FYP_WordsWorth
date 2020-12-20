@@ -1,18 +1,27 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import { StyleSheet, Text, View, Button, Image, TextInput } from 'react-native';
 import CustomButton from "../component/ButtonComponent";
 import { Ionicons } from '@expo/vector-icons';
-const Search=({navigation})=>{
+
+
+const Search=({navigation,route})=>{
+
+  const [getsearch,setSearch]=useState("");
+
+
     return(
       <View style={styles.container}>
         <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
         <View style={styles.inputContainer}>
             <TextInput 
                 style={styles.textInput}
-                placeholder="Search a Book"/>
+                placeholder="Search a Book"
+                value={getsearch}
+                onChangeText={(text)=> setSearch(text)}
+                />
             <Ionicons style={styles.iconStyle} name="ios-mic" size={35} color="black" />
         </View>
-        <CustomButton text="Search" color='red'/>
+        <CustomButton text="Search" color='red' onPressEvent={()=>navigation.navigate("list")}/>
       </View>
   );
   }

@@ -1,20 +1,23 @@
 import  React,{useState,useEffect} from 'react';
 import { View, ActivityIndicator, Text, Button, StyleSheet, FlatList, Image, TouchableOpacity  } from 'react-native';
 
+import {listData} from "../constants/Data.json";
+
 const ListDisplay = ({ navigation , route }) =>{
       const [getRecord,setRecords]=useState({
-    "userId": 1,
-    "id": 1,
-    "title": "delectus aut autem",
+    "name": "1",
+    "image": "",
+    "file": "",
     "completed": false
   },);
       
       React.useEffect(() => {
       
-        apiCall();
+      setRecords(listData)
         
         
     })
+    /** 
     let url = "https://jsonplaceholder.typicode.com/todos"
     
     const apiCall = () => {
@@ -36,7 +39,7 @@ const ListDisplay = ({ navigation , route }) =>{
 
        
     }
-    
+    */
     return(
    <View style={styles.flatList}>
     <FlatList
@@ -48,11 +51,10 @@ const ListDisplay = ({ navigation , route }) =>{
       >
         <View style={{...styles.ScrollView, flexDirection: "row", padding: 5 }}>
           <View style={{...styles.ScrollViewItem, paddingLeft: 5, paddingRight: 10 }}>
-            <View style={{flexDirection:"column"}}>  
-              <Text style={{...styles.ScrollViewText,fontSize: 20}}>User ID: {item.userId}</Text>
-              <Text style={{...styles.ScrollViewText,fontSize: 20}}>ID: {item.id}</Text>
-              <Text style={{...styles.ScrollViewText,fontSize: 20}}>Title: {item.title}</Text>
-              <Text style={{...styles.ScrollViewText,fontSize: 20}}>Completed : {item.completed}</Text>
+            <View style={{flexDirection:"column"}}>
+              <Text style={{...styles.ScrollViewText,fontSize: 20}}>Book Name: {item.name}</Text>
+              <Text style={{...styles.ScrollViewText,fontSize: 20}}>Image: {item.image}</Text>
+              <Text style={{...styles.ScrollViewText,fontSize: 20}}>File Path : {item.file}</Text>
             </View>
           </View>
         </View>
@@ -86,3 +88,4 @@ const ListDisplay = ({ navigation , route }) =>{
   })
   
   export default ListDisplay;
+  

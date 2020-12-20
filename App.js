@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Ionicons, FontAwesome,FontAwesome5,SimpleLineIcons,MaterialIcons } from "@expo/vector-icons";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
+
 import  WelcomeScreen  from "./Screens/WelcomePage";
 import SignIn from "./Screens/SignIn";
 import SignUp from "./Screens/SignUp";
@@ -14,9 +15,12 @@ import Search from "./Screens/Search";
 import DashBoard from './Screens/Dashboard';
 import ListDisplay from './Screens/ListDisplay';
 import EditProfile from './Screens/EditProfile';
+import List from './Screens/list';
+import BookLibrary from './Screens/BookLibrary'
 
 
 import * as firebase from "firebase"
+import * as firebaseBooksData from "firebase"
 
 
 
@@ -73,14 +77,15 @@ const stacknavigator =(
       <Stack.Screen name="Dashboard" component={DashBoard} />
       <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="list" component={List} />
     </Stack.Navigator>
   </NavigationContainer>
 )
   
 
   return (
-    stacknavigator
-    );
+    <BookLibrary />
+     );
 }
 
 
