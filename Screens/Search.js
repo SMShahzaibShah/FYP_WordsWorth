@@ -35,8 +35,10 @@ const Search=({navigation,route})=>{
     },
     ImagesSty:{
       width: 250,
-      height: 70,
-      margin: 10,
+      height: 60,
+      marginTop: 100,
+      marginBottom: 50,
+      //justifyContent: "center"
     },SecondText:{
       fontSize: 16,
       paddingTop: 20,

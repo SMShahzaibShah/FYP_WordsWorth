@@ -106,7 +106,7 @@ const EditProfile=({navigation,route})=>{
      //paddingTop: 40,
   },
   ImagesSty:{
-    width: 200,
+    width: 250,
     height: 60,
     marginTop: 100,
     marginBottom: 50,

@@ -24,6 +24,8 @@ const DashBoard=({navigation,route})=>{
       const displayAscreen=(item)=>{
         if(item.data === "Search A Book"){
           navigation.navigate('Search')
+        }else if(item.data === "Book Library"){
+          navigation.navigate('bookslibrary')
         }  
       }
     return(
@@ -51,10 +53,10 @@ const DashBoard=({navigation,route})=>{
       width: "85%", 
     },
     ImagesSty:{
-      width: 200,
+      width: 250,
       height: 60,
-      marginTop: 50,
-      marginBottom: 20,
+      marginTop: 100,
+      marginBottom: 50,
       //justifyContent: "center"
     },
     crossScrollViewText:{

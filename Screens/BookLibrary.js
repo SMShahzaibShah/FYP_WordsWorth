@@ -1,7 +1,5 @@
 import  React,{useState,useEffect} from 'react';
 import { View, ActivityIndicator, Text, Button, StyleSheet, FlatList, Image, TouchableOpacity, TextInput  } from 'react-native';
-
-import { Ionicons } from '@expo/vector-icons';
 const firebaseBooksData = require("firebase");
 
 
@@ -90,7 +88,10 @@ const FlatListData=(
             <View style={{...styles.ScrollView, flexDirection: "row", padding: 5 }}>
               <View style={{...styles.ScrollViewItem, paddingLeft: 5, paddingRight: 5 }}>
                 <Text style={{...styles.ScrollViewText,fontSize: 20}}>{item.name}</Text>
-                
+                <View style={{...styles.ScrollView, flexDirection: "row", paddingLeft: 7 }}>
+                    <Image style={{width: 30, height: 20, padding: 20}} source={require('../Images/eyeIcon.png')}/>
+                    <Image style={{width: 30, height: 20, padding: 20}} source={require('../Images/delete.png')}/>
+                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -104,13 +105,11 @@ const FlatListData=(
   return(
   
     <View style={styles.flatList}>
-        <Ionicons name="eye-sharp" size={24} color="black" />
     <TextInput
         style={styles.textInput} 
         placeholder="Enter Book to search"
         onChangeText={(text)=>filterList(text)}
     ></TextInput>
-    <Ionicons name="eye" size={24} color="black" />
     {isLoading === true ? Loading : FlatListData}
     </View>
     
@@ -126,7 +125,7 @@ const FlatListData=(
         backgroundColor: '#ecf0f1',
         padding: 8,
       },
-      flatList: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+      flatList: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 30 },
       ScrollViewItem:{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -134,7 +133,7 @@ const FlatListData=(
         alignSelf: "center",
         padding: 10,
         margin:5,
-        width: '80%',
+        width: '75%',
         borderRadius: 10,
     
       },

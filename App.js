@@ -45,7 +45,7 @@ useEffect(()=>{
 },[])  
 const stacknavigator =(
   <NavigationContainer>
-    <Stack.Navigator initialRouteName={"Signin"}
+    <Stack.Navigator initialRouteName={"welcome"}
     screenOptions={
       {
         headerShown: false,
@@ -57,7 +57,8 @@ const stacknavigator =(
         headerRight: () => <Button title="Edit"></Button>
       }
     }
-    >
+    > 
+      <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="Signin" component={SignIn} 
       options={{
         //title: 
@@ -78,13 +79,14 @@ const stacknavigator =(
       <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="list" component={List} />
+      <Stack.Screen name="bookslibrary" component={BookLibrary} />
     </Stack.Navigator>
   </NavigationContainer>
 )
   
 
   return (
-    <BookLibrary />
+    stacknavigator
      );
 }
 

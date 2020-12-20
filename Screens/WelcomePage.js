@@ -6,7 +6,7 @@ const WelcomeScreen=({navigation})=>{
       <View style={styles.container}>
         <Image style={styles.ImagesSty} source={require('../Images/WelcomePageLogo.png')}/>
         <Text style={styles.SecondText}>Words Worth helps you search books conversion to audiobook, save time and stay organized</Text>
-        <CustomButton text="Get Started" color="red" />
+        <CustomButton text="Get Started" color="red"  onPressEvent={()=>navigation.navigate("Signin")}/>
 
         <View style={styles.bottom}>
           <Text style={styles.thirdText}>By Joining you agree to share information with people in your friendlist</Text>
@@ -22,7 +22,7 @@ const WelcomeScreen=({navigation})=>{
       alignItems: 'center'
     },
     ImagesSty:{
-      width: 250,
+      width: 300,
       height: 70,
       marginTop: 300,
       justifyContent: "center"

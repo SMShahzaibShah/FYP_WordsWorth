@@ -91,6 +91,9 @@ const FlatListData=(
             <View style={{...styles.ScrollView, flexDirection: "row", padding: 5 }}>
               <View style={{...styles.ScrollViewItem, paddingLeft: 5, paddingRight: 5 }}>
                 <Text style={{...styles.ScrollViewText,fontSize: 20}}>{item.name}</Text>
+                <View style={{...styles.ScrollView, flexDirection: "row", paddingLeft: 7 }}>
+                    <Image style={{width: 30, height: 20, padding: 20}} source={require('../Images/download.png')}/>
+                    </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -124,7 +127,7 @@ const FlatListData=(
         backgroundColor: '#ecf0f1',
         padding: 8,
       },
-      flatList: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+      flatList: { flex: 1, alignItems: 'center', justifyContent: 'center',  paddingTop: 30  },
       ScrollViewItem:{
         flexDirection: 'row',
         justifyContent: 'space-between',

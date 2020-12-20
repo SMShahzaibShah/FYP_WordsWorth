@@ -52,7 +52,7 @@ const SignIn=({navigation,route})=>{
         <Text style={styles.Hitext}>Create an Account</Text>
         <TouchableOpacity 
         onPress={()=>navigation.navigate("Signup")}>
-          <Text style={{...styles.label, alignSelf:'center'}}>SignUp</Text>
+          <Text style={{...styles.label, alignSelf: "center", margin: 9}}>SignUp</Text>
         </TouchableOpacity>
                 
         </View>
@@ -78,7 +78,7 @@ const SignIn=({navigation,route})=>{
        //paddingTop: 40,
     },
     ImagesSty:{
-      width: 200,
+      width: 250,
       height: 60,
       marginTop: 100,
       marginBottom: 50,
