@@ -42,6 +42,7 @@ import * as firebaseBooksData from "firebase";
 const Stack = createStackNavigator();
 
 export default function App() {
+  const [showOnboard, setShowonBoard] = useState(true);
   useEffect(() => {
     var firebaseConfig = {
       apiKey: "AIzaSyBwEie5MWQm07oxnAoqIRV_LvSdvhzEMsM",
@@ -61,7 +62,7 @@ export default function App() {
   const stacknavigator = (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={"welcome"}
+        initialRouteName={"Signin"}
         screenOptions={{
           headerShown: false,
           headerTitleAlign: "center",
@@ -105,7 +106,15 @@ export default function App() {
     </NavigationContainer>
   );
 
-  return <Onboard />;
+  const handleOnboardFinish = () => {
+    setShowonBoard(false);
+  };
+  return (
+    <>
+      {showOnboard && <Onboard handleDone={handleOnboardFinish} />}
+      {!showOnboard && stacknavigator}
+    </>
+  );
 }
 
 const styles = StyleSheet.create({

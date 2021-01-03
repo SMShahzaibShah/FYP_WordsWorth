@@ -4,6 +4,7 @@ import * as Font from "expo-font";
 import { AppLoading } from "expo";
 
 import AppIntroSlider from "react-native-app-intro-slider";
+import { LinearGradient } from "expo-linear-gradient";
 
 import colors from "../assets/colors/colors";
 
@@ -21,7 +22,7 @@ const data = [
     image: require("../assets/onboarding2.png"),
   },
   {
-    title: "Spend more by Listening \n books you love",
+    title: "Spend more by Listening books you love",
     text: "Easily convert books into audiobook",
     image: require("../assets/onboarding3.png"),
   },
@@ -34,9 +35,7 @@ const fetchFont = () =>
     "OpenSans-SemiBold": require("../assets/fonts/OpenSans-SemiBold.ttf"),
   });
 
-const Stack = createStackNavigator();
-
-export default function Onboard() {
+export default function Onboard(props) {
   //states for loading font
   const [fontLoading, setfontLoading] = useState(false);
 
@@ -56,9 +55,14 @@ export default function Onboard() {
 
   const renderDoneButton = () => {
     return (
-      <View style={styles.rightTextWrapper}>
-        <Text style={styles.rightText}>Done</Text>
-      </View>
+      <LinearGradient
+        colors={["#A5C8FF", "#23286B"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.doneButtonWrapper}
+      >
+        <Text style={styles.doneButtonText}>Done</Text>
+      </LinearGradient>
     );
   };
   const renderNextButton = () => {
@@ -75,7 +79,9 @@ export default function Onboard() {
       </View>
     );
   };
-
+  const handleDone = () => {
+    props.handleDone();
+  };
   if (fontLoading) {
     return (
       <View style={{ flex: 1 }}>
@@ -90,6 +96,7 @@ export default function Onboard() {
           dotStyle={styles.dotStyle}
           activeDotStyle={styles.activeDotStyle}
           data={data}
+          onDone={handleDone}
         />
       </View>
     );
@@ -164,4 +171,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blue,
   },
   dotStyle: { backgroundColor: colors.blueFaded },
+  doneButtonWrapper: {
+    flex: 1,
+    paddingLeft: 35,
+    paddingRight: 50,
+    borderRadius: 25,
+    marginRight: -40,
+  },
+  doneButtonText: {
+    fontSize: 14,
+    fontFamily: "OpenSans-SemiBold",
+    textAlign: "center",
+    margin: 10,
+    color: colors.white,
+  },
 });
