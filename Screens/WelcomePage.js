@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, Button, Image } from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Image,
+} from "react-native";
 import CustomButton from "../component/ButtonComponent";
 
 import colors from "../assets/colors/colors";
@@ -43,26 +50,36 @@ const WelcomeScreen = ({ navigation }) => {
           height: 130,
         }}
       >
-        <Text>
-          <LinearGradient
-            colors={["#A5C8FF", "#23286B"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.doneButtonWrapper}
-          >
-            <Text style={styles.doneButtonText}>LOGIN</Text>
-          </LinearGradient>
-        </Text>
-        <Text style={{ marginTop: 25 }}>
-          <LinearGradient
-            colors={["#A5C8FF", "#23286B"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.doneButtonWrapper}
-          >
-            <Text style={styles.doneButtonText}>SIGNUP</Text>
-          </LinearGradient>
-        </Text>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate("Signin")}
+        >
+          <Text>
+            <LinearGradient
+              colors={["#A5C8FF", "#23286B"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.doneButtonWrapper}
+            >
+              <Text style={styles.doneButtonText}>LOGIN</Text>
+            </LinearGradient>
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate("Signup")}
+        >
+          <Text style={{ marginTop: 25 }}>
+            <LinearGradient
+              colors={["#A5C8FF", "#23286B"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.doneButtonWrapper}
+            >
+              <Text style={styles.doneButtonText}>SIGNUP</Text>
+            </LinearGradient>
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={{ marginTop: 60 }}>
         <Image source={require("../assets/main_bottom2.png")} />
