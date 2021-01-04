@@ -13,6 +13,8 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import * as Font from "expo-font";
+import { AppLoading } from "expo";
 import {
   Ionicons,
   FontAwesome,
@@ -21,8 +23,6 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import * as Font from "expo-font";
-import { AppLoading } from "expo";
 
 import WelcomeScreen from "./Screens/WelcomePage";
 import SignIn from "./Screens/SignIn";
@@ -43,6 +43,8 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [showOnboard, setShowonBoard] = useState(true);
+  const [fontLoading, setfontLoading] = useState(false);
+
   useEffect(() => {
     var firebaseConfig = {
       apiKey: "AIzaSyBwEie5MWQm07oxnAoqIRV_LvSdvhzEMsM",
@@ -59,10 +61,17 @@ export default function App() {
     }
   }, []);
 
+  const fetchFont = () =>
+    Font.loadAsync({
+      "OpenSans-Bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+      "OpenSans-Regular": require("./assets/fonts/OpenSans-Regular.ttf"),
+      "OpenSans-SemiBold": require("./assets/fonts/OpenSans-SemiBold.ttf"),
+    });
+
   const stacknavigator = (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={"Signin"}
+        initialRouteName={"welcome"}
         screenOptions={{
           headerShown: false,
           headerTitleAlign: "center",
@@ -109,12 +118,24 @@ export default function App() {
   const handleOnboardFinish = () => {
     setShowonBoard(false);
   };
-  return (
-    <>
+  if (fontLoading) {
+    return (
+      <>
+        <WelcomeScreen />
+        {/**   
       {showOnboard && <Onboard handleDone={handleOnboardFinish} />}
       {!showOnboard && stacknavigator}
-    </>
-  );
+    */}
+      </>
+    );
+  } else {
+    return (
+      <AppLoading
+        startAsync={fetchFont}
+        onFinish={() => setfontLoading(true)}
+      />
+    );
+  }
 }
 
 const styles = StyleSheet.create({
