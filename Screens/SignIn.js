@@ -16,23 +16,30 @@ import colors from "../assets/colors/colors";
 
 import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 const SignIn = ({ navigation, route }) => {
   const [email, setemail] = useState("");
   const [pass, setpass] = useState("");
 
   const onSignIn = () => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, pass)
-      .then((user) => {
-        navigation.navigate("Dashboard");
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        alert(errorCode);
-        // navigation.navigate('SignIn')
-      });
+    if (email.length <= 0) {
+      alert("Email/Phone Number is empty");
+    } else if (pass.length <= 0) {
+      alert("Password Field is required");
+    } else {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, pass)
+        .then((user) => {
+          navigation.navigate("Dashboard");
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          alert(errorCode);
+          // navigation.navigate('SignIn')
+        });
+    }
   };
   return (
     <>
@@ -81,11 +88,14 @@ const SignIn = ({ navigation, route }) => {
             />
             <TextInput
               placeholder="Enter Email / Phone Number"
+              value={email}
+              onChangeText={(text) => setemail(text)}
               style={{
                 width: 232,
                 height: 45,
                 borderRadius: 50,
                 paddingLeft: 10,
+                fontFamily: "OpenSans-Regular",
               }}
             ></TextInput>
           </View>
@@ -108,11 +118,15 @@ const SignIn = ({ navigation, route }) => {
             />
             <TextInput
               placeholder="Enter Password"
+              secureTextEntry
+              value={pass}
+              onChangeText={(text) => setpass(text)}
               style={{
                 width: 195,
                 height: 45,
                 borderRadius: 50,
                 paddingLeft: 10,
+                fontFamily: "OpenSans-Regular",
               }}
             ></TextInput>
 
@@ -124,10 +138,7 @@ const SignIn = ({ navigation, route }) => {
             />
           </View>
 
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate("Signup")}
-          >
+          <TouchableOpacity activeOpacity={0.7} onPress={() => onSignIn()}>
             <Text style={{ marginTop: 25 }}>
               <LinearGradient
                 colors={["#6E3AA7", "#23286B"]}
@@ -138,10 +149,23 @@ const SignIn = ({ navigation, route }) => {
                 <Text style={styles.doneButtonText}>LOGIN</Text>
               </LinearGradient>
             </Text>
-            <Text style={{ marginTop: 20, marginLeft: 25 }}>
-              Don’t Have an Account ? Sign up
-            </Text>
-            <Text style={{ marginTop: 20, marginLeft: 65 }}>
+            <View
+              style={{ marginTop: 20, marginLeft: 25, flexDirection: "row" }}
+            >
+              <Text style={{ fontFamily: "OpenSans-SemiBold" }}>
+                Don’t Have an Account ?{" "}
+              </Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+                <Text style={{ fontFamily: "OpenSans-Bold" }}>Sign up</Text>
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                marginTop: 20,
+                marginLeft: 65,
+                fontFamily: "OpenSans-Bold",
+              }}
+            >
               Forgot Password ?
             </Text>
           </TouchableOpacity>

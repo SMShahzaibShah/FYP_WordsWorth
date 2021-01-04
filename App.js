@@ -121,11 +121,8 @@ export default function App() {
   if (fontLoading) {
     return (
       <>
-        <SignIn />
-        {/**   
-      {showOnboard && <Onboard handleDone={handleOnboardFinish} />}
-      {!showOnboard && stacknavigator}
-    */}
+        {showOnboard && <Onboard handleDone={handleOnboardFinish} />}
+        {!showOnboard && stacknavigator}
       </>
     );
   } else {
