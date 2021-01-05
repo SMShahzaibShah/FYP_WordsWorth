@@ -16,7 +16,7 @@ import colors from "../assets/colors/colors";
 
 import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+
 const SignIn = ({ navigation, route }) => {
   const [email, setemail] = useState("");
   const [pass, setpass] = useState("");
@@ -44,12 +44,12 @@ const SignIn = ({ navigation, route }) => {
   return (
     <>
       <View style={styles.container}>
-        <View style={{ flexDirection: "row", height: 200 }}>
+        <View style={{ flexDirection: "row", height: 160 }}>
           <Image source={require("../assets/main_top2.png")} />
           <View style={{ flexDirection: "column" }}>
             <Text
               style={{
-                marginTop: 120,
+                marginTop: 100,
                 marginLeft: 20,
                 fontSize: 24,
                 fontFamily: "OpenSans-Bold",
@@ -149,16 +149,16 @@ const SignIn = ({ navigation, route }) => {
                 <Text style={styles.doneButtonText}>LOGIN</Text>
               </LinearGradient>
             </Text>
-            <View
-              style={{ marginTop: 20, marginLeft: 25, flexDirection: "row" }}
-            >
-              <Text style={{ fontFamily: "OpenSans-SemiBold" }}>
-                Don’t Have an Account ?{" "}
-              </Text>
-              <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-                <Text style={{ fontFamily: "OpenSans-Bold" }}>Sign up</Text>
-              </TouchableOpacity>
-            </View>
+          </TouchableOpacity>
+          <View style={{ marginTop: 20, marginLeft: 25, flexDirection: "row" }}>
+            <Text style={{ fontFamily: "OpenSans-SemiBold" }}>
+              Don’t Have an Account ?{" "}
+            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+              <Text style={{ fontFamily: "OpenSans-Bold" }}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity onPress={() => {}}>
             <Text
               style={{
                 marginTop: 20,
@@ -170,8 +170,11 @@ const SignIn = ({ navigation, route }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View>
-          <Image source={require("../assets/main_bottom2.png")} />
+        <View style={{ width: "100%", backgroundColor: "red" }}>
+          <Image
+            style={{ position: "absolute", left: 244 }}
+            source={require("../assets/login_bottom1.png")}
+          />
         </View>
       </View>
       {/** 

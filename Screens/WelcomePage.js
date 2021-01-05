@@ -56,7 +56,7 @@ const WelcomeScreen = ({ navigation }) => {
         >
           <Text>
             <LinearGradient
-              colors={["#A5C8FF", "#23286B"]}
+              colors={["#6E3AA7", "#23286B"]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.doneButtonWrapper}
