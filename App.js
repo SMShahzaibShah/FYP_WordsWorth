@@ -35,6 +35,7 @@ import EditProfile from "./Screens/EditProfile";
 import List from "./Screens/list";
 import BookLibrary from "./Screens/BookLibrary";
 import Onboard from "./component/onboard";
+import ForgotPassword from "./Screens/ForgotPassword";
 
 import * as firebase from "firebase";
 import * as firebaseBooksData from "firebase";
@@ -111,6 +112,7 @@ export default function App() {
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="list" component={List} />
         <Stack.Screen name="bookslibrary" component={BookLibrary} />
+        <Stack.Screen name="ForgotPass" component={ForgotPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -44,12 +44,12 @@ const SignIn = ({ navigation, route }) => {
   return (
     <>
       <View style={styles.container}>
-        <View style={{ flexDirection: "row", height: 160 }}>
+        <View style={{ flexDirection: "row", height: 100 }}>
           <Image source={require("../assets/main_top2.png")} />
           <View style={{ flexDirection: "column" }}>
             <Text
               style={{
-                marginTop: 100,
+                marginTop: 50,
                 marginLeft: 20,
                 fontSize: 24,
                 fontFamily: "OpenSans-Bold",
@@ -59,13 +59,16 @@ const SignIn = ({ navigation, route }) => {
             </Text>
           </View>
         </View>
-        <View style={{ marginLeft: 40, height: 300 }}>
-          <Image source={require("../assets/Login.png")} />
+        <View style={{ marginLeft: 50, height: 272 }}>
+          <Image
+            source={require("../assets/Login.png")}
+            style={{ height: 270, width: 300 }}
+          />
         </View>
         <View
           style={{
             flexDirection: "column",
-            marginTop: 20,
+            marginTop: 10,
             marginLeft: 65,
             height: 225,
           }}
@@ -104,7 +107,7 @@ const SignIn = ({ navigation, route }) => {
               flexDirection: "row",
               width: 265,
               height: 45,
-              marginTop: 25,
+              marginTop: 15,
               backgroundColor: "#F1E7FF",
               borderRadius: 50,
               paddingLeft: 10,
@@ -139,7 +142,7 @@ const SignIn = ({ navigation, route }) => {
           </View>
 
           <TouchableOpacity activeOpacity={0.7} onPress={() => onSignIn()}>
-            <Text style={{ marginTop: 25 }}>
+            <Text style={{ marginTop: 15 }}>
               <LinearGradient
                 colors={["#6E3AA7", "#23286B"]}
                 start={{ x: 0, y: 0 }}
@@ -150,7 +153,113 @@ const SignIn = ({ navigation, route }) => {
               </LinearGradient>
             </Text>
           </TouchableOpacity>
-          <View style={{ marginTop: 20, marginLeft: 25, flexDirection: "row" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              width: "78%",
+              marginTop: 15,
+            }}
+          >
+            <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
+            <View>
+              <Text
+                style={{
+                  width: 25,
+                  textAlign: "center",
+                  fontFamily: "OpenSans-SemiBold",
+                }}
+              >
+                or
+              </Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
+          </View>
+          {
+            //DIV for google and Facebook and Twitter
+          }
+          <View
+            style={{
+              flexDirection: "row",
+              width: 260,
+              justifyContent: "space-between",
+              marginTop: 15,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "#F1E7FF",
+                  height: 60,
+                  width: 60,
+                  borderRadius: 50,
+                }}
+              ></View>
+              <FontAwesome
+                name="facebook"
+                size={30}
+                color="#653CA0"
+                style={{
+                  position: "absolute",
+                  alignSelf: "center",
+                  paddingLeft: 20,
+                }}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "#F1E7FF",
+                  height: 60,
+                  width: 60,
+                  borderRadius: 50,
+                }}
+              ></View>
+              <FontAwesome
+                name="google"
+                size={30}
+                color="#653CA0"
+                style={{
+                  position: "absolute",
+                  alignSelf: "center",
+                  paddingLeft: 18,
+                }}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "#F1E7FF",
+                  height: 60,
+                  width: 60,
+                  borderRadius: 50,
+                }}
+              ></View>
+              <FontAwesome
+                name="twitter"
+                size={30}
+                color="#653CA0"
+                style={{
+                  position: "absolute",
+                  alignSelf: "center",
+                  paddingLeft: 16,
+                }}
+              />
+            </View>
+          </View>
+          <View style={{ marginTop: 15, marginLeft: 25, flexDirection: "row" }}>
             <Text style={{ fontFamily: "OpenSans-SemiBold" }}>
               Don’t Have an Account ?{" "}
             </Text>
@@ -158,10 +267,10 @@ const SignIn = ({ navigation, route }) => {
               <Text style={{ fontFamily: "OpenSans-Bold" }}>Sign up</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => navigation.navigate("ForgotPass")}>
             <Text
               style={{
-                marginTop: 20,
+                marginTop: 15,
                 marginLeft: 65,
                 fontFamily: "OpenSans-Bold",
               }}
@@ -172,7 +281,7 @@ const SignIn = ({ navigation, route }) => {
         </View>
         <View style={{ width: "100%", backgroundColor: "red" }}>
           <Image
-            style={{ position: "absolute", left: 244 }}
+            style={{ position: "absolute", left: 190, padding: 120 }}
             source={require("../assets/login_bottom1.png")}
           />
         </View>
