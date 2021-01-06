@@ -67,6 +67,9 @@ export default function App() {
       "OpenSans-Bold": require("./assets/fonts/OpenSans-Bold.ttf"),
       "OpenSans-Regular": require("./assets/fonts/OpenSans-Regular.ttf"),
       "OpenSans-SemiBold": require("./assets/fonts/OpenSans-SemiBold.ttf"),
+      "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+      "Roboto-Light": require("./assets/fonts/Roboto-Light.ttf"),
+      "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     });
 
   const stacknavigator = (
