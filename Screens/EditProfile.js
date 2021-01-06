@@ -149,22 +149,27 @@ const EditProfile = ({ navigation, route }) => {
             source={require("../assets/main_top.png")}
             style={{ position: "absolute", left: -140 }}
           />
-          <View
-            style={{
-              marginTop: 20,
-              left: 20,
-              flexDirection: "row",
-            }}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.goBack()}
           >
-            <MaterialIcons name="arrow-back" size={24} color="black" />
-            <Text style={{ marginLeft: -1, marginTop: 1 }}> Back</Text>
-          </View>
-
+            <View
+              style={{
+                marginTop: 20,
+                left: 20,
+                width: 80,
+                flexDirection: "row",
+              }}
+            >
+              <MaterialIcons name="arrow-back" size={24} color="black" />
+              <Text style={{ marginLeft: -1, marginTop: 1 }}> Back</Text>
+            </View>
+          </TouchableOpacity>
           <View style={{ flexDirection: "column" }}>
             <Text
               style={{
                 marginTop: 50,
-                marginLeft: 65,
+                marginLeft: 45,
                 fontSize: 24,
                 fontFamily: "OpenSans-Bold",
               }}
@@ -176,7 +181,7 @@ const EditProfile = ({ navigation, route }) => {
         <View
           style={{
             marginLeft: 130,
-            height: 125,
+            height: 130,
           }}
         >
           <Image source={require("../assets/defaultUser.png")} />
@@ -582,17 +587,16 @@ const EditProfile = ({ navigation, route }) => {
                       borderRadius: 50,
                       paddingLeft: 10,
                       marginTop: 10,
-                      marginBottom: 245,
                     }}
                   >
-                    <FontAwesome
-                      name="user"
+                    <Fontisto
+                      name="email"
                       size={24}
                       style={{ alignSelf: "center", marginRight: 5 }}
                       color="#653CA0"
                     />
                     <TextInput
-                      placeholder="Enter Email / Phone Number"
+                      placeholder="Enter Email"
                       value={email}
                       onChangeText={(text) => setemail(text)}
                       style={{
@@ -604,6 +608,29 @@ const EditProfile = ({ navigation, route }) => {
                       }}
                     ></TextInput>
                   </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => onSignUp()}
+                  >
+                    <Text style={{ marginTop: 15 }}>
+                      <LinearGradient
+                        colors={["#6E3AA7", "#23286B"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        style={styles.doneButtonWrapper}
+                      >
+                        <Text style={styles.doneButtonText}>UPDATE INFO</Text>
+                      </LinearGradient>
+                    </Text>
+                  </TouchableOpacity>
+                  <Image
+                    source={require("../assets/EditProfile1.png")}
+                    style={{
+                      marginTop: 20,
+                      marginBottom: 50,
+                      left: 30,
+                    }}
+                  />
                 </View>
               </View>
             );
