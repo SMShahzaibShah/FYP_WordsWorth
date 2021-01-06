@@ -22,6 +22,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 
 const EditProfile = ({ navigation, route }) => {
   const [email, setemail] = useState("");
@@ -39,6 +40,10 @@ const EditProfile = ({ navigation, route }) => {
     inActiveBgColor: "white",
     inActiveTxtColor: "black",
   });
+  const [getquestion, setquestion] = useState({
+    quest: "What is the name of your first pet?",
+  });
+
   const changeStyle1 = (value) => {
     if (value == "transport_car") {
       setRadioState1({
@@ -171,7 +176,7 @@ const EditProfile = ({ navigation, route }) => {
         <View
           style={{
             marginLeft: 130,
-            height: 105,
+            height: 125,
           }}
         >
           <Image source={require("../assets/defaultUser.png")} />
@@ -518,7 +523,88 @@ const EditProfile = ({ navigation, route }) => {
                 {
                   //Security Settings
                 }
-                <View style={{ marginTop: 10 }}></View>
+                <View style={{ marginTop: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: "OpenSans-Regular",
+                      fontSize: 16,
+                      color: colors.gray,
+                    }}
+                  >
+                    {" "}
+                    Select A security Question ?{" "}
+                  </Text>
+                  <Picker
+                    selectedValue={getquestion}
+                    style={{
+                      height: 50,
+                      width: 270,
+                    }}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setquestion({ quest: itemValue })
+                    }
+                    mode="dropdown"
+                  >
+                    <Picker.Item
+                      label="What is the name of your first pet?"
+                      value="pet"
+                    />
+                    <Picker.Item
+                      label="What is the middle name of your Mother?"
+                      value="mothMid"
+                    />
+                    <Picker.Item
+                      label="What is the name of your high School?"
+                      value="high"
+                    />
+                    <Picker.Item
+                      label="In which City you were born?"
+                      value="born"
+                    />
+                  </Picker>
+                  <Text
+                    style={{
+                      fontFamily: "OpenSans-Regular",
+                      fontSize: 16,
+                      color: colors.gray,
+                      marginTop: -3,
+                    }}
+                  >
+                    {" "}
+                    Enter Recovery Email ?{" "}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      width: 265,
+                      height: 45,
+                      backgroundColor: "#F1E7FF",
+                      borderRadius: 50,
+                      paddingLeft: 10,
+                      marginTop: 10,
+                      marginBottom: 245,
+                    }}
+                  >
+                    <FontAwesome
+                      name="user"
+                      size={24}
+                      style={{ alignSelf: "center", marginRight: 5 }}
+                      color="#653CA0"
+                    />
+                    <TextInput
+                      placeholder="Enter Email / Phone Number"
+                      value={email}
+                      onChangeText={(text) => setemail(text)}
+                      style={{
+                        width: 232,
+                        height: 45,
+                        borderRadius: 50,
+                        paddingLeft: 10,
+                        fontFamily: "OpenSans-Regular",
+                      }}
+                    ></TextInput>
+                  </View>
+                </View>
               </View>
             );
           }}
