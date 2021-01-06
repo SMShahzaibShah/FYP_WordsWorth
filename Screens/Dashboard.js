@@ -9,45 +9,14 @@ import {
   FlatList,
 } from "react-native";
 
-import { DashboardData } from "../constants/DashboardData";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import colors from "../assets/colors/colors";
 
 const DashBoard = ({ navigation, route }) => {
-  const [getList, setList] = useState(DashboardData);
-
   const Arrays = [{ key: "0", data: "Search A Book", backColor: "red" }];
-  const scrolView = (
-    <ScrollView style={styles.scrollView}>
-      {getList.map((item) => (
-        <TouchableOpacity
-          activeOpacity={0.7}
-          key={item.key}
-          onPress={() => {
-            displayAscreen(item);
-          }}
-        >
-          <View
-            style={{
-              ...styles.scrollViewItem,
-              backgroundColor: item.backColor,
-            }}
-          >
-            <Text style={styles.scrollViewText}> {item.data} </Text>
-          </View>
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
-  );
-  const displayAscreen = (item) => {
-    if (item.data === "Search A Book") {
-      navigation.navigate("Search");
-    } else if (item.data === "Book Library") {
-      navigation.navigate("bookslibrary");
-    }
-  };
+
   return (
     <>
       <View style={styles.container}>
@@ -71,7 +40,12 @@ const DashBoard = ({ navigation, route }) => {
           }}
         >
           <Ionicons name="ios-menu" size={40} color="black" />
-          <FontAwesome5 name="user-edit" size={24} color="black" />
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("EditProfile")}
+          >
+            <FontAwesome5 name="user-edit" size={24} color="black" />
+          </TouchableOpacity>
         </View>
         {
           //Text on Dashboard
