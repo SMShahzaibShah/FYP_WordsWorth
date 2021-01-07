@@ -29,7 +29,7 @@ const Search = ({ navigation, route }) => {
   const [getbookInfo, setbookInfo] = useState("");
   const [noRes, setRes] = useState(true);
   const [getbook, setbooks] = useState();
-  const [getF, setF] = useState();
+  const [getF, setF] = useState({});
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
@@ -46,7 +46,7 @@ const Search = ({ navigation, route }) => {
     }
     sec
       .database()
-      .ref("Names")
+      .ref("Books")
       .on("value", function (snapshot) {
         console.log("as");
         var data = "";
@@ -54,10 +54,11 @@ const Search = ({ navigation, route }) => {
         snapshot.forEach(function (childSnapshot) {
           data = childSnapshot.val();
           temp.push(data);
+          //console.log(temp);
         });
         setbooks(temp);
       });
-    // console.log(getbook)
+    //console.log(getbook);
   }, []);
 
   var config = {
@@ -67,9 +68,15 @@ const Search = ({ navigation, route }) => {
   };
   var sec;
 
+  const getUrl = (img) => {
+    //console.log(img.split("url:")[1]);
+    return img.split("url:")[1];
+  };
+
   const FlatListData = (
     <View style={styles.flatList}>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={getF}
         renderItem={({ item }) => (
           <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
@@ -79,7 +86,68 @@ const Search = ({ navigation, route }) => {
                   ...styles.ScrollViewItem,
                 }}
               >
-                <Text style={{ ...styles.ScrollViewText }}>{item.name}</Text>
+                {
+                  //div for Image
+                }
+                <View
+                  style={{
+                    //backgroundColor: "blue",
+                    height: 180,
+                    width: 100,
+                    //margin: 5,
+                    marginRight: 5,
+                    marginTop: 2,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri: getUrl(item.image),
+                    }}
+                    style={{
+                      height: 175,
+                      width: 100,
+                      borderRadius: 5,
+                    }}
+                  />
+                </View>
+
+                {
+                  //div for Image close
+                }
+                {
+                  //div for Text close
+                }
+                <View
+                  style={{
+                    flexDirection: "column",
+                    //marginLeft: -40,
+                    //  backgroundColor: "cyan",
+                    width: 160,
+                    marginTop: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      ...styles.ScrollViewText,
+                      fontSize: 14,
+                      color: colors.blue,
+                      fontFamily: "OpenSans-SemiBold",
+                      height: 65,
+                    }}
+                  >
+                    {item.name}
+                  </Text>
+                  <Text
+                    style={{
+                      ...styles.ScrollViewText,
+                      marginTop: 15,
+                      height: 90,
+                    }}
+                  >
+                    {item.description}
+                  </Text>
+                </View>
               </View>
               <View style={{ alignSelf: "center" }}>
                 <Feather name="download" size={30} color="black" />
@@ -134,6 +202,13 @@ const Search = ({ navigation, route }) => {
               position: "absolute",
               marginTop: 80,
             }}
+          />
+          {
+            //Last Image
+          }
+          <Image
+            source={require("../assets/main_bottom2.png")}
+            style={{ bottom: 0, position: "absolute" }}
           />
           {
             //Navigation Menu
@@ -242,13 +317,6 @@ const Search = ({ navigation, route }) => {
               </Text>
             </TouchableOpacity>
           </View>
-          {
-            //Last Image
-          }
-          <Image
-            source={require("../assets/main_bottom2.png")}
-            style={{ bottom: 0, position: "absolute" }}
-          />
         </View>
         {/**
       <View style={styles.container}>
@@ -286,6 +354,13 @@ const Search = ({ navigation, route }) => {
             position: "absolute",
             marginTop: 80,
           }}
+        />
+        {
+          //Last Image
+        }
+        <Image
+          source={require("../assets/main_bottom2.png")}
+          style={{ bottom: 0, position: "relative" }}
         />
         {
           //Navigation Menu
@@ -372,13 +447,6 @@ const Search = ({ navigation, route }) => {
         <View style={styles.flatList}>
           {noRes === true ? FlatListData : Loading}
         </View>
-        {
-          //Last Image
-        }
-        <Image
-          source={require("../assets/main_bottom2.png")}
-          style={{ bottom: 0, position: "absolute" }}
-        />
       </View>
     );
   }
@@ -447,24 +515,34 @@ const styles = StyleSheet.create({
   ScrollViewItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "yellow",
+    //backgroundColor: "yellow",
     alignSelf: "center",
-    margin: 5,
-    width: "70%",
+    //margin: 5,
+    width: "80%",
     borderRadius: 5,
-    paddingLeft: 5,
-    paddingRight: 5,
+    //paddingLeft: 5,
+    //paddingRight: 5,
+    //height: 130,
+    height: 180,
   },
   ScrollViewText: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: "OpenSans-Regular",
     color: colors.gray,
+    height: 60,
+    width: 155,
+    marginTop: 2,
+    //backgroundColor: "white",
   },
   ScrollView: {
-    width: "90%",
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10,
+    //height: 150,
+    height: 200,
+    //backgroundColor: "red",
+    borderRadius: 10,
   },
 });
 
