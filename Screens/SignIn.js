@@ -7,6 +7,7 @@ import {
   Button,
   Image,
   TouchableOpacity,
+  Keyboard,
 } from "react-native";
 import CustomButton from "../component/ButtonComponent";
 import { FontAwesome } from "@expo/vector-icons";
@@ -20,8 +21,10 @@ import * as firebase from "firebase";
 const SignIn = ({ navigation, route }) => {
   const [email, setemail] = useState("");
   const [pass, setpass] = useState("");
+  const [showPass, setShowPass] = useState(true);
 
   const onSignIn = () => {
+    Keyboard.dismiss();
     if (email.length <= 0) {
       alert("Email/Phone Number is empty");
     } else if (pass.length <= 0) {
@@ -39,6 +42,14 @@ const SignIn = ({ navigation, route }) => {
           alert(errorCode);
           // navigation.navigate('SignIn')
         });
+    }
+  };
+
+  const passSettings = () => {
+    if (showPass == true) {
+      setShowPass(false);
+    } else {
+      setShowPass(true);
     }
   };
   return (
@@ -121,7 +132,7 @@ const SignIn = ({ navigation, route }) => {
             />
             <TextInput
               placeholder="Enter Password"
-              secureTextEntry
+              secureTextEntry={showPass}
               value={pass}
               onChangeText={(text) => setpass(text)}
               style={{
@@ -132,13 +143,18 @@ const SignIn = ({ navigation, route }) => {
                 fontFamily: "OpenSans-Regular",
               }}
             ></TextInput>
-
-            <FontAwesome
-              name="eye"
-              size={24}
-              style={{ alignSelf: "center", marginLeft: 3, marginRight: 5 }}
-              color="#653CA0"
-            />
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => passSettings()}
+              style={{ justifyContent: "center" }}
+            >
+              <FontAwesome
+                name="eye"
+                size={22}
+                style={{ alignSelf: "center", marginLeft: 3, marginRight: 5 }}
+                color="#653CA0"
+              />
+            </TouchableOpacity>
           </View>
 
           <TouchableOpacity activeOpacity={0.7} onPress={() => onSignIn()}>

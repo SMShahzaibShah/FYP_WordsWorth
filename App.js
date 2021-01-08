@@ -36,6 +36,7 @@ import List from "./Screens/list";
 import BookLibrary from "./Screens/BookLibrary";
 import Onboard from "./component/onboard";
 import ForgotPassword from "./Screens/ForgotPassword";
+import bookDetails from "./Screens/bookDetails";
 
 import * as firebase from "firebase";
 import * as firebaseBooksData from "firebase";
@@ -116,6 +117,7 @@ export default function App() {
         <Stack.Screen name="list" component={List} />
         <Stack.Screen name="bookslibrary" component={BookLibrary} />
         <Stack.Screen name="ForgotPass" component={ForgotPassword} />
+        <Stack.Screen name="bookDetails" component={bookDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

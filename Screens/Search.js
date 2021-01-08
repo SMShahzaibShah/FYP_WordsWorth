@@ -25,7 +25,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Dimensions } from "react-native";
 
 const Search = ({ navigation, route }) => {
-  const [getsearch, setSearch] = useState("none");
+  const [getsearch, setSearch] = useState("loading");
   const [getbookInfo, setbookInfo] = useState("");
   const [noRes, setRes] = useState(true);
   const [getbook, setbooks] = useState();
@@ -57,6 +57,7 @@ const Search = ({ navigation, route }) => {
           //console.log(temp);
         });
         setbooks(temp);
+        setSearch("none");
       });
     //console.log(getbook);
   }, []);
@@ -79,7 +80,12 @@ const Search = ({ navigation, route }) => {
         showsVerticalScrollIndicator={false}
         data={getF}
         renderItem={({ item }) => (
-          <TouchableOpacity activeOpacity={0.5} onPress={() => {}}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() =>
+              navigation.navigate("bookDetails", { BookDetails: item })
+            }
+          >
             <View style={styles.ScrollView}>
               <View
                 style={{
@@ -134,6 +140,7 @@ const Search = ({ navigation, route }) => {
                       color: colors.blue,
                       fontFamily: "OpenSans-SemiBold",
                       height: 65,
+                      textAlign: "justify",
                     }}
                   >
                     {item.name}
@@ -143,6 +150,7 @@ const Search = ({ navigation, route }) => {
                       ...styles.ScrollViewText,
                       marginTop: 15,
                       height: 90,
+                      textAlign: "justify",
                     }}
                   >
                     {item.description}
@@ -161,7 +169,6 @@ const Search = ({ navigation, route }) => {
   );
   function filterList() {
     //console.log(text);
-
     var list = getbook.filter((item) => item.name.includes(getbookInfo));
     setSearch("Yes");
     //    console.log(list)
@@ -181,8 +188,18 @@ const Search = ({ navigation, route }) => {
       </Text>
     </View>
   );
-
-  if (getsearch === "none") {
+  if (getsearch == "loading") {
+    return (
+      <>
+        <View style={{ justifyContent: "center", alignSelf: "center" }}>
+          <ActivityIndicator size="large" />
+          <Text style={{ fontSize: 18, fontFamily: "OpenSans-Bold" }}>
+            Loading Please Wait
+          </Text>
+        </View>
+      </>
+    );
+  } else if (getsearch === "none") {
     return (
       <>
         <View style={styles.container}>
@@ -360,7 +377,7 @@ const Search = ({ navigation, route }) => {
         }
         <Image
           source={require("../assets/main_bottom2.png")}
-          style={{ bottom: 0, position: "relative" }}
+          style={{ bottom: 0, position: "absolute" }}
         />
         {
           //Navigation Menu
