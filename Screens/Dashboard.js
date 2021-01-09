@@ -170,7 +170,10 @@ const DashBoard = ({ navigation, route }) => {
                   {
                     //book Library
                   }
-                  <TouchableOpacity activeOpacity={0.8}>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => navigation.navigate("bookslibrary")}
+                  >
                     <View
                       style={{
                         height: 167,
