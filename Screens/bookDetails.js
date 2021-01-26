@@ -7,16 +7,74 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Modal,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 import { color } from "react-native-reanimated";
+import * as FileSystem from "expo-file-system";
+import * as Permissions from "expo-permissions";
+import * as MediaLibrary from "expo-media-library";
+import { AsyncStorage } from "react-native";
+
 const getUrl = (img) => {
   //console.log(img.split("url:")[1]);
   return img.split("url:")[1];
 };
 const bookDetails = ({ navigation, route }) => {
+  const [getModal, setModal] = useState(false);
+  const [getText, setText] = useState(false);
+
   const Arrays = [{ key: "0", data: "Search A Book", backColor: "red" }];
+
+  const SaveData = async (item) => {
+    AsyncStorage.getItem("BooksInfo").then((favs) => {
+      favs = favs == null ? [] : JSON.parse(favs);
+
+      favs.push(item);
+      return AsyncStorage.setItem("BooksInfo", JSON.stringify(favs));
+    });
+  };
+
+  const outputData = async () => {
+    const allBooks = await AsyncStorage.getItem("BooksInfo");
+    console.log("sad");
+    console.log(JSON.parse(allBooks));
+  };
+
+  const downloadFile = (bookName) => {
+    console.log("yes");
+    setText(false);
+    const uri = bookName.file;
+    let fileUri = FileSystem.documentDirectory + bookName.name + ".pdf";
+    FileSystem.downloadAsync(uri, fileUri)
+      .then(({ uri }) => {
+        console.log("Download ho gya");
+        saveFile(uri);
+        console.log("done");
+        setText(true);
+        SaveData(bookName);
+        setModal(false);
+        outputData();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  const saveFile = async (fileUri) => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === "granted") {
+      const asset = await MediaLibrary.createAssetAsync(fileUri);
+      const album = await MediaLibrary.getAlbumAsync("expoWordsWorthDownload");
+      await MediaLibrary.createAlbumAsync(
+        "expoWordsWorthDownload",
+        asset,
+        false
+      );
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -79,6 +137,54 @@ const bookDetails = ({ navigation, route }) => {
             {
               //Book Icon
             }
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={getModal}
+              presentationStyle="overFullScreen"
+              style={{ height: 200, width: 100, backgroundColor: "red" }}
+            >
+              <View
+                style={{
+                  justifyContent: "flex-end",
+                  margin: 0,
+                }}
+              >
+                <View
+                  style={{
+                    margin: 20,
+                    backgroundColor: "white",
+                    borderRadius: 20,
+                    padding: 35,
+                    alignItems: "center",
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5,
+                  }}
+                >
+                  {getText === false ? (
+                    <Text
+                      style={{
+                        color: "black",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                      }}
+                    >
+                      Please Wait Book is Downloading
+                    </Text>
+                  ) : (
+                    <Text>Book Download Successfully</Text>
+                  )}
+
+                  <ActivityIndicator size="small" color="#0000ff" />
+                </View>
+              </View>
+            </Modal>
             <FlatList
               data={Arrays}
               showsVerticalScrollIndicator={false}
@@ -206,7 +312,14 @@ const bookDetails = ({ navigation, route }) => {
                     {
                       //For Button
                     }
-                    <TouchableOpacity activeOpacity={0.7}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        setModal(true);
+                        downloadFile(route.params.BookDetails);
+                        // outputData();
+                      }}
+                    >
                       <View
                         style={{
                           height: 40,

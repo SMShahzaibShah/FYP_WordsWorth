@@ -18,12 +18,13 @@ import { Octicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
+import { AsyncStorage } from "react-native";
 import colors from "../assets/colors/colors";
 const BookLibrary = ({ navigation, route }) => {
   const [isLoading, setLoading] = useState(true);
-  const [getbook, setbooks] = useState();
-  const [getF, setF] = useState(getbook);
+  const [getF, setF] = useState();
 
+  const Arrays = [{ key: "0", data: "Search A Book", backColor: "red" }];
   var config = {
     apiKey: "AIzaSyC_zg-7N_LpvkhLAymvksM7Y9lrcA0AkjY",
     authDomain: "dogtag-e36b1.firebaseapp.com",
@@ -31,14 +32,17 @@ const BookLibrary = ({ navigation, route }) => {
   };
   var sec;
 
-  function filterList(text) {
-    console.log(text);
-    var list = getbook.filter((item) => item.name.includes(text));
+  const outputData = async () => {
+    const allBooks = await AsyncStorage.getItem("BooksInfo");
 
-    //    console.log(list)
-    setF(list);
-  }
-
+    //console.log("sad");
+    //console.log(JSON.parse(allBooks));
+    setF(JSON.parse(allBooks));
+  };
+  const getUrl = (img) => {
+    //console.log(img.split("url:")[1]);
+    return img.split("url:")[1];
+  };
   useEffect(() => {
     // Initialize Firebase
     /**
@@ -63,6 +67,7 @@ const BookLibrary = ({ navigation, route }) => {
             });
            // console.log(getbook)
       */
+    outputData();
   }, []);
 
   const Loading = (
@@ -95,7 +100,7 @@ const BookLibrary = ({ navigation, route }) => {
                 }
                 <View
                   style={{
-                    //backgroundColor: "blue",
+                    backgroundColor: "blue",
                     height: 180,
                     width: 100,
                     //margin: 5,
@@ -126,7 +131,7 @@ const BookLibrary = ({ navigation, route }) => {
                   style={{
                     flexDirection: "column",
                     //marginLeft: -40,
-                    //  backgroundColor: "cyan",
+                    backgroundColor: "cyan",
                     width: 160,
                     marginTop: 5,
                   }}
@@ -227,37 +232,86 @@ const BookLibrary = ({ navigation, route }) => {
           </Text>
         </View>
         {
-          //Search DIVE
+          //2nd Conatiner
         }
-        <View
-          style={{
-            justifyContent: "center",
-            alignSelf: "center",
-            marginTop: 60,
-            width: "90%",
-          }}
-        >
+        <View style={styles.secondcontainer}>
           {
-            //Back Button and Dislaying Text
+            //flatlist
           }
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
+          <FlatList
+            data={getF}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            renderItem={({ item }) => {
+              return (
+                <View
+                  style={{
+                    flexDirection: "column",
+                    // backgroundColor: "yellow",
+                    height: 250,
+                    marginTop: 5,
+                  }}
+                >
+                  <View
+                    style={{
+                      //backgroundColor: "cyan",
+                      width: 150,
+                    }}
+                  >
+                    <View
+                      style={{
+                        height: 200,
+                        width: 150,
+                        //borderRadius: 10,
+                        //  backgroundColor: "red",
+                      }}
+                    >
+                      <Image
+                        source={{
+                          uri: getUrl(item.image),
+                        }}
+                        style={{
+                          height: 200,
+                          width: 120,
+                        }}
+                      />
+                    </View>
+                    {
+                      //Text
+                    }
+                    {
+                      //Book Name
+                    }
+                    <Text
+                      style={{
+                        fontFamily: "OpenSans-SemiBold",
+                        fontSize: 12,
+                        color: colors.gray,
+                        justifyContent: "center",
+                        marginTop: 5,
+                        width: 120,
+                        height: 80,
+                      }}
+                    >
+                      {item.name}
+                    </Text>
+
+                    {
+                      //Book Name Close
+                    }
+                  </View>
+                </View>
+              );
             }}
-          ></View>
+          />
+          {
+            //flatlistEnd
+          }
         </View>
+        {
+          //second conatiner end
+        }
       </View>
-      {/**
-    <View style={styles.flatList}>
-    <TextInput
-        style={styles.textInput} 
-        placeholder="Enter Book to search"
-        onChangeText={(text)=>filterList(text)}
-    ></TextInput>
-    {isLoading === true ? Loading : FlatListData}
-    </View>
-     */}
     </>
   );
 };
@@ -270,29 +324,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: "#ecf0f1",
     padding: 8,
-  },
-  flatList: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 30,
-  },
-  ScrollViewItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "grey",
-    alignSelf: "center",
-    padding: 10,
-    margin: 5,
-    width: "75%",
-    borderRadius: 10,
-  },
-  ScrollViewText: {
-    fontSize: 18,
-    color: "white",
-  },
-  ScrollView: {
-    width: "100%",
   },
   textInput: {
     paddingTop: 10,
@@ -312,11 +343,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "90%",
     paddingTop: 5,
+    marginTop: "16%",
+    backgroundColor: "red",
   },
   ScrollViewItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    //backgroundColor: "yellow",
+    backgroundColor: "yellow",
     alignSelf: "center",
     //margin: 5,
     width: "80%",
@@ -342,8 +375,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     //height: 150,
     height: 200,
-    //backgroundColor: "red",
+    //backgroundColor: "yellow",
     borderRadius: 10,
+  },
+  secondcontainer: {
+    //  backgroundColor: "white",
+    marginTop: 30,
+    paddingTop: 30,
+    alignItems: "center",
   },
 });
 
