@@ -21,12 +21,13 @@ import { AntDesign } from "@expo/vector-icons";
 
 import * as MediaLibrary from "expo-media-library";
 import colors from "../assets/colors/colors";
-const BookLibrary = ({ navigation, route }) => {
+const audiobrary = ({ navigation, route }) => {
   const [isLoading, setLoading] = useState(true);
   const [getF, setF] = useState();
-  const [getModal, setModal] = useState(false);
   const [getText, setText] = useState(false);
-  const [book, setbook] = useState();
+  //const [book, setbook] = useState();
+  const [parts, setParts] = useState();
+  const [getmodal, setModal] = useState(false);
 
   const Arrays = [{ key: "0", data: "Search A Book", backColor: "red" }];
   var config = {
@@ -37,7 +38,7 @@ const BookLibrary = ({ navigation, route }) => {
   var sec;
 
   const outputData = async () => {
-    const allBooks = await AsyncStorage.getItem("BooksInfo");
+    const allBooks = await AsyncStorage.getItem("AudioBooks");
 
     //console.log("sad");
     //console.log(JSON.parse(allBooks));
@@ -185,6 +186,22 @@ const BookLibrary = ({ navigation, route }) => {
     </View>
   );
 
+  const FetchData = (book) => {
+    let data = book.file;
+    data = data.split("/").join("$");
+    let bookname = book.name.split(" ").join("-");
+    data = "http://192.168.17.105:8080/files/details/" + data + "||" + bookname;
+    console.log(data);
+    setModal(true);
+    fetch(data)
+      .then((res) => res.json())
+      .then((jsonData) => {
+        setParts(jsonData);
+        setModal(false);
+        console.log(jsonData);
+      });
+  };
+
   return (
     <>
       <View style={{ flex: 1 }}>
@@ -242,19 +259,43 @@ const BookLibrary = ({ navigation, route }) => {
               marginTop: 20,
             }}
           >
-            BOOK LIBRARY
+            AUDIO LIBRARY
           </Text>
         </View>
         {
           //2nd Conatiner
         }
+        <Modal
+          transparent={true}
+          animationType={"none"}
+          visible={getmodal}
+          onDismiss={() => console.log("close modal")}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.activityIndicatorWrapper}>
+              <Text
+                style={{
+                  fontFamily: "OpenSans-SemiBold",
+                  fontSize: 14,
+                  color: colors.blue,
+                }}
+              >
+                Please Wait..
+              </Text>
+              <ActivityIndicator
+                animating={getmodal}
+                size="large"
+                color="black"
+              />
+            </View>
+          </View>
+        </Modal>
         <View style={styles.secondcontainer}>
           {
             //flatlist
           }
           <FlatList
             data={getF}
-            keyExtractor={(item) => Math.random().toString(36).substring(7)}
             showsVerticalScrollIndicator={false}
             numColumns={2}
             renderItem={({ item }) => {
@@ -262,113 +303,9 @@ const BookLibrary = ({ navigation, route }) => {
                 <TouchableOpacity
                   activeOpacity={0.5}
                   onPress={() => {
-                    setbook(item);
-                    setModal(true);
+                    FetchData(item);
                   }}
                 >
-                  <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={getModal}
-                    presentationStyle="overFullScreen"
-                    style={{
-                      flex: 1,
-                      height: "30%",
-                      backgroundColor: "red",
-                      alignItems: "center",
-                      alignSelf: "center",
-                    }}
-                  >
-                    <View
-                      style={{
-                        justifyContent: "flex-end",
-                        alignSelf: "center",
-                        width: "80%",
-                        margin: 0,
-                      }}
-                    >
-                      <View
-                        style={{
-                          margin: 20,
-                          backgroundColor: "white",
-                          borderRadius: 20,
-                          padding: 35,
-                          alignItems: "center",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          shadowColor: "#000",
-                          shadowOffset: {
-                            width: 0,
-                            height: 2,
-                          },
-                          shadowOpacity: 0.25,
-                          shadowRadius: 3.84,
-                          elevation: 5,
-                          margin: 5,
-                        }}
-                      >
-                        <TouchableOpacity
-                          activeOpacity={0.5}
-                          onPress={() => {
-                            setModal(false);
-                            navigation.navigate("reader", {
-                              BookDetails: book,
-                            });
-                          }}
-                        >
-                          <View style={{ flexDirection: "row" }}>
-                            <Text
-                              style={{
-                                fontFamily: "OpenSans-SemiBold",
-                                fontSize: 18,
-                                color: colors.gray,
-                                justifyContent: "center",
-                                marginRight: 10,
-                              }}
-                            >
-                              Preview
-                            </Text>
-                            <FontAwesome5
-                              name="book-reader"
-                              size={20}
-                              color="black"
-                            />
-                          </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          activeOpacity={0.5}
-                          onPress={() => {
-                            SaveData(book);
-                            setModal(false);
-                          }}
-                          style={{
-                            marginTop: 10,
-                          }}
-                        >
-                          <View style={{ flexDirection: "row" }}>
-                            <Text
-                              style={{
-                                fontFamily: "OpenSans-SemiBold",
-                                fontSize: 16,
-                                color: colors.gray,
-                                justifyContent: "center",
-                              }}
-                            >
-                              Add to Audio Library
-                            </Text>
-                            <AntDesign
-                              name="addfile"
-                              size={20}
-                              color="black"
-                              style={{
-                                marginLeft: 5,
-                              }}
-                            />
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </Modal>
                   <View
                     style={{
                       flexDirection: "column",
@@ -431,6 +368,7 @@ const BookLibrary = ({ navigation, route }) => {
                 </TouchableOpacity>
               );
             }}
+            keyExtractor={(item, index) => index.toString()}
           />
           {
             //flatlistEnd
@@ -514,6 +452,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 5,
   },
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "#00000080",
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: "white",
+    height: 100,
+    width: 100,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#C0C0C0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
 });
 
-export default BookLibrary;
+export default audiobrary;

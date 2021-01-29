@@ -38,6 +38,7 @@ import Onboard from "./component/onboard";
 import ForgotPassword from "./Screens/ForgotPassword";
 import bookDetails from "./Screens/bookDetails";
 import Reader from "./Screens/pdfReader";
+import audioLibray from "./Screens/audioLibray";
 
 import * as firebase from "firebase";
 import * as firebaseBooksData from "firebase";
@@ -120,6 +121,7 @@ export default function App() {
         <Stack.Screen name="ForgotPass" component={ForgotPassword} />
         <Stack.Screen name="bookDetails" component={bookDetails} />
         <Stack.Screen name="reader" component={Reader} />
+        <Stack.Screen name="audioLibray" component={audioLibray} />
       </Stack.Navigator>
     </NavigationContainer>
   );

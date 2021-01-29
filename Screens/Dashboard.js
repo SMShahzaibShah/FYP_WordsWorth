@@ -108,7 +108,10 @@ const DashBoard = ({ navigation, route }) => {
                   {
                     //Audio Libray
                   }
-                  <TouchableOpacity activeOpacity={0.8}>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => navigation.navigate("audioLibray")}
+                  >
                     <View
                       style={{
                         height: 169,
