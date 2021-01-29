@@ -19,6 +19,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 import { AsyncStorage } from "react-native";
+
+import * as MediaLibrary from "expo-media-library";
 import colors from "../assets/colors/colors";
 const BookLibrary = ({ navigation, route }) => {
   const [isLoading, setLoading] = useState(true);
@@ -43,6 +45,9 @@ const BookLibrary = ({ navigation, route }) => {
     //console.log(img.split("url:")[1]);
     return img.split("url:")[1];
   };
+
+  const checkAlbum = async () => {};
+
   useEffect(() => {
     // Initialize Firebase
     /**
@@ -244,63 +249,72 @@ const BookLibrary = ({ navigation, route }) => {
             numColumns={2}
             renderItem={({ item }) => {
               return (
-                <View
-                  style={{
-                    flexDirection: "column",
-                    // backgroundColor: "yellow",
-                    height: 250,
-                    marginTop: 5,
-                  }}
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() =>
+                    navigation.navigate("reader", { BookDetails: item })
+                  }
                 >
                   <View
                     style={{
-                      //backgroundColor: "cyan",
-                      width: 150,
+                      flexDirection: "column",
+                      // backgroundColor: "yellow",
+                      //height: 250,
+                      // marginTop: 5,
+                      //  marginBottom: 5,
                     }}
                   >
                     <View
                       style={{
-                        height: 200,
+                        //backgroundColor: "cyan",
                         width: 150,
-                        //borderRadius: 10,
-                        //  backgroundColor: "red",
                       }}
                     >
-                      <Image
-                        source={{
-                          uri: getUrl(item.image),
-                        }}
-                        style={{
-                          height: 200,
-                          width: 120,
-                        }}
-                      />
-                    </View>
-                    {
-                      //Text
-                    }
-                    {
-                      //Book Name
-                    }
-                    <Text
-                      style={{
-                        fontFamily: "OpenSans-SemiBold",
-                        fontSize: 12,
-                        color: colors.gray,
-                        justifyContent: "center",
-                        marginTop: 5,
-                        width: 120,
-                        height: 80,
-                      }}
-                    >
-                      {item.name}
-                    </Text>
+                      <View
+                        style={
+                          {
+                            //height: 200,
+                            //width: 125,
+                            //borderRadius: 10,
+                            //backgroundColor: "red",
+                          }
+                        }
+                      >
+                        <Image
+                          source={{
+                            uri: getUrl(item.image),
+                          }}
+                          style={{
+                            height: 200,
+                            width: 120,
+                          }}
+                        />
+                      </View>
+                      {
+                        //Text
+                      }
+                      {
+                        //Book Name
+                      }
+                      <View style={{ marginTop: 5, width: 120, height: 80 }}>
+                        <Text
+                          style={{
+                            fontFamily: "OpenSans-SemiBold",
+                            fontSize: 12,
+                            color: colors.gray,
+                            justifyContent: "center",
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                      </View>
 
-                    {
-                      //Book Name Close
-                    }
+                      {
+                        //Book Name Close
+                      }
+                    </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             }}
           />
@@ -383,6 +397,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingTop: 30,
     alignItems: "center",
+    marginBottom: 5,
   },
 });
 

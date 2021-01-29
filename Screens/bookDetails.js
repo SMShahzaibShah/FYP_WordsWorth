@@ -40,27 +40,52 @@ const bookDetails = ({ navigation, route }) => {
   const outputData = async () => {
     const allBooks = await AsyncStorage.getItem("BooksInfo");
     console.log("sad");
-    console.log(JSON.parse(allBooks));
+    //console.log(JSON.parse(allBooks));
   };
+
+  const [status, setStatus] = useState(true);
+
+  function check(bookName) {
+    AsyncStorage.getItem("BooksInfo").then((favs) => {
+      favs = favs == null ? [] : JSON.parse(favs);
+      var i = 0;
+      while (i < favs.length) {
+        //console.log(favs[i].name);
+        if (favs[i].name == bookName.name) {
+          setStatus(false);
+        }
+        i = i + 1;
+      }
+    });
+  }
 
   const downloadFile = (bookName) => {
     console.log("yes");
     setText(false);
     const uri = bookName.file;
     let fileUri = FileSystem.documentDirectory + bookName.name + ".pdf";
-    FileSystem.downloadAsync(uri, fileUri)
-      .then(({ uri }) => {
-        console.log("Download ho gya");
-        saveFile(uri);
-        console.log("done");
-        setText(true);
-        SaveData(bookName);
-        setModal(false);
-        outputData();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    check(bookName);
+    console.log(status);
+    if (status == true) {
+      FileSystem.downloadAsync(uri, fileUri)
+        .then(({ uri }) => {
+          console.log("Download ho gya");
+          saveFile(uri);
+          console.log(uri);
+          console.log("done");
+          setText(true);
+          SaveData(bookName);
+          setModal(false);
+          outputData();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      setModal(false);
+
+      alert("book already there");
+    }
   };
   const saveFile = async (fileUri) => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);

@@ -1,20 +1,22 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import * as React from "react";
+import { StyleSheet, View, Text } from "react-native";
 import PDFReader from "rn-pdf-reader-js";
-import { Constants } from "expo";
+import Constants from "expo-constants";
 
-export default function pdfReader {
-    return (
-      <View style={styles.container}>
-        <PDFReader
-          source={{
-            uri: "http://gahp.net/wp-content/uploads/2017/09/sample.pdf",
-          }}
-        />
-      </View>
-    );
+export default function reades({ navigation, route }) {
+  return (
+    <View style={styles.container}>
+      <PDFReader
+        source={{
+          uri:
+            "file:///storage/emulated/0/expoWordsWorthDownload/" +
+            route.params.BookDetails.name +
+            ".pdf",
+        }}
+      />
+    </View>
+  );
 }
-
 
 const styles = StyleSheet.create({
   container: {
