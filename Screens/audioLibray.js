@@ -18,6 +18,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AsyncStorage } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { Octicons } from "@expo/vector-icons";
 
 import * as MediaLibrary from "expo-media-library";
 import colors from "../assets/colors/colors";
@@ -185,6 +186,14 @@ const audiobrary = ({ navigation, route }) => {
       />
     </View>
   );
+  const SavesData = async (bookName, item) => {
+    AsyncStorage.getItem(bookName).then((favs) => {
+      favs = favs == null ? [] : JSON.parse(favs);
+
+      favs.push(item);
+      return AsyncStorage.setItem(bookName, JSON.stringify(favs));
+    });
+  };
 
   const FetchData = (book) => {
     let data = book.file;
@@ -193,18 +202,29 @@ const audiobrary = ({ navigation, route }) => {
     data = "http://192.168.17.105:8080/files/details/" + data + "||" + bookname;
     console.log(data);
     setModal(true);
-    fetch(data)
-      .then((res) => res.json())
-      .then((jsonData) => {
-        setParts(jsonData);
+    AsyncStorage.getItem(bookname).then((favs) => {
+      //console.log(bookname);
+      if (favs == null) {
+        fetch(data)
+          .then((res) => res.json())
+          .then((jsonData) => {
+            setModal(false);
+            setParts(jsonData);
+            console.log(jsonData);
+            SavesData(bookname, jsonData);
+            navigation.navigate("audioDetails", {
+              BookDetails: book,
+              audioParts: jsonData,
+            });
+          });
+      } else {
         setModal(false);
-        console.log(jsonData);
-
         navigation.navigate("audioDetails", {
           BookDetails: book,
-          audioParts: jsonData,
+          audioParts: JSON.parse(favs)[0],
         });
-      });
+      }
+    });
   };
 
   return (
@@ -248,7 +268,7 @@ const audiobrary = ({ navigation, route }) => {
             activeOpacity={0.8}
             onPress={() => navigation.navigate("EditProfile")}
           >
-            <FontAwesome5 name="user-edit" size={24} color="black" />
+            <Octicons name="gear" size={24} color="black" />
           </TouchableOpacity>
         </View>
         {

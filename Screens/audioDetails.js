@@ -19,13 +19,14 @@ import * as Permissions from "expo-permissions";
 import * as MediaLibrary from "expo-media-library";
 import { AsyncStorage } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
 const getUrl = (img) => {
   //console.log(img.split("url:")[1]);
   return img.split("url:")[1];
 };
 const audioDetails = ({ navigation, route }) => {
-  const [getModal, setModal] = useState(false);
+  const [getmodal, setModal] = useState(false);
   const [getText, setText] = useState(false);
 
   const Arrays = [{ key: "0", data: "Search A Book", backColor: "red" }];
@@ -61,41 +62,54 @@ const audioDetails = ({ navigation, route }) => {
     });
   }
 
-  const downloadFile = (bookName) => {
+  const downloadFile = (bookName, link) => {
     console.log("yes");
-    setText(false);
-    const uri = bookName.file;
-    let fileUri = FileSystem.documentDirectory + bookName.name + ".pdf";
-    check(bookName);
-    console.log(status);
-    if (status == true) {
-      FileSystem.downloadAsync(uri, fileUri)
-        .then(({ uri }) => {
-          console.log("Download ho gya");
-          saveFile(uri);
-          console.log(uri);
-          console.log("done");
-          setText(true);
-          SaveData(bookName);
-          setModal(false);
-          outputData();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      setModal(false);
+    //setText(false);
+    let data = link;
+    data = data.split("/").join("$");
+    const uri =
+      "http://192.168.17.105:8080/files/fetch/" +
+      data +
+      "||" +
+      bookName.key +
+      "||" +
+      bookName.start +
+      "||" +
+      bookName.end;
+    let fileUri = FileSystem.documentDirectory + bookName.key + ".wav";
+    //check(bookName);
+    //console.log(status);
+    //if (status == true) {
+    FileSystem.downloadAsync(uri, fileUri)
+      .then(({ uri }) => {
+        console.log("Download ho gya");
+        saveAudioFile(uri);
+        console.log(uri);
+        console.log("done");
+        // setText(true);
+        //SaveData(bookName);
+        setModal(false);
+        //outputData();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    //} else {
+    //  setModal(false);
 
-      alert("book already there");
-    }
+    //   alert("book already there");
+    //}
   };
-  const saveFile = async (fileUri) => {
+
+  const saveAudioFile = async (fileUri, bookName) => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status === "granted") {
       const asset = await MediaLibrary.createAssetAsync(fileUri);
-      const album = await MediaLibrary.getAlbumAsync("expoWordsWorthDownload");
+      const album = await MediaLibrary.getAlbumAsync(
+        "expoWordsWorthDownload" + "/" + bookName
+      );
       await MediaLibrary.createAlbumAsync(
-        "expoWordsWorthDownload",
+        "expoWordsWorthDownload" + "/" + bookName,
         asset,
         false
       );
@@ -156,7 +170,31 @@ const audioDetails = ({ navigation, route }) => {
           {
             //bookDetail Close
           }
-
+          <Modal
+            transparent={true}
+            animationType={"none"}
+            visible={getmodal}
+            //onDismiss={() => console.log("close modal")}
+          >
+            <View style={styles.modalBackground}>
+              <View style={styles.activityIndicatorWrapper}>
+                <Text
+                  style={{
+                    fontFamily: "OpenSans-SemiBold",
+                    fontSize: 14,
+                    color: colors.blue,
+                  }}
+                >
+                  Please Wait..
+                </Text>
+                <ActivityIndicator
+                  animating={getmodal}
+                  size="large"
+                  color="black"
+                />
+              </View>
+            </View>
+          </Modal>
           {
             //WhiteContainer
           }
@@ -239,51 +277,96 @@ const audioDetails = ({ navigation, route }) => {
                 </View>
               </View>
             </View>
-            <View style={{ height: Dimensions.get("window").height * 0.45 }}>
+            <View
+              style={{
+                height: Dimensions.get("window").height * 0.45,
+                //backgroundColor: "red",
+                width: "95%",
+              }}
+            >
               <FlatList
                 data={route.params.audioParts}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item, index }) => {
                   return (
                     <View
-                      style={
-                        {
-                          //height: 500,
-                          //width: "100%",
-                        }
-                      }
+                      style={{
+                        // backgroundColor: "cyan",
+                        flexDirection: "row",
+                      }}
                     >
                       <View
                         style={{
                           //  backgroundColor: "red",
                           justifyContent: "space-between",
                           height: 50,
-                          width: "80%",
+                          width: "67%",
                           margin: 10,
                           borderRadius: 50,
                           padding: 7,
                           backgroundColor: "#F1E7FF",
-                          marginLeft: -0,
+                          marginLeft: 5,
                           flexDirection: "row",
                         }}
                       >
-                        <Text
-                          style={{
-                            fontFamily: "OpenSans-SemiBold",
-                            fontSize: 12,
-                            color: colors.blue,
-                            justifyContent: "center",
-                          }}
-                        >
-                          Part {index + 1} # {item.key}{" "}
-                        </Text>
-                        <View style={{ marginLeft: 15, alignSelf: "center" }}>
-                          <Feather name="download" size={30} color="black" />
-                        </View>
+                        <TouchableOpacity onPress={() => console.log("hy")}>
+                          <Text
+                            style={{
+                              fontFamily: "OpenSans-SemiBold",
+                              fontSize: 12,
+                              color: colors.blue,
+                              justifyContent: "center",
+                            }}
+                          >
+                            Part {index + 1} # {item.key}{" "}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.log(item);
+                          console.log(route.params.BookDetails.file);
+                          setModal(true);
+                          downloadFile(item, route.params.BookDetails.file);
+                        }}
+                        style={{
+                          //marginLeft: ,
+                          alignSelf: "center",
+                          backgroundColor: "#F1E7FF",
+                          borderRadius: 50,
+                          width: 40,
+                          height: 40,
+                        }}
+                      >
+                        <Feather
+                          name="download"
+                          size={28}
+                          color="black"
+                          style={{ alignSelf: "center" }}
+                        />
+                      </TouchableOpacity>
+                      <View
+                        style={{
+                          marginLeft: 5,
+                          alignSelf: "center",
+                          backgroundColor: "#F1E7FF",
+                          borderRadius: 50,
+                          width: 40,
+                          height: 40,
+                          padding: 3,
+                        }}
+                      >
+                        <Entypo
+                          name="controller-play"
+                          size={30}
+                          color="black"
+                          style={{ alignSelf: "center", marginLeft: 3 }}
+                        />
                       </View>
                     </View>
                   );
                 }}
+                keyExtractor={(item, index) => index.toString()}
               />
             </View>
           </View>
@@ -302,17 +385,17 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   secondcontainer: {
-    //  height: "100%",
+    height: "100%",
     width: "100%",
     backgroundColor: "white",
-    marginTop: 80,
+    marginTop: 60,
     borderRadius: 40,
     borderBottomEndRadius: 0,
     paddingTop: 20,
     alignItems: "center",
     alignSelf: "center",
     paddingLeft: 20,
-    justifyContent: "space-between",
+    //justifyContent: "space-between",
   },
   backButton: {
     marginTop: "8%",
@@ -358,6 +441,25 @@ const styles = StyleSheet.create({
     height: 200,
     //backgroundColor: "red",
     borderRadius: 10,
+  },
+
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "#00000080",
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: "white",
+    height: 100,
+    width: 100,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#C0C0C0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 });
 export default audioDetails;
