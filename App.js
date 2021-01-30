@@ -40,6 +40,7 @@ import bookDetails from "./Screens/bookDetails";
 import Reader from "./Screens/pdfReader";
 import AudioLibray from "./Screens/audioLibray";
 import audioDetails from "./Screens/audioDetails";
+import audioSettings from "./Screens/audioSettings";
 
 import * as firebase from "firebase";
 import * as firebaseBooksData from "firebase";
@@ -124,6 +125,7 @@ export default function App() {
         <Stack.Screen name="reader" component={Reader} />
         <Stack.Screen name="audioLibray" component={AudioLibray} />
         <Stack.Screen name="audioDetails" component={audioDetails} />
+        <Stack.Screen name="audioSettings" component={audioSettings} />
       </Stack.Navigator>
     </NavigationContainer>
   );

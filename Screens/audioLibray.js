@@ -266,9 +266,9 @@ const audiobrary = ({ navigation, route }) => {
           <Ionicons name="ios-menu" size={40} color="black" />
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => navigation.navigate("EditProfile")}
+            onPress={() => navigation.navigate("audioSettings")}
           >
-            <Octicons name="gear" size={24} color="black" />
+            <Octicons name="gear" size={30} color="black" />
           </TouchableOpacity>
         </View>
         {
