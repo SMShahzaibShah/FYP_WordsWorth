@@ -199,6 +199,11 @@ const audiobrary = ({ navigation, route }) => {
         setParts(jsonData);
         setModal(false);
         console.log(jsonData);
+
+        navigation.navigate("audioDetails", {
+          BookDetails: book,
+          audioParts: jsonData,
+        });
       });
   };
 
