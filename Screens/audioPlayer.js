@@ -11,26 +11,33 @@ import { Audio } from "expo-av";
 
 import Slider from "@react-native-community/slider";
 
-export default function audioPlayer() {
+export default function audioPlayer({ navigation, route }) {
   const [sound, setSound] = useState();
   const [current, setcurrent] = useState();
   const [getmax, setmax] = useState();
-  const [getButton, setButton] = useState("play");
+  const [getButton, setButton] = useState("resume");
   const [getVolume, setVolumne] = useState(100);
   const [getSpeed, setSpeed] = useState(1);
+  const [gettime, settime] = useState(1);
 
   async function playSound() {
     console.log("Loading Sound");
     //setSound(Audio.Sound())
     const { sound } = await Audio.Sound.createAsync({
       uri:
-        "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3",
+        "file:///storage/emulated/0/expoWordsWorthDownload/Audio/" +
+        route.params.audioPartsNumber.key +
+        ".wav",
     });
 
     setSound(sound);
 
     console.log("Playing Sound");
-    // await sound.playAsync();
+    if (gettime == 1) {
+      await sound.playAsync();
+      settime(0);
+    }
+
     var pos = await sound.getStatusAsync();
     console.log(pos);
     while (pos.positionMillis < pos.playableDurationMillis) {
@@ -58,16 +65,12 @@ export default function audioPlayer() {
       return hours + ":" + minutes + ":" + seconds;
     }
   }
-  {
-    /**
   useEffect(() => {
     if (sound == null) {
       playSound();
     }
   }, []);
-   */
-  }
-  const handlechange = (val) => {};
+
   {
     /**
         onSlidingComplete={(val) => {
@@ -80,7 +83,7 @@ export default function audioPlayer() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("./assets/playerTopLeft.png")}
+        source={require("../assets/playerTopLeft.png")}
         style={{
           left: 0,
           top: 0,
@@ -91,6 +94,7 @@ export default function audioPlayer() {
         activeOpacity={0.7}
         onPress={() => {
           sound.unloadAsync();
+          navigation.goBack();
         }}
         style={{
           marginTop: 5,
@@ -118,7 +122,7 @@ export default function audioPlayer() {
         </Text>
       </TouchableOpacity>
       <Image
-        source={require("./assets/playerRightTop.png")}
+        source={require("../assets/playerRightTop.png")}
         style={{
           right: 0,
           top: 0,
@@ -126,7 +130,7 @@ export default function audioPlayer() {
         }}
       />
       <Image
-        source={require("./assets/playerBottomLeft.png")}
+        source={require("../assets/playerBottomLeft.png")}
         style={{
           left: 0,
           bottom: 0,
@@ -134,7 +138,7 @@ export default function audioPlayer() {
         }}
       />
       <Image
-        source={require("./assets/playerBottomRight.png")}
+        source={require("../assets/playerBottomRight.png")}
         style={{
           right: 0,
           bottom: 0,
@@ -150,7 +154,7 @@ export default function audioPlayer() {
           color: "#3F414E",
         }}
       >
-        Book Name Aye Ga
+        {route.params.BookDetails.name}
       </Text>
       <Text
         style={{
@@ -161,7 +165,7 @@ export default function audioPlayer() {
           margin: 5,
         }}
       >
-        Part Number Aye Ga
+        {route.params.audioPartsNumber.key}
       </Text>
       <View
         style={{
@@ -189,7 +193,7 @@ export default function audioPlayer() {
           }}
         >
           <Image
-            source={require("./assets/skipback5.png")}
+            source={require("../assets/skipback5.png")}
             style={
               {
                 //width: 50
@@ -215,7 +219,7 @@ export default function audioPlayer() {
               setButton("resume");
             } else {
               setButton("play");
-              sound.stopAsync();
+              sound.pauseAsync();
             }
           }}
         >
@@ -224,12 +228,12 @@ export default function audioPlayer() {
            */}
           {getButton == "play" ? (
             <Image
-              source={require("./assets/play.png")}
+              source={require("../assets/play.png")}
               style={{ alignSelf: "center" }}
             />
           ) : (
             <Image
-              source={require("./assets/pause.png")}
+              source={require("../assets/pause.png")}
               style={{ alignSelf: "center" }}
             />
           )}
@@ -249,7 +253,7 @@ export default function audioPlayer() {
             console.log(current);
           }}
         >
-          <Image source={require("./assets/forward5.png")} />
+          <Image source={require("../assets/forward5.png")} />
         </TouchableOpacity>
       </View>
       <View style={{ width: "90%" }}>
@@ -462,10 +466,11 @@ export default function audioPlayer() {
         />
                  
       </View>
-      */}
+      
       <View style={{ position: "absolute", bottom: 10 }}>
         <Button title="Play Sound" onPress={playSound} />
       </View>
+      */}
     </View>
   );
 }

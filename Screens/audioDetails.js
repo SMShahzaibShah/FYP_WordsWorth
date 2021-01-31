@@ -26,6 +26,7 @@ const getUrl = (img) => {
 };
 const audioDetails = ({ navigation, route }) => {
   const [getmodal, setModal] = useState(false);
+  const [getPlaymodal, setPlayModal] = useState(false);
   const [getText, setText] = useState(false);
 
   const Arrays = [{ key: "0", data: "Search A Book", backColor: "red" }];
@@ -118,6 +119,31 @@ const audioDetails = ({ navigation, route }) => {
   return (
     <>
       <View style={styles.container}>
+        <Modal
+          transparent={true}
+          animationType={"none"}
+          visible={getPlaymodal}
+          //onDismiss={() => console.log("close modal")}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.activityIndicatorWrapper}>
+              <Text
+                style={{
+                  fontFamily: "OpenSans-SemiBold",
+                  fontSize: 14,
+                  color: colors.blue,
+                }}
+              >
+                Please Wait..
+              </Text>
+              <ActivityIndicator
+                animating={getmodal}
+                size="large"
+                color="black"
+              />
+            </View>
+          </View>
+        </Modal>
         {
           //Image for background
         }
@@ -163,7 +189,7 @@ const audioDetails = ({ navigation, route }) => {
                 marginTop: "10%",
               }}
             >
-              AUDIO BOOK
+              AUDIOBOOK
             </Text>
           </View>
           {
@@ -344,7 +370,18 @@ const audioDetails = ({ navigation, route }) => {
                           style={{ alignSelf: "center" }}
                         />
                       </TouchableOpacity>
-                      <View
+                      <TouchableOpacity
+                        activeOpacity={0.7}
+                        onPress={() => {
+                          console.log("Play");
+                          console.log(item);
+                          console.log(route.params.BookDetails.name);
+
+                          navigation.navigate("audioPlayer", {
+                            BookDetails: route.params.BookDetails,
+                            audioPartsNumber: item,
+                          });
+                        }}
                         style={{
                           marginLeft: 5,
                           alignSelf: "center",
@@ -361,7 +398,7 @@ const audioDetails = ({ navigation, route }) => {
                           color="black"
                           style={{ alignSelf: "center", marginLeft: 3 }}
                         />
-                      </View>
+                      </TouchableOpacity>
                     </View>
                   );
                 }}

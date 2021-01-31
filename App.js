@@ -127,7 +127,7 @@ export default function App() {
         <Stack.Screen name="audioLibray" component={AudioLibray} />
         <Stack.Screen name="audioDetails" component={audioDetails} />
         <Stack.Screen name="audioSettings" component={audioSettings} />
-        <Stack.Screen name=" audioPlayer" component={audioPlayer} />
+        <Stack.Screen name="audioPlayer" component={audioPlayer} />
       </Stack.Navigator>
     </NavigationContainer>
   );
