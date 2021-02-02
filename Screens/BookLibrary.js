@@ -431,6 +431,7 @@ const BookLibrary = ({ navigation, route }) => {
                 </TouchableOpacity>
               );
             }}
+            keyExtractor={(item, index) => index.toString()}
           />
           {
             //flatlistEnd

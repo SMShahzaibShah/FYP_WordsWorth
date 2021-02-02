@@ -36,13 +36,15 @@ function MyTabs() {
           fontWeight: "bold",
         },
         style: {
-          margin: 5,
+          marginTop: 20,
+          position: "relative",
           //          backgroundColor: "red",
           width: "90%",
           //justifyContent: "center",
           alignSelf: "center",
         },
         tabStyle: {
+          // position: "relative",
           // width: "100%",
           //justifyContent: "space-between",
           //borderWidth: 5,
@@ -107,7 +109,7 @@ function MyTabs() {
   );
 }
 
-export default function collections() {
+export default function collections({ navigation, route }) {
   return (
     <View
       style={{
@@ -140,7 +142,12 @@ export default function collections() {
           alignSelf: "center",
         }}
       >
-        <Ionicons name="ios-menu" size={40} color="black" />
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.goBack()}
+        >
+          <Ionicons name="md-arrow-back" size={24} color="black" />
+        </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => navigation.navigate("EditProfile")}
