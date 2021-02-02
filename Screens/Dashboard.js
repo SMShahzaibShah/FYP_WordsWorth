@@ -235,7 +235,10 @@ const DashBoard = ({ navigation, route }) => {
                       </Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.8}>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => navigation.navigate("collections")}
+                  >
                     {
                       //Collection
                     }

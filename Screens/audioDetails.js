@@ -37,7 +37,7 @@ const audioDetails = ({ navigation, route }) => {
   const [sound, setSound] = useState();
   const [current, setcurrent] = useState();
   const [getmax, setmax] = useState();
-  const [getButton, setButton] = useState("resume");
+  const [getButton, setButton] = useState("play");
   const [getVolume, setVolumne] = useState(100);
   const [getSpeed, setSpeed] = useState(1);
 
@@ -45,12 +45,15 @@ const audioDetails = ({ navigation, route }) => {
   const [getpartName, setPartName] = useState();
 
   //Audio Player Funtions
-  async function playSound(naaamofAudioFile) {
+  async function playSound(naaamofAudioFile, foldername) {
+    foldername = foldername.split(" ").join("-");
     console.log("Loading Sound");
     //setSound(Audio.Sound())
     const { sound } = await Audio.Sound.createAsync({
       uri:
-        "file:///storage/emulated/0/expoWordsWorthDownload/Audio/" +
+        "file:///storage/emulated/0/expoWordsWorthDownload/" +
+        foldername +
+        "/" +
         naaamofAudioFile +
         ".wav",
     });
@@ -123,12 +126,14 @@ const audioDetails = ({ navigation, route }) => {
   }
 
   const downloadFile = (bookName, link) => {
+    console.log(bookName + "download");
     console.log("yes");
     //setText(false);
-    let data = link;
+    let booknameForFolder = link.name.split(" ").join("-");
+    let data = link.file;
     data = data.split("/").join("$");
     const uri =
-      "http://192.168.17.105:8080/files/fetch/" +
+      "http://192.168.0.103:8080/files/fetch/" +
       data +
       "||" +
       bookName.key +
@@ -140,10 +145,11 @@ const audioDetails = ({ navigation, route }) => {
     //check(bookName);
     //console.log(status);
     //if (status == true) {
+    //setTimeout(5000);
     FileSystem.downloadAsync(uri, fileUri)
       .then(({ uri }) => {
         console.log("Download ho gya");
-        saveAudioFile(uri);
+        saveAudioFile(uri, booknameForFolder);
         console.log(uri);
         console.log("done");
         // setText(true);
@@ -162,6 +168,7 @@ const audioDetails = ({ navigation, route }) => {
   };
 
   const saveAudioFile = async (fileUri, bookName) => {
+    console.log(bookName + " save");
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status === "granted") {
       const asset = await MediaLibrary.createAssetAsync(fileUri);
@@ -182,7 +189,7 @@ const audioDetails = ({ navigation, route }) => {
         <Modal
           animationType={"none"}
           visible={getPlaymodal}
-          onDismiss={() => sound.unloadAsync()}
+          // onDismiss={() => sound.unloadAsync()}
         >
           <View
             style={{
@@ -792,10 +799,10 @@ const audioDetails = ({ navigation, route }) => {
                       </View>
                       <TouchableOpacity
                         onPress={() => {
-                          console.log(item);
-                          console.log(route.params.BookDetails.file);
+                          // console.log(item);
+                          // console.log(route.params.BookDetails.file);
                           setModal(true);
-                          downloadFile(item, route.params.BookDetails.file);
+                          downloadFile(item, route.params.BookDetails);
                         }}
                         style={{
                           //marginLeft: ,
@@ -821,7 +828,7 @@ const audioDetails = ({ navigation, route }) => {
                           console.log(route.params.BookDetails.name);
                           setbookname(route.params.BookDetails.name);
                           setPartName(item.key);
-                          playSound(item.key);
+                          playSound(item.key, route.params.BookDetails.name);
                           setPlayModal(true);
 
                           {
