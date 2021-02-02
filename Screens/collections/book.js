@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
   FlatList,
+  Image,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -37,6 +38,7 @@ export default function book() {
     const allcoll = await AsyncStorage.getItem("Collections");
     setColl(JSON.parse(allcoll));
   };
+
   var selectItem = (item) => {
     var color = false;
     //console.log(item);
@@ -77,22 +79,134 @@ export default function book() {
       data={Coll}
       //keyExtractor={(item) => Math.random().toString(36).substring(7)}
       //showsVerticalScrollIndicator={false}
-      //numColumns={2}
+      numColumns={2}
       style={{
         marginTop: 5,
         width: "90%",
-        // backgroundColor: "red",
+        //   backgroundColor: "red",
         alignSelf: "center",
+        //justifyContent: "space-between",
       }}
       renderItem={({ item }) => {
         return (
-          <View
+          <TouchableOpacity
+            activeOpacity={0.5}
             style={{
-              backgroundColor: "yellow",
-              height: 100,
-              width: 80,
+              //  backgroundColor: "red",
+              // justifyContent: "space-between",
+              height: 190,
+              width: 160,
+              margin: 10,
+              borderRadius: 10,
+              padding: 7,
+              // justifyContent: "space-between",
+
+              //backgroundColor:
+              //selectItem(item) == true ? "green" : "lightgray",
+              //justifyContent: "center",
+              //marginLeft: 5,
+              //flexDirection: "row",
+              //  backgroundColor: "yellow",
             }}
-          ></View>
+            onPress={() => console.log(item)}
+          >
+            <Image
+              source={require("./booksAssets/Rectangle34.png")}
+              style={{
+                height: 190,
+                width: 160,
+                borderRadius: 10,
+                position: "absolute",
+              }}
+            />
+            {/**Name Text */}
+            <View style={{ flexDirection: "column" }}>
+              <Text
+                style={{
+                  fontFamily: "OpenSans-SemiBold",
+                  fontSize: 14,
+                  color: "#1C215D",
+                  width: 150,
+                  textAlign: "justify",
+                  //  marginTop: 10,
+                }}
+              >
+                {" "}
+                Name:
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "OpenSans-Regular",
+                  fontSize: 14,
+                  color: "#8D8FAD",
+                  width: 150,
+                  textAlign: "left",
+                  //  marginTop: 10,
+                }}
+              >
+                {" "}
+                {item.name}
+              </Text>
+            </View>
+            {/**Name Text CLose */}
+            {/**Name Text */}
+            <View style={{ flexDirection: "column" }}>
+              <Text
+                style={{
+                  fontFamily: "OpenSans-SemiBold",
+                  fontSize: 14,
+                  color: "#1C215D",
+                  width: 150,
+                  textAlign: "justify",
+                  //  marginTop: 10,
+                }}
+              >
+                {" "}
+                Discription:
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "OpenSans-Regular",
+                  fontSize: 14,
+                  color: "#8D8FAD",
+                  width: 150,
+                  textAlign: "left",
+                  //textAlign: "justify",
+                  //  marginTop: 10,
+                }}
+              >
+                {" "}
+                {item.dis}
+              </Text>
+            </View>
+            {/**Name Text CLose */}
+            {/**Name Text */}
+            <View
+              style={{
+                flexDirection: "column",
+                position: "absolute",
+                bottom: 5,
+                left: 5,
+
+                // backgroundColor: "red",
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: "OpenSans-SemiBold",
+                  fontSize: 14,
+                  color: "#1C215D",
+                  marginTop: 1,
+                  width: 160,
+                  //  marginTop: 10,
+                }}
+              >
+                {" "}
+                See More...
+              </Text>
+            </View>
+            {/**Name Text CLose */}
+          </TouchableOpacity>
         );
       }}
       keyExtractor={(item, index) => index.toString()}
@@ -121,7 +235,12 @@ export default function book() {
       {
         //Modal
       }
-      <Modal transparent={true} animationType={"none"} visible={getModal}>
+      <Modal
+        transparent={true}
+        animationType={"none"}
+        visible={getModal}
+        // onRequestClose={() => outputCollections()}
+      >
         <View style={styles.modalBackground}>
           <View style={styles.activityIndicatorWrapper}>
             {
@@ -279,13 +398,18 @@ export default function book() {
             }
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => {
+              onPress={async () => {
                 setallCollections({
                   name: CollectionsName,
                   dis: CollectionsDis,
                   items: getselectedItem,
                 });
-                SaveData(allCollections);
+                SaveData({
+                  name: CollectionsName,
+                  dis: CollectionsDis,
+                  items: getselectedItem,
+                });
+                outputCollections();
                 setModal(false);
               }}
             >
