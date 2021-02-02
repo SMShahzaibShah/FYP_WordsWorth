@@ -78,7 +78,7 @@ export default function book() {
     <FlatList
       data={Coll}
       //keyExtractor={(item) => Math.random().toString(36).substring(7)}
-      //showsVerticalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
       numColumns={2}
       style={{
         marginTop: 5,
@@ -86,6 +86,12 @@ export default function book() {
         //   backgroundColor: "red",
         alignSelf: "center",
         //justifyContent: "space-between",
+      }}
+      refreshing={false}
+      onRefresh={() => {
+        console.log("refreshing");
+        outputCollections();
+        console.log("refreshing done");
       }}
       renderItem={({ item }) => {
         return (
