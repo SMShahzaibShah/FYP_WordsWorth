@@ -9,16 +9,21 @@ import { Ionicons } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import { createStackNavigator } from "@react-navigation/stack";
+
+const Stack = createStackNavigator();
+
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AsyncStorage } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
+import bookCollections from "./collections/collectionsBooksDetails";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 const Tab = createMaterialTopTabNavigator();
 
-function MyTabs() {
+const MyTabs = () => {
   return (
     <Tab.Navigator
       swipeEnabled={true}
@@ -34,12 +39,14 @@ function MyTabs() {
         labelStyle: {
           fontSize: 16,
           fontWeight: "bold",
+          //backgroundColor: "red",
+          flexDirection: "row",
         },
         style: {
-          marginTop: 20,
+          // marginTop: 20,
           position: "relative",
           //          backgroundColor: "red",
-          width: "90%",
+          width: "100%",
           //justifyContent: "center",
           alignSelf: "center",
         },
@@ -107,8 +114,7 @@ function MyTabs() {
       />
     </Tab.Navigator>
   );
-}
-
+};
 export default function collections({ navigation, route }) {
   return (
     <View
@@ -165,7 +171,7 @@ export default function collections({ navigation, route }) {
             fontSize: 20,
             color: colors.gray,
             marginTop: 20,
-            marginBottom: 40,
+            marginBottom: 60,
           }}
         >
           COLLECTIONS
@@ -174,7 +180,23 @@ export default function collections({ navigation, route }) {
       {
         //Search DIVE
       }
-      <NavigationContainer independent={true}>{MyTabs()}</NavigationContainer>
+      <NavigationContainer independent={true}>
+        <Stack.Navigator
+          initialRouteName={"allCollections"}
+          screenOptions={{
+            headerShown: false,
+            //  headerTitleAlign: "center",
+            // headerTintColor: "black", // change header color
+            // headerStyle: {
+            //  backgroundColor: "lightblue",
+            //},
+            // headerRight: () => <Button title="Edit"></Button>,
+          }}
+        >
+          <Stack.Screen name="allCollections" component={MyTabs} />
+          <Stack.Screen name="bookCollections" component={bookCollections} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </View>
   );
 }
@@ -182,7 +204,7 @@ export default function collections({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#faf8f5",
     alignItems: "center",
     justifyContent: "center",
   },

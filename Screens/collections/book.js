@@ -17,7 +17,7 @@ import * as FileSystem from "expo-file-system";
 import { AsyncStorage } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
-export default function book() {
+export default function book({ navigation, route }) {
   const [getModal, setModal] = useState(false);
   const [allbooks, setbooks] = useState([]);
   const [getselectedItem, setselectedItem] = useState([]);
@@ -114,7 +114,10 @@ export default function book() {
               //flexDirection: "row",
               //  backgroundColor: "yellow",
             }}
-            onPress={() => console.log(item)}
+            onPress={() => {
+              console.log(item);
+              navigation.navigate("bookCollections", { collectionInfo: item });
+            }}
           >
             <Image
               source={require("./booksAssets/Rectangle34.png")}
@@ -176,6 +179,7 @@ export default function book() {
                   fontSize: 14,
                   color: "#8D8FAD",
                   width: 150,
+                  height: 58,
                   textAlign: "left",
                   //textAlign: "justify",
                   //  marginTop: 10,
@@ -480,7 +484,7 @@ export default function book() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: "red",
+    backgroundColor: "#faf8f5",
     // alignItems: "center",
     // justifyContent: "center",
   },

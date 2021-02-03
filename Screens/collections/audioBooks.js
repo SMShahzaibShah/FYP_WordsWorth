@@ -484,6 +484,7 @@ export default function audioBook() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#faf8f5",
     //backgroundColor: "red",
     // alignItems: "center",
     // justifyContent: "center",
