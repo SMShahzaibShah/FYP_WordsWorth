@@ -25,7 +25,7 @@ export default function book({ navigation, route }) {
   const [CollectionsName, setCollectionsName] = useState();
   const [CollectionsDis, setCollectionsDis] = useState();
   const [Coll, setColl] = useState();
-
+  const [ref, setref] = useState(false);
   const outputData = async () => {
     setbooks(
       await FileSystem.readDirectoryAsync(
@@ -87,7 +87,7 @@ export default function book({ navigation, route }) {
         alignSelf: "center",
         //justifyContent: "space-between",
       }}
-      refreshing={false}
+      refreshing={ref}
       onRefresh={() => {
         console.log("refreshing");
         outputCollections();
@@ -115,7 +115,7 @@ export default function book({ navigation, route }) {
               //  backgroundColor: "yellow",
             }}
             onPress={() => {
-              console.log(item);
+              //  console.log(item);
               navigation.navigate("bookCollections", { collectionInfo: item });
             }}
           >
@@ -408,7 +408,7 @@ export default function book({ navigation, route }) {
             }
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={async () => {
+              onPress={() => {
                 setallCollections({
                   name: CollectionsName,
                   dis: CollectionsDis,
@@ -420,7 +420,11 @@ export default function book({ navigation, route }) {
                   items: getselectedItem,
                 });
                 outputCollections();
+                setref(true);
                 setModal(false);
+                setTimeout(() => {
+                  setref(false);
+                }, 1000);
               }}
             >
               <Text style={{ margin: 15 }}>

@@ -8,6 +8,7 @@ import {
   TextInput,
   FlatList,
   Image,
+  AsyncStorage,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -19,6 +20,7 @@ import * as FileSystem from "expo-file-system";
 import colorss from "../../assets/colors/colors";
 
 import { LinearGradient } from "expo-linear-gradient";
+
 export default function CollectionBooksDetails({ navigation, route }) {
   const [CollectionsName, setCollectionsName] = useState(
     route.params.collectionInfo.name
@@ -27,11 +29,52 @@ export default function CollectionBooksDetails({ navigation, route }) {
     route.params.collectionInfo.dis
   );
 
-  const [allbooks, setbooks] = useState([]);
-  const [getselectedItem, setselectedItem] = useState([]);
-  const [getNotInCollection, setNotInCollection] = useState([]);
-  const [getModal, setModal] = useState(false);
-  var selectItem = (item) => {
+  //const [getCollection, setCollection] = useState(); //conatins Book That remains after Deleted
+  const [allbooks, setbooks] = useState([]); //Conatins ALl the books that are avaiable in library
+
+  const [getselectedItem, setselectedItem] = useState(); //conatins Book To be Deleted
+
+  const [getNotInCollection, setNotInCollection] = useState(); //conatins Book that are not in collection
+  const [getModal, setModal] = useState(false); //Display Modal
+
+  const [updateed, setupdate] = useState();
+  const [ref, setref] = useState(false); //refresh List
+
+  const allinColl = () => {
+    //  console.log(getselectedItem);
+    const booksInCols = route.params.collectionInfo.items;
+    var data = booksInCols.filter((e) => !getselectedItem.includes(e));
+    //setCollection(data);
+    return data;
+  };
+  const storeExpense = async (data) => {
+    try {
+      await AsyncStorage.setItem("Collections", JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getExpense = async (ob) => {
+    try {
+      var value = await AsyncStorage.getItem("Collections");
+      if (value !== null) {
+        value = JSON.parse(value);
+        // console.log(value);
+        for (var i = 0; i < value.length; i++) {
+          if (value[i].name == route.params.collectionInfo.name) {
+            value[i] = ob;
+          }
+        }
+        //console.log(value);
+        storeExpense(value);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const selectItem = (item) => {
+    // console.log("here");
     var color = false;
     //console.log(item);
     //console.log(getselectedItem);
@@ -40,11 +83,13 @@ export default function CollectionBooksDetails({ navigation, route }) {
       //console.log(getselectedItem[i]);
       if (getselectedItem[i] == item) {
         //found = true;
+        // console.log(getselectedItem);
+        // console.log(item);
         color = true;
         break;
       }
     }
-    // console.log(color);
+    //console.log(color);
     return color;
   };
   const outputData = async () => {
@@ -57,16 +102,15 @@ export default function CollectionBooksDetails({ navigation, route }) {
 
   const notinColl = () => {
     const booksInCols = route.params.collectionInfo.items;
+    const x = allbooks.filter((e) => !booksInCols.includes(e));
 
-    // console.log(booksInCols);
-    //console.log(getNotInCollection);
-    //console.log(allbooks);
-    setNotInCollection(allbooks.filter((e) => !booksInCols.includes(e)));
+    setNotInCollection(x);
+
+    // console.log(getNotInCollection);
   };
+
   useEffect(() => {
     outputData();
-    // setselectedItem([]);
-    notinColl();
   }, []);
   return (
     <View style={styles.container}>
@@ -191,8 +235,9 @@ export default function CollectionBooksDetails({ navigation, route }) {
               horizontal={true}
               style={{
                 marginTop: 5,
-                height: 0,
+                //height: 0,
               }}
+              refreshing={ref}
               renderItem={({ item }) => {
                 return (
                   <TouchableOpacity
@@ -212,7 +257,20 @@ export default function CollectionBooksDetails({ navigation, route }) {
                       //flexDirection: "row",
                     }}
                     onPress={() => {
-                      setselectedItem([...getselectedItem, item]);
+                      var newVal = getselectedItem;
+                      //console.log(item);
+                      //console.log(getselectedItem);
+                      if (newVal.includes(item)) {
+                        alert("Item Already Exits");
+                      } else {
+                        newVal.push(item);
+                        setselectedItem(newVal);
+                        //console.log(getselectedItem);
+                        setref(true);
+                        setTimeout(() => {
+                          setref(false);
+                        }, 500);
+                      }
                     }}
                   >
                     <Text
@@ -271,9 +329,6 @@ export default function CollectionBooksDetails({ navigation, route }) {
                       //marginLeft: 5,
                       //flexDirection: "row",
                     }}
-                    onPress={() => {
-                      setselectedItem([...getselectedItem, item]);
-                    }}
                   >
                     <Text
                       style={{
@@ -295,18 +350,19 @@ export default function CollectionBooksDetails({ navigation, route }) {
             }
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={async () => {
+              onPress={() => {
                 {
-                  /**
-                SaveData({
-                  name: CollectionsName,
-                  dis: CollectionsDis,
-                  items: getselectedItem,
-                });
-               // outputCollections();
-                setModal(false);
-              
-               */
+                  const ob = {
+                    name: CollectionsName,
+                    items: allinColl(),
+                    dis: CollectionsDis,
+                  };
+                  setTimeout(() => {
+                    setModal(false);
+                    console.log(ob);
+                    getExpense(ob);
+                    navigation.goBack();
+                  }, 2000);
                 }
               }}
             >
@@ -329,7 +385,7 @@ export default function CollectionBooksDetails({ navigation, route }) {
             }
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={async () => {
+              onPress={() => {
                 {
                   /**
                 SaveData({
@@ -401,7 +457,7 @@ export default function CollectionBooksDetails({ navigation, route }) {
 
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => {
+          onPress={async () => {
             console.log("Edit");
             setselectedItem([]);
             setModal(true);
