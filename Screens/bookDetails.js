@@ -154,20 +154,15 @@ const bookDetails = ({ navigation, route }) => {
           {
             //bookDetail Close
           }
-          <Modal
-            animationType="none"
-            transparent={true}
-            visible={getModal}
-            //style={{ height: 200, width: 100, backgroundColor: "red" }}
-          >
+          <Modal animationType="none" transparent={true} visible={getModal}>
             <View style={styles.modalBackground}>
               <View style={styles.activityIndicatorWrapper}>
                 {getText === false ? (
                   <Text
                     style={{
-                      color: "black",
-                      fontWeight: "bold",
-                      textAlign: "center",
+                      fontFamily: "OpenSans-SemiBold",
+                      fontSize: 14,
+                      color: colors.blue,
                     }}
                   >
                     Please Wait Book is Downloading
@@ -379,8 +374,8 @@ const styles = StyleSheet.create({
   },
   activityIndicatorWrapper: {
     backgroundColor: "white",
-    height: 100,
-    width: 100,
+    height: "20%",
+    width: "80%",
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#C0C0C0",

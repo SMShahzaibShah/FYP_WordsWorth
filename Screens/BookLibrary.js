@@ -16,11 +16,14 @@ const firebaseBooksData = require("firebase");
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+
+import { Entypo } from "@expo/vector-icons";
 import { AsyncStorage } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import * as MediaLibrary from "expo-media-library";
 import colors from "../assets/colors/colors";
+import { color } from "react-native-reanimated";
 const BookLibrary = ({ navigation, route }) => {
   const [isLoading, setLoading] = useState(true);
   const [getF, setF] = useState();
@@ -246,6 +249,110 @@ const BookLibrary = ({ navigation, route }) => {
           </Text>
         </View>
         {
+          //Modal
+        }
+        <Modal animationType="none" transparent={true} visible={getModal}>
+          <View style={styles.modalBackground}>
+            <View style={styles.activityIndicatorWrapper}>
+              {
+                //Cross Button
+              }
+              <TouchableOpacity
+                onPress={() => setModal(false)}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 50,
+                  backgroundColor: "gray",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "absolute",
+                  right: 10,
+                  top: 10,
+                }}
+              >
+                <Entypo name="cross" size={30} color="white" />
+              </TouchableOpacity>
+              {
+                //Cross Button close
+              }
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  setModal(false);
+                  navigation.navigate("reader", {
+                    BookDetails: book,
+                  });
+                }}
+                style={{
+                  //borderWidth: 2,
+                  width: 120,
+                  height: 40,
+                  padding: 6,
+                  borderRadius: 50,
+                  backgroundColor: "#f1e7ff",
+                  // margin: 5,
+                }}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <Text
+                    style={{
+                      fontFamily: "OpenSans-SemiBold",
+                      fontSize: 18,
+                      color: colors.gray,
+                      // justifyContent: "center",
+                      marginRight: 10,
+                      //  marginLeft: 10,
+                    }}
+                  >
+                    Preview
+                  </Text>
+                  <FontAwesome5 name="book-reader" size={20} color="black" />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  SaveData(book);
+                  setModal(false);
+                }}
+                style={{
+                  //borderWidth: 2,
+                  width: 200,
+                  height: 40,
+                  padding: 6,
+                  borderRadius: 50,
+                  backgroundColor: "#f1e7ff",
+                }}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <Text
+                    style={{
+                      fontFamily: "OpenSans-SemiBold",
+                      fontSize: 16,
+                      color: colors.gray,
+                      justifyContent: "center",
+                    }}
+                  >
+                    Add to Audio Library
+                  </Text>
+                  <AntDesign
+                    name="addfile"
+                    size={20}
+                    color="black"
+                    style={{
+                      marginLeft: 5,
+                    }}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        {
+          //MOdal Close
+        }
+        {
           //2nd Conatiner
         }
         <View style={styles.secondcontainer}>
@@ -266,109 +373,6 @@ const BookLibrary = ({ navigation, route }) => {
                     setModal(true);
                   }}
                 >
-                  <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={getModal}
-                    presentationStyle="overFullScreen"
-                    style={{
-                      flex: 1,
-                      height: "30%",
-                      backgroundColor: "red",
-                      alignItems: "center",
-                      alignSelf: "center",
-                    }}
-                  >
-                    <View
-                      style={{
-                        justifyContent: "flex-end",
-                        alignSelf: "center",
-                        width: "80%",
-                        margin: 0,
-                      }}
-                    >
-                      <View
-                        style={{
-                          margin: 20,
-                          backgroundColor: "white",
-                          borderRadius: 20,
-                          padding: 35,
-                          alignItems: "center",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          shadowColor: "#000",
-                          shadowOffset: {
-                            width: 0,
-                            height: 2,
-                          },
-                          shadowOpacity: 0.25,
-                          shadowRadius: 3.84,
-                          elevation: 5,
-                          margin: 5,
-                        }}
-                      >
-                        <TouchableOpacity
-                          activeOpacity={0.5}
-                          onPress={() => {
-                            setModal(false);
-                            navigation.navigate("reader", {
-                              BookDetails: book,
-                            });
-                          }}
-                        >
-                          <View style={{ flexDirection: "row" }}>
-                            <Text
-                              style={{
-                                fontFamily: "OpenSans-SemiBold",
-                                fontSize: 18,
-                                color: colors.gray,
-                                justifyContent: "center",
-                                marginRight: 10,
-                              }}
-                            >
-                              Preview
-                            </Text>
-                            <FontAwesome5
-                              name="book-reader"
-                              size={20}
-                              color="black"
-                            />
-                          </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          activeOpacity={0.5}
-                          onPress={() => {
-                            SaveData(book);
-                            setModal(false);
-                          }}
-                          style={{
-                            marginTop: 10,
-                          }}
-                        >
-                          <View style={{ flexDirection: "row" }}>
-                            <Text
-                              style={{
-                                fontFamily: "OpenSans-SemiBold",
-                                fontSize: 16,
-                                color: colors.gray,
-                                justifyContent: "center",
-                              }}
-                            >
-                              Add to Audio Library
-                            </Text>
-                            <AntDesign
-                              name="addfile"
-                              size={20}
-                              color="black"
-                              style={{
-                                marginLeft: 5,
-                              }}
-                            />
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </Modal>
                   <View
                     style={{
                       flexDirection: "column",
@@ -514,6 +518,25 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     alignItems: "center",
     marginBottom: 5,
+  },
+
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "#00000080",
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: "white",
+    height: "20%",
+    width: "80%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#C0C0C0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 });
 

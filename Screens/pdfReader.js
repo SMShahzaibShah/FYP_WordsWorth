@@ -9,7 +9,7 @@ export default function reades({ navigation, route }) {
       <PDFReader
         source={{
           uri:
-            "file:///storage/emulated/0/expoWordsWorthDownload/" +
+            "file:///storage/emulated/0/expoWordsWorthDownload/Books/" +
             route.params.BookDetails.name +
             ".pdf",
         }}
