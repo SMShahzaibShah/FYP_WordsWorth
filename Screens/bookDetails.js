@@ -93,7 +93,7 @@ const bookDetails = ({ navigation, route }) => {
       const asset = await MediaLibrary.createAssetAsync(fileUri);
       const album = await MediaLibrary.getAlbumAsync("expoWordsWorthDownload");
       await MediaLibrary.createAlbumAsync(
-        "expoWordsWorthDownload",
+        "expoWordsWorthDownload/Books",
         asset,
         false
       );
@@ -154,6 +154,32 @@ const bookDetails = ({ navigation, route }) => {
           {
             //bookDetail Close
           }
+          <Modal
+            animationType="none"
+            transparent={true}
+            visible={getModal}
+            //style={{ height: 200, width: 100, backgroundColor: "red" }}
+          >
+            <View style={styles.modalBackground}>
+              <View style={styles.activityIndicatorWrapper}>
+                {getText === false ? (
+                  <Text
+                    style={{
+                      color: "black",
+                      fontWeight: "bold",
+                      textAlign: "center",
+                    }}
+                  >
+                    Please Wait Book is Downloading
+                  </Text>
+                ) : (
+                  <Text>Book Download Successfully</Text>
+                )}
+
+                <ActivityIndicator size="small" color="#0000ff" />
+              </View>
+            </View>
+          </Modal>
 
           {
             //WhiteContainer
@@ -162,54 +188,6 @@ const bookDetails = ({ navigation, route }) => {
             {
               //Book Icon
             }
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={getModal}
-              presentationStyle="overFullScreen"
-              style={{ height: 200, width: 100, backgroundColor: "red" }}
-            >
-              <View
-                style={{
-                  justifyContent: "flex-end",
-                  margin: 0,
-                }}
-              >
-                <View
-                  style={{
-                    margin: 20,
-                    backgroundColor: "white",
-                    borderRadius: 20,
-                    padding: 35,
-                    alignItems: "center",
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  {getText === false ? (
-                    <Text
-                      style={{
-                        color: "black",
-                        fontWeight: "bold",
-                        textAlign: "center",
-                      }}
-                    >
-                      Please Wait Book is Downloading
-                    </Text>
-                  ) : (
-                    <Text>Book Download Successfully</Text>
-                  )}
-
-                  <ActivityIndicator size="small" color="#0000ff" />
-                </View>
-              </View>
-            </Modal>
             <FlatList
               data={Arrays}
               showsVerticalScrollIndicator={false}
@@ -391,6 +369,24 @@ const styles = StyleSheet.create({
     marginTop: "8%",
     marginLeft: "5%",
     width: "14%",
+  },
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "#00000080",
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: "white",
+    height: 100,
+    width: 100,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#C0C0C0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 });
 export default bookDetails;
