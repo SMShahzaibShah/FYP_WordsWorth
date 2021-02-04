@@ -88,11 +88,6 @@ export default function book({ navigation, route }) {
         //justifyContent: "space-between",
       }}
       refreshing={ref}
-      onRefresh={() => {
-        console.log("refreshing");
-        outputCollections();
-        console.log("refreshing done");
-      }}
       renderItem={({ item }) => {
         return (
           <TouchableOpacity
@@ -423,6 +418,7 @@ export default function book({ navigation, route }) {
                 setref(true);
                 setModal(false);
                 setTimeout(() => {
+                  outputCollections();
                   setref(false);
                 }, 1000);
               }}

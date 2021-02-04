@@ -19,6 +19,7 @@ import { AsyncStorage } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import bookCollections from "./collections/collectionsBooksDetails";
+import audioCollections from "./collections/collectionAudioDetails";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 const Tab = createMaterialTopTabNavigator();
@@ -195,6 +196,7 @@ export default function collections({ navigation, route }) {
         >
           <Stack.Screen name="allCollections" component={MyTabs} />
           <Stack.Screen name="bookCollections" component={bookCollections} />
+          <Stack.Screen name="audioCollections" component={audioCollections} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

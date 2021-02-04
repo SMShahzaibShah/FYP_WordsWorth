@@ -21,7 +21,7 @@ import colorss from "../../assets/colors/colors";
 
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function CollectionBooksDetails({ navigation, route }) {
+export default function CollectionAudioBooksDetails({ navigation, route }) {
   const [CollectionsName, setCollectionsName] = useState(
     route.params.collectionInfo.name
   );
@@ -55,14 +55,14 @@ export default function CollectionBooksDetails({ navigation, route }) {
   };
   const storeExpense = async (data) => {
     try {
-      await AsyncStorage.setItem("Collections", JSON.stringify(data));
+      await AsyncStorage.setItem("audioCollections", JSON.stringify(data));
     } catch (error) {
       console.log(error);
     }
   };
   const getExpense = async (ob) => {
     try {
-      var value = await AsyncStorage.getItem("Collections");
+      var value = await AsyncStorage.getItem("audioCollections");
       if (value !== null) {
         value = JSON.parse(value);
         // console.log(value);
@@ -253,7 +253,7 @@ export default function CollectionBooksDetails({ navigation, route }) {
               }}
             >
               {" "}
-              Select Books to delete ?{" "}
+              Select AudioBooks to delete ?{" "}
             </Text>
             <FlatList
               data={listsOfBook}
@@ -326,7 +326,7 @@ export default function CollectionBooksDetails({ navigation, route }) {
               }}
             >
               {" "}
-              Select Books to Add in Collection ?{" "}
+              Select AudioBooks To Add In Collection ?{" "}
             </Text>
             <FlatList
               data={getNotInCollection}
@@ -625,7 +625,7 @@ export default function CollectionBooksDetails({ navigation, route }) {
           }}
         >
           {" "}
-          List of Books In Collection :{" "}
+          List of AudioBooks In Collection :{" "}
         </Text>
         {
           //flat List

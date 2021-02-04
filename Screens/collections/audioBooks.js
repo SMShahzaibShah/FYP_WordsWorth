@@ -17,16 +17,15 @@ import * as FileSystem from "expo-file-system";
 import { AsyncStorage } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
-export default function audioBook() {
+export default function audiobook({ navigation, route }) {
   const [getModal, setModal] = useState(false);
   const [allbooks, setbooks] = useState([]);
   const [getselectedItem, setselectedItem] = useState([]);
   const [allCollections, setallCollections] = useState();
   const [CollectionsName, setCollectionsName] = useState();
   const [CollectionsDis, setCollectionsDis] = useState();
-  const [getRef, setRef] = useState(false);
   const [Coll, setColl] = useState();
-
+  const [ref, setref] = useState(false);
   const outputData = async () => {
     setbooks(
       await FileSystem.readDirectoryAsync(
@@ -88,14 +87,7 @@ export default function audioBook() {
         alignSelf: "center",
         //justifyContent: "space-between",
       }}
-      refreshing={getRef}
-      onRefresh={() => {
-        console.log("refreshing");
-        outputCollections();
-        console.log("refreshing done");
-        setRef(false);
-        console.log(getRef);
-      }}
+      refreshing={ref}
       renderItem={({ item }) => {
         return (
           <TouchableOpacity
@@ -117,7 +109,10 @@ export default function audioBook() {
               //flexDirection: "row",
               //  backgroundColor: "yellow",
             }}
-            onPress={() => console.log(item)}
+            onPress={() => {
+              //  console.log(item);
+              navigation.navigate("audioCollections", { collectionInfo: item });
+            }}
           >
             <Image
               source={require("./booksAssets/Rectangle34.png")}
@@ -179,6 +174,7 @@ export default function audioBook() {
                   fontSize: 14,
                   color: "#8D8FAD",
                   width: 150,
+                  height: 58,
                   textAlign: "left",
                   //textAlign: "justify",
                   //  marginTop: 10,
@@ -223,11 +219,11 @@ export default function audioBook() {
   );
 
   const SaveData = async (item) => {
-    AsyncStorage.getItem("audioCollections").then((favs) => {
+    AsyncStorage.getItem("Collections").then((favs) => {
       favs = favs == null ? [] : JSON.parse(favs);
 
       favs.push(item);
-      return AsyncStorage.setItem("audioCollections", JSON.stringify(favs));
+      return AsyncStorage.setItem("Collections", JSON.stringify(favs));
     });
   };
   useEffect(() => {
@@ -355,7 +351,7 @@ export default function audioBook() {
               }}
             >
               {" "}
-              Select Books{" "}
+              Select AudioBooks{" "}
             </Text>
             <FlatList
               data={allbooks}
@@ -407,7 +403,7 @@ export default function audioBook() {
             }
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={async () => {
+              onPress={() => {
                 setallCollections({
                   name: CollectionsName,
                   dis: CollectionsDis,
@@ -419,8 +415,12 @@ export default function audioBook() {
                   items: getselectedItem,
                 });
                 outputCollections();
-                // setRef(true);
+                setref(true);
                 setModal(false);
+                setTimeout(() => {
+                  outputCollections();
+                  setref(false);
+                }, 1000);
               }}
             >
               <Text style={{ margin: 15 }}>
@@ -485,7 +485,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#faf8f5",
-    //backgroundColor: "red",
     // alignItems: "center",
     // justifyContent: "center",
   },
