@@ -199,7 +199,7 @@ const audiobrary = ({ navigation, route }) => {
     let data = book.file;
     data = data.split("/").join("$");
     let bookname = book.name.split(" ").join("-");
-    data = "http://192.168.0.103:8080/files/details/" + data + "||" + bookname;
+    data = "http://192.168.0.105:8080/files/details/" + data + "||" + bookname;
     console.log(data);
     setModal(true);
     AsyncStorage.getItem(bookname).then((favs) => {
@@ -323,6 +323,12 @@ const audiobrary = ({ navigation, route }) => {
             data={getF}
             showsVerticalScrollIndicator={false}
             numColumns={2}
+            style={{
+              //alignItems: "center",
+              width: "70%",
+              //justifyContent: "center",
+              //backgroundColor: "red",
+            }}
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity

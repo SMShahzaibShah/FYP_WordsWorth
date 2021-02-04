@@ -286,12 +286,15 @@ const BookLibrary = ({ navigation, route }) => {
                 }}
                 style={{
                   //borderWidth: 2,
-                  width: 120,
+                  width: 200,
                   height: 40,
                   padding: 6,
                   borderRadius: 50,
                   backgroundColor: "#f1e7ff",
+                  justifyContent: "center",
+                  alignItems: "center",
                   // margin: 5,
+                  marginTop: 50,
                 }}
               >
                 <View style={{ flexDirection: "row" }}>
@@ -299,7 +302,7 @@ const BookLibrary = ({ navigation, route }) => {
                     style={{
                       fontFamily: "OpenSans-SemiBold",
                       fontSize: 18,
-                      color: colors.gray,
+                      color: colors.blue,
                       // justifyContent: "center",
                       marginRight: 10,
                       //  marginLeft: 10,
@@ -307,7 +310,7 @@ const BookLibrary = ({ navigation, route }) => {
                   >
                     Preview
                   </Text>
-                  <FontAwesome5 name="book-reader" size={20} color="black" />
+                  <FontAwesome5 name="book-reader" size={20} color="#653CA0" />
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -323,6 +326,7 @@ const BookLibrary = ({ navigation, route }) => {
                   padding: 6,
                   borderRadius: 50,
                   backgroundColor: "#f1e7ff",
+                  marginTop: 30,
                 }}
               >
                 <View style={{ flexDirection: "row" }}>
@@ -330,7 +334,7 @@ const BookLibrary = ({ navigation, route }) => {
                     style={{
                       fontFamily: "OpenSans-SemiBold",
                       fontSize: 16,
-                      color: colors.gray,
+                      color: colors.blue,
                       justifyContent: "center",
                     }}
                   >
@@ -339,7 +343,7 @@ const BookLibrary = ({ navigation, route }) => {
                   <AntDesign
                     name="addfile"
                     size={20}
-                    color="black"
+                    color="#653CA0"
                     style={{
                       marginLeft: 5,
                     }}
@@ -364,6 +368,12 @@ const BookLibrary = ({ navigation, route }) => {
             keyExtractor={(item) => Math.random().toString(36).substring(7)}
             showsVerticalScrollIndicator={false}
             numColumns={2}
+            style={{
+              //alignItems: "center",
+              width: "70%",
+              //justifyContent: "center",
+              //backgroundColor: "red",
+            }}
             renderItem={({ item }) => {
               return (
                 <TouchableOpacity
@@ -518,6 +528,10 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     alignItems: "center",
     marginBottom: 5,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "red",
   },
 
   modalBackground: {
@@ -529,14 +543,15 @@ const styles = StyleSheet.create({
   },
   activityIndicatorWrapper: {
     backgroundColor: "white",
-    height: "20%",
+    height: "25%",
     width: "80%",
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#C0C0C0",
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-around",
+
+    //  justifyContent: "space-around",
   },
 });
 
