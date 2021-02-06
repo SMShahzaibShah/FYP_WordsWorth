@@ -19,8 +19,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
 
 const SignIn = ({ navigation, route }) => {
-  const [email, setemail] = useState("");
-  const [pass, setpass] = useState("");
+  const [email, setemail] = useState("shahzaib@gmail.com");
+  const [pass, setpass] = useState("shahzaib123");
   const [showPass, setShowPass] = useState(true);
 
   const onSignIn = () => {

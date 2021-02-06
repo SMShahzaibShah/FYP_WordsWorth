@@ -10,6 +10,7 @@ import {
   Modal,
   ActivityIndicator,
   Dimensions,
+  PermissionsAndroid,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
@@ -20,6 +21,7 @@ import { AsyncStorage } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
+import { MaterialIcons } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 
 import Slider from "@react-native-community/slider";
@@ -32,20 +34,121 @@ const audioDetails = ({ navigation, route }) => {
   const [getb, setb] = useState([]);
   const [getpage, setpage] = useState(true);
 
-  const displayButton = async (partName) => {
+  const deleteAudio = async (naaamofAudioFile) => {
+    var foldername = route.params.BookDetails.name;
+    foldername = foldername.split(" ").join("-");
+    naaamofAudioFile = naaamofAudioFile + ".wav";
+    {
+      /**
+    var fileUri =
+      "file:///storage/emulated/0/expoWordsWorthDownload/" +
+      foldername +
+      "/" +
+      naaamofAudioFile +
+      ".wav";
+ */
+    }
+    let fileUri =
+      "file:///data/user/0/host.exp.exponent/files/ExperienceData/%2540smshahzaib%252FFYP_WordsWorth/The-Importance-of-Being-Earnest---by-Oscar-Wilde-Part4.wav";
+
+    console.log(fileUri);
+    const album = await MediaLibrary.getAlbumsAsync(fileUri);
+    var toFind = "";
+    for (var i = 0; i < album.length; i++) {
+      if (album[i].title.indexOf(foldername) > -1) {
+        toFind = album[i];
+      }
+    }
+    // console.log(toFind);
+    console.log(toFind.title);
+    let media = await MediaLibrary.getAssetsAsync({
+      album: toFind,
+      mediaType: ["audio"],
+    });
+
+    var asse = media.assets;
+    //  console.log(asse);
+    var toDel = "";
+    for (var i = 0; i < asse.length; i++) {
+      if (asse[i].filename.indexOf(naaamofAudioFile) > -1) {
+        toDel = asse[i];
+      }
+    }
+    console.log(toDel);
+
+    var delArray = [toDel];
+    console.log(delArray);
+    await MediaLibrary.deleteAssetsAsync(delArray);
+    // console.log(toDel);
+    //   console.log("toDel is", toDel);
+    {
+      /**
+    let fileUri =
+      FileSystem.documentDirectory +
+      foldername +
+      "/" +
+      naaamofAudioFile +
+      ".wav";
+    console.log(fileUri);
+               */
+    }
+    //    let naa = "expoWordsWorthDownload/" + foldername;
+    // const album = await MediaLibrary.getAlbumAsync("expoWordsWorthDownload");
+    //console.log(album);
+    //  album.
+    //  console.log(album.assetCount);
+
+    {
+      /**
+    let media = await MediaLibrary.getAssetsAsync({
+      uri: fileUri,
+      // album: album,
+      mediaType: ["audio"],
+    });
+
+    console.log(media);
+ */
+    }
+    //const album = await MediaLibrary.getAlbumAsync("expoWordsWorthDownload");
+    //await MediaLibrary.removeAssetsFromAlbumAsync(fileUri, album);
+
+    {
+      /**
+    const album = await MediaLibrary.getAlbumAsync("expoWordsWorthDownload");
+    console.log(album);
+ */
+    }
+    {
+      /**
+    await MediaLibrary.deleteAssetsAsync(
+      "expoWordsWorthDownload/" + foldername,
+      asset,
+      false
+    );
+     */
+    }
+  };
+
+  const displayButton = async () => {
     var folderName = route.params.BookDetails.name;
     folderName = folderName.split(" ").join("-");
-    const data = await FileSystem.readDirectoryAsync(
-      "file:///storage/emulated/0/expoWordsWorthDownload/" + folderName
-    );
-    var arr = [];
-    for (var i = 0; i < data.length; i++) {
-      arr.push(data[i]);
+    try {
+      const data = await FileSystem.readDirectoryAsync(
+        "file:///storage/emulated/0/expoWordsWorthDownload/" + folderName
+      );
+
+      var arr = [];
+      for (var i = 0; i < data.length; i++) {
+        arr.push(data[i]);
+      }
+      // console.log(arr);
+      setb(arr);
+      setpage(false);
+      //setb(data);
+    } catch {
+      console.log("here");
+      setpage(false);
     }
-    // console.log(arr);
-    setb(arr);
-    setpage(false);
-    //setb(data);
   };
   useEffect(() => {
     displayButton();
@@ -126,7 +229,7 @@ const audioDetails = ({ navigation, route }) => {
     let data = link.file;
     data = data.split("/").join("$");
     const uri =
-      "http://192.168.0.105:8080/files/fetch/" +
+      "http://192.168.0.104:8080/files/fetch/" +
       data +
       "||" +
       bookName.key +
@@ -156,7 +259,7 @@ const audioDetails = ({ navigation, route }) => {
     let data = link.file;
     data = data.split("/").join("$");
     const uri =
-      "http://192.168.0.105:8080/files/get/" +
+      "http://192.168.0.104:8080/files/get/" +
       data +
       "||" +
       bookName.key +
@@ -173,7 +276,7 @@ const audioDetails = ({ navigation, route }) => {
       .then(({ uri }) => {
         console.log("Download ho gya");
         saveAudioFile(uri, booknameForFolder);
-        console.log(uri);
+        console.log("uri is", uri);
         console.log("done");
         // setText(true);
         //SaveData(bookName);
@@ -842,37 +945,77 @@ const audioDetails = ({ navigation, route }) => {
                         </View>
 
                         {getb.toString().indexOf(item.key) > -1 ? (
-                          <TouchableOpacity
-                            activeOpacity={0.7}
-                            onPress={() => {
-                              console.log("Play");
-                              console.log(item);
-                              console.log(route.params.BookDetails.name);
-                              setbookname(route.params.BookDetails.name);
-                              setPartName(item.key);
-                              playSound(
-                                item.key,
-                                route.params.BookDetails.name
-                              );
-                              setPlayModal(true);
-                            }}
-                            style={{
-                              // marginLeft: 5,
-                              alignSelf: "center",
-                              backgroundColor: "#F1E7FF",
-                              borderRadius: 50,
-                              width: 40,
-                              height: 40,
-                              padding: 3,
-                            }}
-                          >
-                            <Entypo
-                              name="controller-play"
-                              size={30}
-                              color="black"
-                              style={{ alignSelf: "center", marginLeft: 3 }}
-                            />
-                          </TouchableOpacity>
+                          <>
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                console.log("Play");
+                                console.log(item);
+                                console.log(route.params.BookDetails.name);
+                                setbookname(route.params.BookDetails.name);
+                                setPartName(item.key);
+                                playSound(
+                                  item.key,
+                                  route.params.BookDetails.name
+                                );
+                                setPlayModal(true);
+                              }}
+                              style={{
+                                // marginLeft: 5,
+                                alignSelf: "center",
+                                backgroundColor: "#F1E7FF",
+                                borderRadius: 50,
+                                width: 40,
+                                height: 40,
+                                padding: 3,
+                              }}
+                            >
+                              <Entypo
+                                name="controller-play"
+                                size={30}
+                                color="black"
+                                style={{ alignSelf: "center", marginLeft: 3 }}
+                              />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              onPress={() => {
+                                console.log("delete");
+                                console.log(item);
+                                console.log(route.params.BookDetails.name);
+                                //setbookname(route.params.BookDetails.name);
+                                // setPartName(item.key);
+                                // playSound(
+                                //   item.key,
+                                //  route.params.BookDetails.name
+                                // );
+                                // setPlayModal(true);
+                                deleteAudio(item.key);
+                              }}
+                              style={{
+                                // marginLeft: 5,
+                                justifyContent: "center",
+                                alignSelf: "center",
+                                alignItems: "center",
+                                backgroundColor: "#F1E7FF",
+                                marginLeft: 5,
+                                borderRadius: 50,
+                                width: 40,
+                                height: 40,
+                                //padding: 2,
+                              }}
+                            >
+                              <MaterialIcons
+                                name="delete"
+                                size={30}
+                                color="black"
+                                style={{
+                                  alignSelf: "center",
+                                  //  marginLeft: 3
+                                }}
+                              />
+                            </TouchableOpacity>
+                          </>
                         ) : (
                           <TouchableOpacity
                             onPress={() => {
