@@ -49,10 +49,14 @@ const audioDetails = ({ navigation, route }) => {
  */
     }
     let fileUri =
-      "file:///data/user/0/host.exp.exponent/files/ExperienceData/%2540smshahzaib%252FFYP_WordsWorth/The-Importance-of-Being-Earnest---by-Oscar-Wilde-Part4.wav";
+      "file:///data/user/0/host.exp.exponent/files/ExperienceData/%2540smshahzaib%252FFYP_WordsWorth/" +
+      naaamofAudioFile;
 
-    console.log(fileUri);
+    // console.log(fileUri);
+
     const album = await MediaLibrary.getAlbumsAsync(fileUri);
+    console.log(album);
+
     var toFind = "";
     for (var i = 0; i < album.length; i++) {
       if (album[i].title.indexOf(foldername) > -1) {
@@ -60,14 +64,16 @@ const audioDetails = ({ navigation, route }) => {
       }
     }
     // console.log(toFind);
-    console.log(toFind.title);
+    //console.log(toFind);
+
     let media = await MediaLibrary.getAssetsAsync({
       album: toFind,
       mediaType: ["audio"],
     });
 
     var asse = media.assets;
-    //  console.log(asse);
+    console.log(asse);
+
     var toDel = "";
     for (var i = 0; i < asse.length; i++) {
       if (asse[i].filename.indexOf(naaamofAudioFile) > -1) {
@@ -79,54 +85,6 @@ const audioDetails = ({ navigation, route }) => {
     var delArray = [toDel];
     console.log(delArray);
     await MediaLibrary.deleteAssetsAsync(delArray);
-    // console.log(toDel);
-    //   console.log("toDel is", toDel);
-    {
-      /**
-    let fileUri =
-      FileSystem.documentDirectory +
-      foldername +
-      "/" +
-      naaamofAudioFile +
-      ".wav";
-    console.log(fileUri);
-               */
-    }
-    //    let naa = "expoWordsWorthDownload/" + foldername;
-    // const album = await MediaLibrary.getAlbumAsync("expoWordsWorthDownload");
-    //console.log(album);
-    //  album.
-    //  console.log(album.assetCount);
-
-    {
-      /**
-    let media = await MediaLibrary.getAssetsAsync({
-      uri: fileUri,
-      // album: album,
-      mediaType: ["audio"],
-    });
-
-    console.log(media);
- */
-    }
-    //const album = await MediaLibrary.getAlbumAsync("expoWordsWorthDownload");
-    //await MediaLibrary.removeAssetsFromAlbumAsync(fileUri, album);
-
-    {
-      /**
-    const album = await MediaLibrary.getAlbumAsync("expoWordsWorthDownload");
-    console.log(album);
- */
-    }
-    {
-      /**
-    await MediaLibrary.deleteAssetsAsync(
-      "expoWordsWorthDownload/" + foldername,
-      asset,
-      false
-    );
-     */
-    }
   };
 
   const displayButton = async () => {
@@ -241,8 +199,7 @@ const audioDetails = ({ navigation, route }) => {
       .then((response) => response.text())
       .then((responseJson) => {
         console.log(responseJson);
-        downloadFile(bookName, link);
-        setModal(false);
+        downloadFile(bookName, responseJson, link);
       })
       .catch((error) => {
         // console.error(error);
@@ -251,22 +208,12 @@ const audioDetails = ({ navigation, route }) => {
         // setModal(false);
       });
   };
-  const downloadFile = (bookName, link) => {
-    console.log(bookName + "download");
+  const downloadFile = (bookName, send, link) => {
+    //  console.log(bookName + "download");
     console.log("yes");
     //setText(false);
     let booknameForFolder = link.name.split(" ").join("-");
-    let data = link.file;
-    data = data.split("/").join("$");
-    const uri =
-      "http://192.168.0.104:8080/files/get/" +
-      data +
-      "||" +
-      bookName.key +
-      "||" +
-      bookName.start +
-      "||" +
-      bookName.end;
+    const uri = "http://192.168.0.104:8080/files/get/" + send;
     let fileUri = FileSystem.documentDirectory + bookName.key + ".wav";
     //check(bookName);
     //console.log(status);
@@ -981,8 +928,8 @@ const audioDetails = ({ navigation, route }) => {
                               activeOpacity={0.7}
                               onPress={() => {
                                 console.log("delete");
-                                console.log(item);
-                                console.log(route.params.BookDetails.name);
+                                // console.log(item);
+                                // console.log(route.params.BookDetails.name);
                                 //setbookname(route.params.BookDetails.name);
                                 // setPartName(item.key);
                                 // playSound(
