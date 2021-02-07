@@ -199,7 +199,8 @@ const audiobrary = ({ navigation, route }) => {
     let data = book.file;
     data = data.split("/").join("$");
     let bookname = book.name.split(" ").join("-");
-    data = "http://192.168.0.104:8080/files/details/" + data + "||" + bookname;
+    data =
+      "http://192.168.100.127:8080/files/details/" + data + "||" + bookname;
     console.log(data);
     setModal(true);
     AsyncStorage.getItem(bookname).then((favs) => {

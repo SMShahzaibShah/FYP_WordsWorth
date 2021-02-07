@@ -33,6 +33,7 @@ const getUrl = (img) => {
 const audioDetails = ({ navigation, route }) => {
   const [getb, setb] = useState([]);
   const [getpage, setpage] = useState(true);
+  const [getref, setref] = useState(false);
 
   const deleteAudio = async (naaamofAudioFile) => {
     var foldername = route.params.BookDetails.name;
@@ -55,16 +56,19 @@ const audioDetails = ({ navigation, route }) => {
     // console.log(fileUri);
 
     const album = await MediaLibrary.getAlbumsAsync(fileUri);
-    console.log(album);
+    //console.log(album);
 
     var toFind = "";
+    //var co = 0;
     for (var i = 0; i < album.length; i++) {
       if (album[i].title.indexOf(foldername) > -1) {
         toFind = album[i];
+        break;
+        //co = co + 1;
       }
     }
-    // console.log(toFind);
-    //console.log(toFind);
+    //console.log(co);
+    //console.log(toFind[0]);
 
     let media = await MediaLibrary.getAssetsAsync({
       album: toFind,
@@ -187,7 +191,7 @@ const audioDetails = ({ navigation, route }) => {
     let data = link.file;
     data = data.split("/").join("$");
     const uri =
-      "http://192.168.0.104:8080/files/fetch/" +
+      "http://192.168.100.127:8080/files/fetch/" +
       data +
       "||" +
       bookName.key +
@@ -213,7 +217,7 @@ const audioDetails = ({ navigation, route }) => {
     console.log("yes");
     //setText(false);
     let booknameForFolder = link.name.split(" ").join("-");
-    const uri = "http://192.168.0.104:8080/files/get/" + send;
+    const uri = "http://192.168.100.127:8080/files/get/" + send;
     let fileUri = FileSystem.documentDirectory + bookName.key + ".wav";
     //check(bookName);
     //console.log(status);
@@ -229,6 +233,14 @@ const audioDetails = ({ navigation, route }) => {
         //SaveData(bookName);
         setModal(false);
         //outputData();
+        var newVal = getb;
+        newVal.push(bookName.key + ".wav");
+        console.log(newVal);
+        setb(newVal);
+        setref(true);
+        setTimeout(() => {
+          setref(false);
+        }, 500);
       })
       .catch((error) => {
         console.error(error);
@@ -855,6 +867,7 @@ const audioDetails = ({ navigation, route }) => {
                 <FlatList
                   data={route.params.audioParts}
                   showsVerticalScrollIndicator={false}
+                  refreshing={getref}
                   renderItem={({ item, index }) => {
                     return (
                       <View
@@ -938,6 +951,32 @@ const audioDetails = ({ navigation, route }) => {
                                 // );
                                 // setPlayModal(true);
                                 deleteAudio(item.key);
+
+                                var newVal = getb;
+                                function arrayRemove(arr, value) {
+                                  return arr.filter(function (ele) {
+                                    return ele != value;
+                                  });
+                                }
+                                var nna = item.key + ".wav";
+                                // console.log(newVal);
+                                var result = arrayRemove(newVal, nna);
+                                //console.log(result);
+                                setb(result);
+                                setref(true);
+                                setTimeout(() => {
+                                  setref(false);
+                                }, 500);
+                                {
+                                  /**
+                                console.log(newVal);
+                                setb(newVal);
+                                setref(true);
+                                setTimeout(() => {
+                                  setref(false);
+                                }, 500);
+ */
+                                }
                               }}
                               style={{
                                 // marginLeft: 5,
@@ -966,11 +1005,8 @@ const audioDetails = ({ navigation, route }) => {
                         ) : (
                           <TouchableOpacity
                             onPress={() => {
-                              // console.log(item);
-                              // console.log(route.params.BookDetails.file);
                               setModal(true);
                               getpart(item, route.params.BookDetails);
-                              // downloadFile(item, route.params.BookDetails);
                             }}
                             style={{
                               //marginLeft: ,
