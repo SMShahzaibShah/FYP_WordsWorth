@@ -43,6 +43,7 @@ import audioDetails from "./Screens/audioDetails";
 import audioSettings from "./Screens/audioSettings";
 import audioPlayer from "./Screens/audioPlayer";
 import collections from "./Screens/collestions";
+import bookSuggestions from "./Screens/bookSuggestions";
 
 import * as firebase from "firebase";
 import * as firebaseBooksData from "firebase";
@@ -130,6 +131,7 @@ export default function App() {
         <Stack.Screen name="audioSettings" component={audioSettings} />
         <Stack.Screen name="audioPlayer" component={audioPlayer} />
         <Stack.Screen name="collections" component={collections} />
+        <Stack.Screen name="bookSuggestions" component={bookSuggestions} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -861,7 +861,7 @@ const audioDetails = ({ navigation, route }) => {
                 style={{
                   height: Dimensions.get("window").height * 0.45,
                   //backgroundColor: "red",
-                  width: "95%",
+                  width: "90%",
                 }}
               >
                 <FlatList
