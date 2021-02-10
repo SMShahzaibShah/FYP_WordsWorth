@@ -24,6 +24,7 @@ function MyTabs() {
       initialRouteName="NewsFeed"
       activeColor="white"
       inactiveColor="grey"
+      shifting={true}
       barStyle={{
         backgroundColor: "white",
         //paddingTop: 5,
@@ -51,17 +52,17 @@ function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="post"
+        name="Post"
         component={post}
         options={{
           tabBarColor: "#37265b",
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="add-circle-outline" size={25} color={color} />
+            <MaterialIcons name="add-circle-outline" size={24} color={color} />
           ),
         }}
       />
       <Tab.Screen
-        name="message"
+        name="Message"
         component={message}
         options={{
           tabBarColor: "#6518f4",
@@ -72,7 +73,7 @@ function MyTabs() {
       />
 
       <Tab.Screen
-        name="profile"
+        name="Profile"
         component={profile}
         options={{
           tabBarColor: "#1f65ff",
@@ -164,15 +165,13 @@ export default function socailSeg({ navigation, route }) {
           initialRouteName={"newsFeed"}
           screenOptions={{
             headerShown: false,
-            //  headerTitleAlign: "center",
-            // headerTintColor: "black", // change header color
-            // headerStyle: {
-            //  backgroundColor: "lightblue",
-            //},
-            // headerRight: () => <Button title="Edit"></Button>,
           }}
         >
           <Stack.Screen name="newsFeed" component={MyTabs} />
+          <Stack.Screen name="Search" component={searchFriends} />
+          <Stack.Screen name="Post" component={post} />
+          <Stack.Screen name="Message" component={message} />
+          <Stack.Screen name="Profile" component={profile} />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

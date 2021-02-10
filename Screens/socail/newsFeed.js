@@ -1,17 +1,19 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 export default function newsFeed() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#faf8f5",
-      }}
-    >
+    <View style={styles.container}>
       <Text>newsFeed</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    //  justifyContent: "center",
+    //  alignItems: "center",
+    backgroundColor: "#faf8f5",
+  },
+});
