@@ -137,7 +137,7 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-
+  const Drawer = createDrawerNavigator();
   const handleOnboardFinish = () => {
     setShowonBoard(false);
   };

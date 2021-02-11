@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 export default function newsFeed() {
   return (
     <View style={styles.container}>
-      <Text>newsFeed</Text>
+      <Text>Home</Text>
     </View>
   );
 }

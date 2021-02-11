@@ -9,7 +9,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
 import { LinearGradient } from "expo-linear-gradient";
-
+import "firebase/firestore";
 import colors from "../assets/colors/colors";
 
 const SignUp = ({ navigation, route }) => {
@@ -29,9 +29,13 @@ const SignUp = ({ navigation, route }) => {
           .signInWithEmailAndPassword(email, pass)
           .then((user) => {
             user = firebase.auth().currentUser;
-
             user.updateProfile({
               displayName: name.fName + "," + name.LName,
+            });
+            const dbh = firebase.firestore();
+            dbh.collection("users").doc(user.uid).set({
+              name: name,
+              email: email,
             });
             alert("User Created");
             setemail("");
