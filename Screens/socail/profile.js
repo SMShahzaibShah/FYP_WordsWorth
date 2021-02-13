@@ -20,11 +20,26 @@ import colors from "../../assets/colors/colors";
 export default function Profile() {
   const [getData, setData] = useState();
   const [getModal, setModal] = useState(false);
-  const [getSelected, setSelected] = useState({});
+  const [getSelected, setSelected] = useState({
+    creation: {
+      nanoseconds: 0,
+      seconds: 0,
+    },
+    downloadURL: "",
+    getcaption: "",
+    getquestion: {
+      quest: "",
+    },
+  });
+  const [getname, setname] = useState("");
 
   useEffect(() => {
     fectchUserposts();
+    var disName = firebase.auth().currentUser.displayName;
+    var disNamear = disName.split(",");
+    setname({ fName: disNamear[0], LName: disNamear[1] });
   }, []);
+
   const fectchUserposts = () => {
     firebase
       .firestore()
@@ -44,7 +59,7 @@ export default function Profile() {
   return (
     <View style={styles.container}>
       <Modal
-        animationType="none"
+        animationType="slide"
         transparent={true}
         visible={getModal}
         onRequestClose={() => {
@@ -91,7 +106,7 @@ export default function Profile() {
                   fontFamily: "OpenSans-Regular",
                   fontSize: 14,
                   alignSelf: "center",
-                  color: colors.blueFaded,
+                  color: colors.gray,
                 }}
               >
                 {getSelected.getcaption}
@@ -126,7 +141,7 @@ export default function Profile() {
                   fontFamily: "OpenSans-Regular",
                   fontSize: 14,
                   alignSelf: "center",
-                  color: colors.blueFaded,
+                  color: colors.gray,
                 }}
               >
                 {getSelected.getquestion.quest}
@@ -161,7 +176,7 @@ export default function Profile() {
                   fontFamily: "OpenSans-Regular",
                   fontSize: 14,
                   alignSelf: "center",
-                  color: colors.blueFaded,
+                  color: colors.gray,
                 }}
               >
                 {getSelected.getquestion.quest}
@@ -230,6 +245,7 @@ export default function Profile() {
             <Text
               style={{
                 alignSelf: "center",
+                color: colors.gray,
               }}
             >
               56
@@ -237,6 +253,7 @@ export default function Profile() {
             <Text
               style={{
                 fontFamily: "OpenSans-SemiBold",
+                color: colors.blue,
               }}
             >
               Posts
@@ -256,6 +273,7 @@ export default function Profile() {
             <Text
               style={{
                 alignSelf: "center",
+                color: colors.gray,
               }}
             >
               217
@@ -263,6 +281,7 @@ export default function Profile() {
             <Text
               style={{
                 fontFamily: "OpenSans-SemiBold",
+                color: colors.blue,
               }}
             >
               Followers
@@ -281,6 +300,7 @@ export default function Profile() {
             <Text
               style={{
                 alignSelf: "center",
+                color: colors.gray,
               }}
             >
               56
@@ -288,6 +308,7 @@ export default function Profile() {
             <Text
               style={{
                 fontFamily: "OpenSans-SemiBold",
+                color: colors.blue,
               }}
             >
               Following
@@ -314,19 +335,21 @@ export default function Profile() {
           alignSelf: "center",
           flexDirection: "column",
           width: "100%",
-          marginLeft: 5,
+          marginLeft: 10,
         }}
       >
         <Text
           style={{
             fontFamily: "OpenSans-SemiBold",
+            color: colors.blue,
           }}
         >
-          Syed Shahzaib Shah
+          {getname.fName} {getname.LName}
         </Text>
         <Text
           style={{
             fontFamily: "Roboto-Regular",
+            color: colors.gray,
           }}
         >
           Bio Aye gii
@@ -349,9 +372,10 @@ export default function Profile() {
       >
         <Text
           style={{
-            fontFamily: "OpenSans-Bold",
+            fontFamily: "OpenSans-SemiBold",
             fontSize: 16,
-            margin: 5,
+            marginLeft: 10,
+            color: colors.blue,
           }}
         >
           Posts
@@ -359,7 +383,7 @@ export default function Profile() {
         <View
           style={{
             width: "100%",
-            //   backgroundColor: "yellow",
+            //backgroundColor: "yellow",
             alignItems: "center",
             height: 410,
             paddingBottom: 10,
@@ -440,7 +464,7 @@ const styles = StyleSheet.create({
   },
   activityIndicatorWrapper: {
     backgroundColor: "white",
-    height: "60%",
+    height: "40%",
     width: "100%",
     borderTopStartRadius: 50,
     borderWidth: 1,

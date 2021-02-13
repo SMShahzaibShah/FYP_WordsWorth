@@ -21,7 +21,7 @@ import post from "./socail/post";
 function MyTabs() {
   return (
     <Tab.Navigator
-      initialRouteName="NewsFeed"
+      initialRouteName="Home"
       activeColor="white"
       inactiveColor="grey"
       shifting={true}
@@ -32,10 +32,10 @@ function MyTabs() {
       }}
     >
       <Tab.Screen
-        name="NewsFeed"
+        name="Home"
         component={newsFeed}
         options={{
-          tabBarColor: "#653CA0",
+          tabBarColor: "#10002b",
           tabBarIcon: ({ color }) => (
             <Ionicons name="ios-home" size={24} color={color} />
           ),
@@ -45,7 +45,7 @@ function MyTabs() {
         name="Search"
         component={searchFriends}
         options={{
-          tabBarColor: "#006D69",
+          tabBarColor: "#240046",
           tabBarIcon: ({ color }) => (
             <Ionicons name="ios-search" size={24} color={color} />
           ),
@@ -55,7 +55,7 @@ function MyTabs() {
         name="Post"
         component={post}
         options={{
-          tabBarColor: "#37265b",
+          tabBarColor: "#3c096c",
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="add-circle-outline" size={24} color={color} />
           ),
@@ -65,7 +65,7 @@ function MyTabs() {
         name="Message"
         component={message}
         options={{
-          tabBarColor: "#6518f4",
+          tabBarColor: "#5a189a",
           tabBarIcon: ({ color }) => (
             <Feather name="message-square" size={24} color={color} />
           ),
@@ -76,7 +76,7 @@ function MyTabs() {
         name="Profile"
         component={profile}
         options={{
-          tabBarColor: "#1f65ff",
+          tabBarColor: "#7b2cbf",
           tabBarIcon: ({ color }) => (
             <Feather name="user" size={24} color={color} />
           ),
