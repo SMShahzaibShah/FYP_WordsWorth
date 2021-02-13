@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,19 +6,41 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  FlatList,
 } from "react-native";
+
 import * as firebase from "firebase";
+import { AsyncStorage } from "react-native";
 require("firebase/firestore");
 require("firebase/firebase-storage");
 import colors from "../../assets/colors/colors";
-
+import { Picker } from "@react-native-picker/picker";
 import { LinearGradient } from "expo-linear-gradient";
+
 export default function post() {
   const [getcaption, setcaption] = useState("");
-  const [getheight, setheight] = useState(0);
+  const [getF, setF] = useState();
+  const [getquestion, setquestion] = useState({
+    quest: "Reading",
+  });
+  const [book, setbook] = useState();
+
+  const getUrl = (img) => {
+    //console.log(img.split("url:")[1]);
+    return img.split("url:")[1];
+  };
+
+  const outputData = async () => {
+    const allBooks = await AsyncStorage.getItem("BooksInfo");
+    setF(JSON.parse(allBooks));
+  };
+
+  useEffect(() => {
+    outputData();
+  }, []);
 
   const UploadImage = async () => {
-    const uri = "to be set";
+    const uri = getUrl(book.image);
     const childPath = `post/${
       firebase.auth().currentUser.uid
     }/${Math.random().toString(36)}`;
@@ -40,6 +62,7 @@ export default function post() {
     };
     task.on("state_changed", taskProgress, taskError, TaskCompleted);
   };
+
   const savePostData = (downloadURL) => {
     firebase
       .firestore()
@@ -49,33 +72,130 @@ export default function post() {
       .add({
         downloadURL,
         getcaption,
+        getquestion,
         creation: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(function () {
         alert("Post Added");
+        setcaption("");
+        setbook();
       });
   };
   return (
     <View style={styles.container}>
       {
-        //Search Image
+        //List Of books
       }
       <View
         style={{
-          justifyContent: "center",
-          alignItems: "center",
-          //  marginTop: 80,
+          width: "90%",
+          //alignContent: "center",
+          alignSelf: "center",
+          //  backgroundColor: "red",
+          height: "53%",
         }}
       >
-        <Image
-          source={require("../../assets/Postpng.png")}
+        <Text
           style={{
-            //position: "absolute",
-            height: 160,
-            width: 200,
+            fontFamily: "OpenSans-SemiBold",
+            fontSize: 17,
+            color: colors.blue,
+            marginBottom: 10,
+            marginTop: 10,
           }}
+        >
+          {" "}
+          Select A Book{" "}
+        </Text>
+        <FlatList
+          data={getF}
+          keyExtractor={(item) => Math.random().toString(36).substring(7)}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          style={{
+            height: 300,
+            width: "100%",
+            // backgroundColor: "red",
+          }}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  if (book == undefined) {
+                    setbook(item);
+                  } else {
+                    alert(
+                      "You Can only Select one Book which is selected Already"
+                    );
+                  }
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "column",
+                  }}
+                >
+                  <View
+                    style={{
+                      // backgroundColor: "cyan",
+                      width: 180,
+                    }}
+                  >
+                    <View
+                      style={
+                        {
+                          //height: 200,
+                          //width: 125,
+                          //borderRadius: 10,
+                          //backgroundColor: "red",
+                        }
+                      }
+                    >
+                      <Image
+                        source={{
+                          uri: getUrl(item.image),
+                        }}
+                        style={{
+                          height: 220,
+                          width: 150,
+                        }}
+                      />
+                    </View>
+                    {
+                      //Text
+                    }
+                    {
+                      //Book Name
+                    }
+                    <View style={{ marginTop: 5, width: 150, height: 80 }}>
+                      <Text
+                        style={{
+                          fontFamily: "OpenSans-SemiBold",
+                          fontSize: 12,
+                          color: colors.gray,
+                          justifyContent: "center",
+                          textAlign: "justify",
+                        }}
+                      >
+                        {item.name}
+                      </Text>
+                    </View>
+
+                    {
+                      //Book Name Close
+                    }
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
+      {
+        //List of Books Close
+      }
       {
         //TExtInput Container
       }
@@ -84,30 +204,75 @@ export default function post() {
           width: "90%",
           //alignContent: "center",
           alignSelf: "center",
+          margin: 5,
           //backgroundColor: "red",
         }}
       >
         <Text
           style={{
-            fontFamily: "OpenSans-Regular",
+            fontFamily: "OpenSans-SemiBold",
             fontSize: 17,
             color: colors.blue,
-            marginBottom: 10,
-            marginTop: 10,
+            marginBottom: 5,
+            //    marginTop: 10,
           }}
         >
           {" "}
-          What's In your Mind{" "}
+          Caption{" "}
         </Text>
         <TextInput
           placeholder="Type Here..."
           disableFullscreenUI={true}
           multiline={true}
+          numberOfLines={2}
           onChangeText={(text) => {
             setcaption(text);
           }}
+          value={getcaption}
           style={styles.textinpputField}
         ></TextInput>
+      </View>
+      {
+        //TExtInput Container close
+      }
+      {
+        //Picker
+      }
+      <View
+        style={{
+          width: "90%",
+          //alignContent: "center",
+          alignSelf: "center",
+          //backgroundColor: "red",
+          margin: 5,
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: "OpenSans-SemiBold",
+            fontSize: 17,
+            color: colors.blue,
+            marginBottom: 5,
+            //    marginTop: 10,
+          }}
+        >
+          {" "}
+          Book Status ?{" "}
+        </Text>
+        <Picker
+          selectedValue={getquestion}
+          style={{
+            height: 50,
+            width: 270,
+          }}
+          onValueChange={(itemValue, itemIndex) =>
+            setquestion({ quest: itemValue })
+          }
+          mode="dropdown"
+        >
+          <Picker.Item label="Reading" value="Reading" />
+          <Picker.Item label="Compeletd Reading" value="Finish" />
+        </Picker>
         {
           //Button
         }
@@ -115,6 +280,15 @@ export default function post() {
           activeOpacity={0.7}
           style={{
             margin: 10,
+          }}
+          onPress={() => {
+            if (book == undefined) {
+              alert("Please Select A book");
+            } else if (getcaption == "") {
+              alert("Please Inset A Caption");
+            } else {
+              UploadImage();
+            }
           }}
         >
           <Text
@@ -137,7 +311,7 @@ export default function post() {
         }
       </View>
       {
-        //TExtInput Container close
+        //picker Close
       }
     </View>
   );
