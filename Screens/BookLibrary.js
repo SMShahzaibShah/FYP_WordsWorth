@@ -370,7 +370,8 @@ const BookLibrary = ({ navigation, route }) => {
             numColumns={2}
             style={{
               //alignItems: "center",
-              width: "70%",
+              width: "80%",
+              // alignSelf: "center",
               //justifyContent: "center",
               //backgroundColor: "red",
             }}
@@ -386,7 +387,7 @@ const BookLibrary = ({ navigation, route }) => {
                   <View
                     style={{
                       flexDirection: "column",
-                      // backgroundColor: "yellow",
+                      //backgroundColor: "yellow",
                       //height: 250,
                       // marginTop: 5,
                       //  marginBottom: 5,
@@ -395,7 +396,7 @@ const BookLibrary = ({ navigation, route }) => {
                     <View
                       style={{
                         //backgroundColor: "cyan",
-                        width: 150,
+                        width: 170,
                       }}
                     >
                       <View
@@ -413,8 +414,9 @@ const BookLibrary = ({ navigation, route }) => {
                             uri: getUrl(item.image),
                           }}
                           style={{
-                            height: 200,
-                            width: 120,
+                            height: 210,
+                            width: 130,
+                            borderRadius: 10,
                           }}
                         />
                       </View>

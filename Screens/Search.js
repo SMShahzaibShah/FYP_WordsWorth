@@ -99,7 +99,7 @@ const Search = ({ navigation, route }) => {
                   style={{
                     //backgroundColor: "blue",
                     height: 180,
-                    width: 100,
+                    width: 110,
                     //margin: 5,
                     marginRight: 5,
                     marginTop: 2,
@@ -111,8 +111,8 @@ const Search = ({ navigation, route }) => {
                       uri: getUrl(item.image),
                     }}
                     style={{
-                      height: 175,
-                      width: 100,
+                      height: 180,
+                      width: 110,
                       borderRadius: 5,
                     }}
                   />
@@ -139,7 +139,7 @@ const Search = ({ navigation, route }) => {
                       fontSize: 14,
                       color: colors.blue,
                       fontFamily: "OpenSans-SemiBold",
-                      height: 65,
+                      // height: 65,
                       textAlign: "justify",
                     }}
                   >
@@ -149,7 +149,7 @@ const Search = ({ navigation, route }) => {
                     style={{
                       ...styles.ScrollViewText,
                       marginTop: 15,
-                      height: 90,
+                      height: 95,
                       textAlign: "justify",
                     }}
                   >

@@ -189,12 +189,15 @@ const bookDetails = ({ navigation, route }) => {
               renderItem={({ item }) => {
                 return (
                   <View
-                    style={{ justifyContent: "center", alignItems: "center" }}
+                    style={{
+                      // justifyContent: "center",
+                      alignItems: "center",
+                    }}
                   >
                     <View
                       style={{
                         height: 270,
-                        width: 200,
+                        width: 170,
                         borderRadius: 10,
                       }}
                     >
@@ -204,7 +207,7 @@ const bookDetails = ({ navigation, route }) => {
                         }}
                         style={{
                           height: 270,
-                          width: 200,
+                          width: 170,
                           borderRadius: 10,
                         }}
                       />
