@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Octicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
 
 import colors from "../../assets/colors/colors";
 
@@ -25,8 +26,30 @@ export default function searchFriends() {
   const [getModal, setModal] = useState(false);
   const [getsearch, setSearch] = useState("");
   const [getFound, setFound] = useState();
+  const [following, setfollowing] = useState(false);
+  const [getfollowinId, setfollowingId] = useState([]);
+
+  const fetchUserFollowing = () => {
+    firebase
+      .firestore()
+      .collection("following")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("userFollowing")
+      .onSnapshot((Snapshot) => {
+        let following = Snapshot.docs.map((doc) => {
+          const id = doc.id;
+          return id;
+        });
+        setfollowingId(following);
+      });
+  };
+
+  useEffect(() => {
+    fetchUserFollowing();
+  }, []);
 
   const getData = () => {
+    console.log(getfollowinId);
     if (getsearch.length == 0) {
       setModal(false);
       alert("Please Enter Name");
@@ -43,6 +66,7 @@ export default function searchFriends() {
             return { id, ...data };
           });
           setusers(users);
+
           if (users.length == 0) {
             console.log("not Found");
             setFound(false);
@@ -55,6 +79,26 @@ export default function searchFriends() {
           setModal(false);
         });
     }
+  };
+
+  const onFollow = (itemTobeFollow) => {
+    firebase
+      .firestore()
+      .collection("following")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("userFollowing")
+      .doc(itemTobeFollow)
+      .set({});
+  };
+
+  const onUnFollow = (itemTobeFollow) => {
+    firebase
+      .firestore()
+      .collection("following")
+      .doc(firebase.auth().currentUser.uid)
+      .collection("userFollowing")
+      .doc(itemTobeFollow)
+      .delete();
   };
 
   return (
@@ -247,7 +291,10 @@ export default function searchFriends() {
                               marginLeft: 5,
                             }}
                           >
-                            {item.id}
+                            {
+                              //item.id
+                            }
+                            Bio Aye Gi
                           </Text>
                           {
                             //Bio close
@@ -257,6 +304,77 @@ export default function searchFriends() {
                         {
                           //Name Conatiner close
                         }
+                        {getfollowinId.includes(item.id) ? (
+                          <>
+                            {
+                              //Following
+                            }
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              style={{
+                                height: 50,
+                                width: 50,
+                                backgroundColor: "#F1E7FF",
+                                borderRadius: 50,
+                                alignSelf: "center",
+                                right: 0,
+                                position: "absolute",
+                                justifyContent: "center",
+                              }}
+                              onPress={() => {
+                                onUnFollow(item.id);
+                                console.log("Done");
+                              }}
+                            >
+                              <SimpleLineIcons
+                                name="user-following"
+                                size={30}
+                                color="#6E3AA7"
+                                style={{
+                                  alignSelf: "center",
+                                }}
+                              />
+                            </TouchableOpacity>
+                            {
+                              //Following Close
+                            }
+                          </>
+                        ) : (
+                          <>
+                            {
+                              //Follow
+                            }
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              style={{
+                                height: 50,
+                                width: 50,
+                                backgroundColor: "#F1E7FF",
+                                borderRadius: 50,
+                                alignSelf: "center",
+                                right: 0,
+                                position: "absolute",
+                                justifyContent: "center",
+                              }}
+                              onPress={() => {
+                                onFollow(item.id);
+                                console.log("Done");
+                              }}
+                            >
+                              <SimpleLineIcons
+                                name="user-follow"
+                                size={30}
+                                color="#6E3AA7"
+                                style={{
+                                  alignSelf: "center",
+                                }}
+                              />
+                            </TouchableOpacity>
+                            {
+                              //Follow Close
+                            }
+                          </>
+                        )}
                       </View>
                     </TouchableOpacity>
                     {
