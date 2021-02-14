@@ -169,8 +169,9 @@ export default function post() {
                           uri: getUrl(item.image),
                         }}
                         style={{
-                          height: 220,
-                          width: 150,
+                          height: 210,
+                          width: 130,
+                          borderRadius: 10,
                         }}
                       />
                     </View>
@@ -180,7 +181,7 @@ export default function post() {
                     {
                       //Book Name
                     }
-                    <View style={{ marginTop: 5, width: 150, height: 80 }}>
+                    <View style={{ marginTop: 5, width: 130, height: 80 }}>
                       <Text
                         style={{
                           fontFamily: "OpenSans-SemiBold",
