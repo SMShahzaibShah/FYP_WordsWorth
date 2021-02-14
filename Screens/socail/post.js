@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Modal,
+  ActivityIndicator,
 } from "react-native";
 
 import * as firebase from "firebase";
@@ -24,6 +26,7 @@ export default function post() {
     quest: "Reading",
   });
   const [book, setbook] = useState();
+  const [getModal, setModal] = useState(false);
 
   const getUrl = (img) => {
     //console.log(img.split("url:")[1]);
@@ -79,10 +82,19 @@ export default function post() {
         alert("Post Added");
         setcaption("");
         setbook();
+        setModal(false);
       });
   };
   return (
     <View style={styles.container}>
+      <Modal animationType="none" transparent={true} visible={getModal}>
+        <View style={styles.modalBackground}>
+          <View style={styles.activityIndicatorWrapper}>
+            <Text>Please Wait...</Text>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </View>
+        </View>
+      </Modal>
       {
         //List Of books
       }
@@ -287,6 +299,7 @@ export default function post() {
             } else if (getcaption == "") {
               alert("Please Inset A Caption");
             } else {
+              setModal(true);
               UploadImage();
             }
           }}
@@ -343,5 +356,23 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans-SemiBold",
     textAlign: "center",
     color: colors.white,
+  },
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "#00000080",
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: "white",
+    height: "20%",
+    width: "80%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#C0C0C0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 });

@@ -8,6 +8,8 @@ import {
   Image,
   TouchableOpacity,
   Keyboard,
+  Modal,
+  ActivityIndicator,
 } from "react-native";
 import CustomButton from "../component/ButtonComponent";
 import { FontAwesome } from "@expo/vector-icons";
@@ -22,6 +24,7 @@ const SignIn = ({ navigation, route }) => {
   const [email, setemail] = useState("shahzaib@gmail.com");
   const [pass, setpass] = useState("shahzaib123");
   const [showPass, setShowPass] = useState(true);
+  const [getModal, setModal] = useState(false);
 
   const onSignIn = () => {
     Keyboard.dismiss();
@@ -34,11 +37,13 @@ const SignIn = ({ navigation, route }) => {
         .auth()
         .signInWithEmailAndPassword(email, pass)
         .then((user) => {
+          setModal(false);
           navigation.navigate("Dashboard");
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
+          setModal(false);
           alert(errorCode);
           // navigation.navigate('SignIn')
         });
@@ -55,6 +60,14 @@ const SignIn = ({ navigation, route }) => {
   return (
     <>
       <View style={styles.container}>
+        <Modal animationType="none" transparent={true} visible={getModal}>
+          <View style={styles.modalBackground}>
+            <View style={styles.activityIndicatorWrapper}>
+              <Text>Please Wait...</Text>
+              <ActivityIndicator size="small" color="#0000ff" />
+            </View>
+          </View>
+        </Modal>
         <View style={{ flexDirection: "row", height: 100 }}>
           <Image source={require("../assets/main_top2.png")} />
           <View style={{ flexDirection: "column" }}>
@@ -157,7 +170,13 @@ const SignIn = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity activeOpacity={0.7} onPress={() => onSignIn()}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              setModal(true);
+              onSignIn();
+            }}
+          >
             <Text style={{ marginTop: 15 }}>
               <LinearGradient
                 colors={["#6E3AA7", "#23286B"]}
@@ -426,6 +445,24 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 10,
     color: colors.white,
+  },
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "#00000080",
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: "white",
+    height: "20%",
+    width: "80%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#C0C0C0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 });
 
