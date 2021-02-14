@@ -26,7 +26,6 @@ export default function searchFriends() {
   const [getModal, setModal] = useState(false);
   const [getsearch, setSearch] = useState("");
   const [getFound, setFound] = useState();
-  const [following, setfollowing] = useState(false);
   const [getfollowinId, setfollowingId] = useState([]);
 
   const fetchUserFollowing = () => {
@@ -90,6 +89,11 @@ export default function searchFriends() {
       .doc(itemTobeFollow)
       .set({});
   };
+  const arrayRemove = (itemTobeFollow) => {
+    return getfollowinId.filter(function (ele) {
+      return ele != itemTobeFollow;
+    });
+  };
 
   const onUnFollow = (itemTobeFollow) => {
     firebase
@@ -99,6 +103,8 @@ export default function searchFriends() {
       .collection("userFollowing")
       .doc(itemTobeFollow)
       .delete();
+    var result = arrayRemove(itemTobeFollow);
+    setfollowingId(result);
   };
 
   return (
