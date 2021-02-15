@@ -41,7 +41,7 @@ export default function newsFeed() {
           var feedDataa = getFeedData;
           feedDataa.push(feeData);
           setFeedData(feedDataa);
-          // console.log(feedDataa);
+          //console.log(feedDataa);
         }
       }
     }
@@ -98,15 +98,15 @@ export default function newsFeed() {
   };
 
   useEffect(() => {
-    //setUsersInfo([]);
-    // setUsersPost([]);
-    // if (getTime == 0) {
-    // fetchUserFollowing();
-    //  }
+    setUsersInfo([]);
+    setUsersPost([]);
+    if (getTime == 0) {
+      fetchUserFollowing();
+    }
   }, []);
 
   const fetchUserFollowing = () => {
-    // setTime(1);
+    setTime(1);
     firebase
       .firestore()
       .collection("following")
@@ -121,13 +121,14 @@ export default function newsFeed() {
         fectchUserposts(following);
         //  console.log(getUsersPost);
 
-        setTimeout(() => {
-          fetchFeedData();
-          // console.log(getUsersPost);
-        }, 1000);
+        fetchFeedData();
+        // console.log(getUsersPost);
       });
   };
 
+  const Date = (TimeStamp) => {
+    return TimeStamp.toDate().toString();
+  };
   return (
     <View style={styles.container}>
       <Modal animationType="none" transparent={true} visible={getModal}>
@@ -140,14 +141,14 @@ export default function newsFeed() {
       </Modal>
 
       <FlatList
-        data={getF}
+        data={getFeedData}
         keyExtractor={(item) => Math.random().toString(36).substring(7)}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           return (
             <View
               style={{
-                height: 450,
+                height: 455,
                 //width: "100%",
                 // backgroundColor: "red",
                 margin: 5,
@@ -183,18 +184,19 @@ export default function newsFeed() {
                 <View
                   style={{
                     // backgroundColor: "cyan",
-                    height: 50,
-                    width: 50,
+                    height: 40,
+                    width: 40,
                     borderRadius: 50,
                     //justifyContent: "center",
                     //alignItems: "center",
                     //alignSelf: "center",
-                    paddingTop: 9,
+                    paddingTop: 10,
+                    paddingLeft: 8,
                   }}
                 >
                   <EvilIcons
                     name="user"
-                    size={80}
+                    size={70}
                     color="black"
                     style={{ margin: -15 }}
                   />
@@ -218,12 +220,13 @@ export default function newsFeed() {
                   <Text
                     style={{
                       fontFamily: "OpenSans-SemiBold",
-                      fontSize: 13,
+                      fontSize: 14,
                       color: colors.blue,
-                      marginTop: 8,
+                      marginTop: 5,
                     }}
                   >
-                    Naam Aye gaa
+                    {item.userInformation.info.name.fName}{" "}
+                    {item.userInformation.info.name.LName}
                   </Text>
                   {
                     //Name close
@@ -239,7 +242,7 @@ export default function newsFeed() {
                       marginTop: 2,
                     }}
                   >
-                    Time Aye gaa
+                    {Date(item.userPosts.creation)}
                   </Text>
                   {
                     //Time close
@@ -270,10 +273,11 @@ export default function newsFeed() {
                     fontSize: 14,
                     color: colors.blue,
                     marginTop: 2,
-                    marginTop: 5,
+                    marginBottom: 2,
+                    //marginTop: 5,
                   }}
                 >
-                  Caption Aye gaa
+                  {item.userPosts.getcaption}
                 </Text>
                 {
                   //Caption Close
@@ -286,7 +290,17 @@ export default function newsFeed() {
                     height: 320,
                     //     backgroundColor: "blue",
                   }}
-                ></View>
+                >
+                  <Image
+                    source={{
+                      uri: item.userPosts.downloadURL,
+                    }}
+                    style={{
+                      height: 320,
+                      width: 200,
+                    }}
+                  />
+                </View>
                 {
                   //Image Close
                 }
@@ -299,6 +313,7 @@ export default function newsFeed() {
                     //   backgroundColor: "yellow",
                     width: 70,
                     justifyContent: "space-between",
+                    marginTop: 2,
                   }}
                 >
                   <AntDesign
@@ -311,7 +326,7 @@ export default function newsFeed() {
                   />
                   <FontAwesome
                     name="comment-o"
-                    size={24}
+                    size={25}
                     color="black"
                     style={{
                       alignSelf: "center",
