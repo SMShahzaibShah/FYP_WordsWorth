@@ -20,6 +20,7 @@ import colors from "../../assets/colors/colors";
 export default function Profile() {
   const [getData, setData] = useState();
   const [getModal, setModal] = useState(false);
+  const [getModal1, setModal1] = useState(false);
   const [getSelected, setSelected] = useState({
     creation: {
       nanoseconds: 0,
@@ -34,6 +35,7 @@ export default function Profile() {
   const [getname, setname] = useState("");
 
   useEffect(() => {
+    setModal1(true);
     fectchUserposts();
     var disName = firebase.auth().currentUser.displayName;
     var disNamear = disName.split(",");
@@ -46,7 +48,7 @@ export default function Profile() {
       .collection("posts")
       .doc(firebase.auth().currentUser.uid)
       .collection("userPosts")
-      .orderBy("creation", "asc")
+      .orderBy("creation", "desc")
       .get()
       .then((snapshot) => {
         let posts = snapshot.docs.map((doc) => {
@@ -54,10 +56,25 @@ export default function Profile() {
           return { ...data };
         });
         setData(posts);
+        setTimeout(() => {
+          setModal1(false);
+        }, 2000);
       });
   };
+  const Date = (TimeStamp) => {
+    return TimeStamp.toDate().toString();
+  };
+
   return (
     <View style={styles.container}>
+      <Modal animationType="none" transparent={true} visible={getModal1}>
+        <View style={styles.modalBackground1}>
+          <View style={styles.activityIndicatorWrapper1}>
+            <Text>Please Wait...</Text>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </View>
+        </View>
+      </Modal>
       <Modal
         animationType="slide"
         transparent={true}
@@ -179,7 +196,7 @@ export default function Profile() {
                   color: colors.gray,
                 }}
               >
-                {getSelected.getquestion.quest}
+                {getSelected.creation.seconds}
               </Text>
             </View>
             {
@@ -475,5 +492,24 @@ const styles = StyleSheet.create({
     bottom: 0,
     position: "absolute",
     borderTopRightRadius: 50,
+  },
+
+  modalBackground1: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "#00000080",
+  },
+  activityIndicatorWrapper1: {
+    backgroundColor: "white",
+    height: "20%",
+    width: "80%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#C0C0C0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 });

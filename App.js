@@ -21,8 +21,10 @@ import {
   FontAwesome5,
   SimpleLineIcons,
   MaterialIcons,
+  Feather,
+  MaterialCommunityIcons,
+  Fontisto,
 } from "@expo/vector-icons";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 
 import { AuthContext } from "./context";
 import WelcomeScreen from "./Screens/WelcomePage";
@@ -47,11 +49,14 @@ import collections from "./Screens/collestions";
 import bookSuggestions from "./Screens/bookSuggestions";
 import socailSegment from "./Screens/socailSeg";
 
+import Slidebar from "./Slidebar";
+
 import { AsyncStorage } from "react-native";
 import * as firebase from "firebase";
 import * as firebaseBooksData from "firebase";
 
 const Stack = createStackNavigator();
+const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 export default function App() {
@@ -70,6 +75,113 @@ export default function App() {
     };
   }, []);
 
+  const DrawerScreen = () => (
+    <Drawer.Navigator
+      drawerType="slide"
+      drawerStyle={{
+        //backgroundColor: 'lightblue',
+        width: "60%",
+      }}
+      drawerContent={(props) => <Slidebar {...props} />}
+    >
+      <Drawer.Screen
+        name="Dashboard"
+        component={DashBoard}
+        options={{
+          drawerLabel: "Dashboard",
+          drawerIcon: () => (
+            <MaterialCommunityIcons
+              name="view-dashboard-outline"
+              size={24}
+              color="black"
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{
+          drawerLabel: "Search",
+          drawerIcon: () => <Feather name="search" size={24} color="black" />,
+        }}
+      />
+      <Drawer.Screen
+        name="bookslibrary"
+        component={BooksLibraryScreen}
+        options={{
+          drawerLabel: "Books Library",
+          drawerIcon: () => (
+            <MaterialCommunityIcons
+              name="library-shelves"
+              size={24}
+              color="black"
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="audioLibray"
+        component={audioLibrayScreen}
+        options={{
+          drawerLabel: "Audio Library",
+          drawerIcon: () => (
+            <MaterialCommunityIcons name="audiobook" size={24} color="black" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="collections"
+        component={collectionsScreen}
+        options={{
+          drawerLabel: "Collection",
+          drawerIcon: () => (
+            <MaterialIcons name="collections" size={24} color="black" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="bookSuggestions"
+        component={bookSuggestionsScreen}
+        options={{
+          drawerLabel: "Suggestion",
+          drawerIcon: () => <Feather name="sun" size={24} color="black" />,
+        }}
+      />
+      <Drawer.Screen
+        name="socailSegment"
+        component={socailSegmentScreen}
+        options={{
+          drawerLabel: "Socail",
+          drawerIcon: () => <Fontisto name="world-o" size={24} color="black" />,
+        }}
+      />
+    </Drawer.Navigator>
+  );
+  const RootStackScreen = ({ userToken }) => {
+    return (
+      <RootStack.Navigator headerMode="none">
+        {userToken ? (
+          <RootStack.Screen name="App" component={DrawerScreen} />
+        ) : (
+          <RootStack.Screen name="Auth" component={AuthStackScreen} />
+        )}
+      </RootStack.Navigator>
+    );
+  };
+  const AuthStackScreen = () => (
+    <AuthStack.Navigator
+      initialRouteName={"welcome"}
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <AuthStack.Screen name="welcome" component={WelcomeScreen} />
+      <AuthStack.Screen name="Signin" component={SignIn} />
+      <AuthStack.Screen name="Signup" component={SignUp} />
+      <AuthStack.Screen name="ForgotPass" component={ForgotPassword} />
+    </AuthStack.Navigator>
+  );
   useEffect(() => {
     var firebaseConfig = {
       apiKey: "AIzaSyBwEie5MWQm07oxnAoqIRV_LvSdvhzEMsM",
@@ -182,35 +294,7 @@ export default function App() {
   const stacknavigator = (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        {userToken ? (
-          <Drawer.Navigator>
-            <Drawer.Screen name="Dashboard" component={DashBoard} />
-            <Drawer.Screen name="Search" component={SearchScreen} />
-            <Drawer.Screen name="bookslibrary" component={BooksLibraryScreen} />
-            <Drawer.Screen name="audioLibray" component={audioLibrayScreen} />
-            <Drawer.Screen name="collections" component={collectionsScreen} />
-            <Drawer.Screen
-              name="bookSuggestions"
-              component={bookSuggestionsScreen}
-            />
-            <Drawer.Screen
-              name="socailSegment"
-              component={socailSegmentScreen}
-            />
-          </Drawer.Navigator>
-        ) : (
-          <AuthStack.Navigator
-            initialRouteName={"welcome"}
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <AuthStack.Screen name="welcome" component={WelcomeScreen} />
-            <AuthStack.Screen name="Signin" component={SignIn} />
-            <AuthStack.Screen name="Signup" component={SignUp} />
-            <AuthStack.Screen name="ForgotPass" component={ForgotPassword} />
-          </AuthStack.Navigator>
-        )}
+        <RootStackScreen userToken={userToken} />
 
         {/**
       <Stack.Navigator
