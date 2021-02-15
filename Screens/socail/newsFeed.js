@@ -1,17 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  FlatList,
+  Modal,
+  ActivityIndicator,
+} from "react-native";
 
 import * as firebase from "firebase";
 import { AsyncStorage } from "react-native";
-import post from "./post";
+import { EvilIcons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+
 require("firebase/firestore");
 require("firebase/firebase-storage");
+import colors from "../../assets/colors/colors";
 
 export default function newsFeed() {
   const [getUsersInfo, setUsersInfo] = useState([]);
   const [getUsersPost, setUsersPost] = useState([]);
   const [getFeedData, setFeedData] = useState([]);
   const [getTime, setTime] = useState(0);
+  const [getF, setF] = useState(["Hi", "Hi", "Hi", "Hi"]);
+  const [getModal, setModal] = useState(false);
 
   const fetchFeedData = () => {
     var arr1d = [].concat(...getUsersPost);
@@ -115,7 +130,206 @@ export default function newsFeed() {
 
   return (
     <View style={styles.container}>
-      <Text>HI</Text>
+      <Modal animationType="none" transparent={true} visible={getModal}>
+        <View style={styles.modalBackground}>
+          <View style={styles.activityIndicatorWrapper}>
+            <Text>Please Wait...</Text>
+            <ActivityIndicator size="small" color="#0000ff" />
+          </View>
+        </View>
+      </Modal>
+
+      <FlatList
+        data={getF}
+        keyExtractor={(item) => Math.random().toString(36).substring(7)}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => {
+          return (
+            <View
+              style={{
+                height: 450,
+                //width: "100%",
+                // backgroundColor: "red",
+                margin: 5,
+                paddingLeft: 10,
+                paddingRight: 10,
+                paddingBottom: 10,
+                paddingTop: 15,
+                //Shadow
+                borderWidth: 1,
+                borderRadius: 2,
+                borderColor: "#ddd",
+                borderBottomWidth: 0,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.8,
+                shadowRadius: 2,
+                elevation: 1,
+                marginLeft: 5,
+                marginRight: 5,
+                marginTop: 10,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                {
+                  //Picture
+                }
+                <View
+                  style={{
+                    // backgroundColor: "cyan",
+                    height: 50,
+                    width: 50,
+                    borderRadius: 50,
+                    //justifyContent: "center",
+                    //alignItems: "center",
+                    //alignSelf: "center",
+                    paddingTop: 9,
+                  }}
+                >
+                  <EvilIcons
+                    name="user"
+                    size={80}
+                    color="black"
+                    style={{ margin: -15 }}
+                  />
+                </View>
+                {
+                  //Picture Close
+                }
+                {
+                  //Name and Time
+                }
+                <View
+                  style={{
+                    //  backgroundColor: "yellow",
+                    height: 50,
+                    width: "83%",
+                  }}
+                >
+                  {
+                    //Name
+                  }
+                  <Text
+                    style={{
+                      fontFamily: "OpenSans-SemiBold",
+                      fontSize: 13,
+                      color: colors.blue,
+                      marginTop: 8,
+                    }}
+                  >
+                    Naam Aye gaa
+                  </Text>
+                  {
+                    //Name close
+                  }
+                  {
+                    //Time
+                  }
+                  <Text
+                    style={{
+                      fontFamily: "OpenSans-Regular",
+                      fontSize: 12,
+                      color: colors.gray,
+                      marginTop: 2,
+                    }}
+                  >
+                    Time Aye gaa
+                  </Text>
+                  {
+                    //Time close
+                  }
+                </View>
+                {
+                  //Name and Time Close
+                }
+              </View>
+              {
+                //Image
+              }
+              <View
+                style={{
+                  height: 370,
+                  width: 345,
+                  //     backgroundColor: "cyan",
+                  margin: 10,
+                  alignSelf: "center",
+                }}
+              >
+                {
+                  //Caption
+                }
+                <Text
+                  style={{
+                    fontFamily: "OpenSans-Regular",
+                    fontSize: 14,
+                    color: colors.blue,
+                    marginTop: 2,
+                    marginTop: 5,
+                  }}
+                >
+                  Caption Aye gaa
+                </Text>
+                {
+                  //Caption Close
+                }
+                {
+                  //Image
+                }
+                <View
+                  style={{
+                    height: 320,
+                    //     backgroundColor: "blue",
+                  }}
+                ></View>
+                {
+                  //Image Close
+                }
+                {
+                  //like Comment
+                }
+                <View
+                  style={{
+                    flexDirection: "row",
+                    //   backgroundColor: "yellow",
+                    width: 70,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <AntDesign
+                    name="hearto"
+                    size={24}
+                    color="black"
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  />
+                  <FontAwesome
+                    name="comment-o"
+                    size={24}
+                    color="black"
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  />
+                </View>
+                {
+                  //like Comment
+                }
+              </View>
+
+              {
+                //Image Close
+              }
+            </View>
+          );
+        }}
+      />
     </View>
   );
 }
@@ -124,5 +338,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#faf8f5",
+  },
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "#00000080",
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: "white",
+    height: "20%",
+    width: "80%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#C0C0C0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 });
