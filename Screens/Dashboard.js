@@ -39,7 +39,12 @@ const DashBoard = ({ navigation, route }) => {
             alignItems: "center",
           }}
         >
-          <Ionicons name="ios-menu" size={40} color="black" />
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.openDrawer()}
+          >
+            <Ionicons name="ios-menu" size={40} color="black" />
+          </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate("EditProfile")}
@@ -57,6 +62,7 @@ const DashBoard = ({ navigation, route }) => {
               fontSize: 20,
               color: colors.gray,
               marginTop: 20,
+              //backgroundColor: "red",
             }}
           >
             DASHBOARD
@@ -83,7 +89,6 @@ const DashBoard = ({ navigation, route }) => {
                       style={{
                         height: 210,
                         width: 176.43,
-
                         marginTop: 65,
                         borderRadius: 10,
                       }}
@@ -95,10 +100,11 @@ const DashBoard = ({ navigation, route }) => {
                       <Text
                         style={{
                           marginTop: 175,
-                          left: 18,
+                          // left: 18,
                           fontSize: 18,
                           fontFamily: "Roboto-Bold",
                           color: "#FFECCC",
+                          alignSelf: "center",
                         }}
                       >
                         Search Book
@@ -128,10 +134,11 @@ const DashBoard = ({ navigation, route }) => {
                       <Text
                         style={{
                           marginTop: 130,
-                          left: 18,
+                          // left: 18,
                           fontSize: 18,
                           fontFamily: "Roboto-Bold",
                           color: "#3F414E",
+                          alignSelf: "center",
                         }}
                       >
                         Audio Libray
@@ -161,10 +168,11 @@ const DashBoard = ({ navigation, route }) => {
                       <Text
                         style={{
                           marginTop: 170,
-                          left: 18,
+                          //  left: 18,
                           fontSize: 18,
                           fontFamily: "Roboto-Bold",
                           color: "#FFECCC",
+                          alignSelf: "center",
                         }}
                       >
                         Book Suggestion
@@ -197,10 +205,11 @@ const DashBoard = ({ navigation, route }) => {
                       <Text
                         style={{
                           marginTop: 135,
-                          left: 18,
+                          // left: 18,
                           fontSize: 18,
                           fontFamily: "Roboto-Bold",
                           color: "#FEF9F3",
+                          alignSelf: "center",
                         }}
                       >
                         Book Libray
@@ -231,10 +240,11 @@ const DashBoard = ({ navigation, route }) => {
                       <Text
                         style={{
                           marginTop: 170,
-                          left: 18,
+                          //   left: 18,
                           fontSize: 18,
                           fontFamily: "Roboto-Bold",
                           color: "#3F414E",
+                          alignSelf: "center",
                         }}
                       >
                         Socail Segment
@@ -265,10 +275,11 @@ const DashBoard = ({ navigation, route }) => {
                       <Text
                         style={{
                           marginTop: 120,
-                          left: 18,
+                          // left: 18,
                           fontSize: 18,
                           fontFamily: "Roboto-Bold",
-                          color: "#3F414E",
+                          color: "#FEF9F3",
+                          alignSelf: "center",
                         }}
                       >
                         Collections

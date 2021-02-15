@@ -224,7 +224,12 @@ const BookLibrary = ({ navigation, route }) => {
             alignSelf: "center",
           }}
         >
-          <Ionicons name="ios-menu" size={40} color="black" />
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.openDrawer()}
+          >
+            <Ionicons name="ios-menu" size={40} color="black" />
+          </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate("EditProfile")}
@@ -373,7 +378,7 @@ const BookLibrary = ({ navigation, route }) => {
               width: "80%",
               // alignSelf: "center",
               //justifyContent: "center",
-              //backgroundColor: "red",
+              // backgroundColor: "red",
             }}
             renderItem={({ item }) => {
               return (
@@ -396,7 +401,7 @@ const BookLibrary = ({ navigation, route }) => {
                     <View
                       style={{
                         //backgroundColor: "cyan",
-                        width: 170,
+                        width: 185,
                       }}
                     >
                       <View
@@ -524,7 +529,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   secondcontainer: {
-    //  backgroundColor: "white",
+    //backgroundColor: "white",
     flex: 1,
     marginTop: 30,
     paddingTop: 30,

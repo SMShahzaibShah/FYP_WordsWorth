@@ -24,6 +24,7 @@ import {
 } from "@expo/vector-icons";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 
+import { AuthContext } from "./context";
 import WelcomeScreen from "./Screens/WelcomePage";
 import SignIn from "./Screens/SignIn";
 import SignUp from "./Screens/SignUp";
@@ -46,14 +47,28 @@ import collections from "./Screens/collestions";
 import bookSuggestions from "./Screens/bookSuggestions";
 import socailSegment from "./Screens/socailSeg";
 
+import { AsyncStorage } from "react-native";
 import * as firebase from "firebase";
 import * as firebaseBooksData from "firebase";
 
 const Stack = createStackNavigator();
-
+const AuthStack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 export default function App() {
   const [showOnboard, setShowonBoard] = useState(true);
   const [fontLoading, setfontLoading] = useState(false);
+  const [userToken, setuserToken] = useState(null);
+
+  const authContext = React.useMemo(() => {
+    return {
+      SignInco: () => {
+        setuserToken("asdf");
+      },
+      Signoutco: () => {
+        setuserToken(null);
+      },
+    };
+  }, []);
 
   useEffect(() => {
     var firebaseConfig = {
@@ -81,8 +96,123 @@ export default function App() {
       "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     });
 
+  const SearchScreen = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName={"Search"}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Search" component={Search} />
+        <Stack.Screen name="bookDetails" component={bookDetails} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
+      </Stack.Navigator>
+    );
+  };
+
+  const BooksLibraryScreen = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName={"bookslibrary"}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="bookslibrary" component={BookLibrary} />
+        <Stack.Screen name="reader" component={Reader} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
+      </Stack.Navigator>
+    );
+  };
+  const audioLibrayScreen = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName={"audioLibray"}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="audioLibray" component={AudioLibray} />
+        <Stack.Screen name="audioDetails" component={audioDetails} />
+        <Stack.Screen name="audioSettings" component={audioSettings} />
+        <Stack.Screen name="audioPlayer" component={audioPlayer} />
+      </Stack.Navigator>
+    );
+  };
+  const bookSuggestionsScreen = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName={"bookSuggestions"}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="bookSuggestions" component={bookSuggestions} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
+      </Stack.Navigator>
+    );
+  };
+  const socailSegmentScreen = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName={"socailSegment"}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="socailSegment" component={socailSegment} />
+      </Stack.Navigator>
+    );
+  };
+
+  const collectionsScreen = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName={"collections"}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="collections" component={collections} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
+      </Stack.Navigator>
+    );
+  };
   const stacknavigator = (
-    <NavigationContainer>
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        {userToken ? (
+          <Drawer.Navigator>
+            <Drawer.Screen name="Dashboard" component={DashBoard} />
+            <Drawer.Screen name="Search" component={SearchScreen} />
+            <Drawer.Screen name="bookslibrary" component={BooksLibraryScreen} />
+            <Drawer.Screen name="audioLibray" component={audioLibrayScreen} />
+            <Drawer.Screen name="collections" component={collectionsScreen} />
+            <Drawer.Screen
+              name="bookSuggestions"
+              component={bookSuggestionsScreen}
+            />
+            <Drawer.Screen
+              name="socailSegment"
+              component={socailSegmentScreen}
+            />
+          </Drawer.Navigator>
+        ) : (
+          <AuthStack.Navigator
+            initialRouteName={"welcome"}
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <AuthStack.Screen name="welcome" component={WelcomeScreen} />
+            <AuthStack.Screen name="Signin" component={SignIn} />
+            <AuthStack.Screen name="Signup" component={SignUp} />
+            <AuthStack.Screen name="ForgotPass" component={ForgotPassword} />
+          </AuthStack.Navigator>
+        )}
+
+        {/**
       <Stack.Navigator
         initialRouteName={"welcome"}
         screenOptions={{
@@ -135,9 +265,11 @@ export default function App() {
         <Stack.Screen name="bookSuggestions" component={bookSuggestions} />
         <Stack.Screen name="socailSegment" component={socailSegment} />
       </Stack.Navigator>
-    </NavigationContainer>
+     */}
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
-  const Drawer = createDrawerNavigator();
+
   const handleOnboardFinish = () => {
     setShowonBoard(false);
   };

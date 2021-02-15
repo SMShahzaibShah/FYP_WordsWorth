@@ -25,10 +25,10 @@ export default function newsFeed() {
   const [getUsersPost, setUsersPost] = useState([]);
   const [getFeedData, setFeedData] = useState([]);
   const [getTime, setTime] = useState(0);
-  const [getF, setF] = useState(["Hi", "Hi", "Hi", "Hi"]);
   const [getModal, setModal] = useState(false);
 
   const fetchFeedData = () => {
+    console.log("here1");
     var arr1d = [].concat(...getUsersPost);
     for (var i = 0; i < getUsersInfo.length; i++) {
       var j = 0;
@@ -42,6 +42,8 @@ export default function newsFeed() {
           feedDataa.push(feeData);
           setFeedData(feedDataa);
           //console.log(feedDataa);
+          setModal(false);
+          console.log("here2");
         }
       }
     }
@@ -98,15 +100,16 @@ export default function newsFeed() {
   };
 
   useEffect(() => {
-    setUsersInfo([]);
-    setUsersPost([]);
-    if (getTime == 0) {
-      fetchUserFollowing();
-    }
+    // setUsersInfo([]);
+    // setUsersPost([]);
+    setModal(true);
+    //if (getTime == 0) {
+    fetchUserFollowing();
+    //}
   }, []);
 
   const fetchUserFollowing = () => {
-    setTime(1);
+    //setTime(1);
     firebase
       .firestore()
       .collection("following")
@@ -118,10 +121,14 @@ export default function newsFeed() {
           return id;
         });
         fetchUsersInfo(following);
+
         fectchUserposts(following);
         //  console.log(getUsersPost);
+        setTimeout(() => {
+          console.log("here");
+          fetchFeedData();
+        }, 2000);
 
-        fetchFeedData();
         // console.log(getUsersPost);
       });
   };
@@ -273,7 +280,7 @@ export default function newsFeed() {
                     fontSize: 14,
                     color: colors.blue,
                     marginTop: 2,
-                    marginBottom: 2,
+                    marginBottom: 3,
                     //marginTop: 5,
                   }}
                 >
@@ -298,6 +305,8 @@ export default function newsFeed() {
                     style={{
                       height: 320,
                       width: 200,
+                      borderRadius: 10,
+                      alignSelf: "center",
                     }}
                   />
                 </View>
@@ -319,14 +328,6 @@ export default function newsFeed() {
                   <AntDesign
                     name="hearto"
                     size={24}
-                    color="black"
-                    style={{
-                      alignSelf: "center",
-                    }}
-                  />
-                  <FontAwesome
-                    name="comment-o"
-                    size={25}
                     color="black"
                     style={{
                       alignSelf: "center",

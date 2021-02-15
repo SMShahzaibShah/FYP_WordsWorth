@@ -15,16 +15,30 @@ import CustomButton from "../component/ButtonComponent";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import { AsyncStorage } from "react-native";
 import colors from "../assets/colors/colors";
 
 import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
+import { AuthContext } from "../context";
 
 const SignIn = ({ navigation, route }) => {
   const [email, setemail] = useState("shahzaib@gmail.com");
   const [pass, setpass] = useState("shahzaib123");
   const [showPass, setShowPass] = useState(true);
   const [getModal, setModal] = useState(false);
+
+  const { SignInco } = React.useContext(AuthContext);
+
+  const setUser = async (value) => {
+    try {
+      await AsyncStorage.setItem("user", value);
+    } catch (e) {
+      // save error
+    }
+
+    console.log("Done.");
+  };
 
   const onSignIn = () => {
     Keyboard.dismiss();
@@ -38,7 +52,8 @@ const SignIn = ({ navigation, route }) => {
         .signInWithEmailAndPassword(email, pass)
         .then((user) => {
           setModal(false);
-          navigation.navigate("Dashboard");
+          SignInco();
+          // navigation.navigate("Dashboard");
         })
         .catch((error) => {
           var errorCode = error.code;
