@@ -86,7 +86,7 @@ export default function App() {
     >
       <Drawer.Screen
         name="Dashboard"
-        component={DashBoard}
+        component={DashboardScreen}
         options={{
           drawerLabel: "Dashboard",
           drawerIcon: () => (
@@ -274,6 +274,7 @@ export default function App() {
         }}
       >
         <Stack.Screen name="socailSegment" component={socailSegment} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
       </Stack.Navigator>
     );
   };
@@ -287,6 +288,19 @@ export default function App() {
         }}
       >
         <Stack.Screen name="collections" component={collections} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
+      </Stack.Navigator>
+    );
+  };
+  const DashboardScreen = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName={"Dashboard"}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Dashboard" component={DashBoard} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
       </Stack.Navigator>
     );

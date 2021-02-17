@@ -21,6 +21,9 @@ import colors from "../assets/colors/colors";
 import { LinearGradient } from "expo-linear-gradient";
 import * as firebase from "firebase";
 import { AuthContext } from "../context";
+import "firebase/firestore";
+import * as Google from "expo-google-app-auth";
+import * as Facebook from "expo-facebook";
 
 const SignIn = ({ navigation, route }) => {
   const [email, setemail] = useState("shahzaib@gmail.com");
@@ -29,6 +32,152 @@ const SignIn = ({ navigation, route }) => {
   const [getModal, setModal] = useState(false);
 
   const { SignInco } = React.useContext(AuthContext);
+
+  {
+    //Facebook Signin
+  }
+  async function fblogIn() {
+    try {
+      await Facebook.initializeAsync({
+        appId: "433850741266038",
+      });
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ["public_profile"],
+      });
+      if (type === "success") {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(
+          `https://graph.facebook.com/me?access_token=${token}`
+        );
+        const credential = firebase.auth.FacebookAuthProvider.credential(token);
+        // console.log(credential);
+        firebase
+          .auth()
+          .signInWithCredential(credential)
+          .then(function () {
+            firebase.auth().onAuthStateChanged((user) => {
+              if (user != null) {
+                const dbh = firebase.firestore();
+                dbh.collection("users").doc(user.id).set({
+                  name: user.displayName,
+                  email: user.email,
+                  photo: user.photoURL,
+                });
+                SignInco();
+              }
+            });
+          })
+          .catch((error) => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+          });
+        //checkLoginState(userInfo);
+        //Alert.alert("Logged in!", `Hi ${(await response.json()).name}!`);
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+    }
+  }
+  {
+    //Facebook SignIN Close
+  }
+
+  {
+    //SignIn With Google
+  }
+  async function signInWithGoogleAsync() {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId:
+          "754217307534-30cni1uu8eb7cv54lmkluisr0jsfvrlg.apps.googleusercontent.com",
+        //iosClientId: YOUR_CLIENT_ID_HERE,
+        behavior: "web",
+        scopes: ["profile", "email"],
+      });
+
+      if (result.type === "success") {
+        onSignInGoo(result);
+        return result.accessToken;
+      } else {
+        return { cancelled: true };
+      }
+    } catch (e) {
+      return { error: true };
+    }
+  }
+
+  function onSignInGoo(googleUser) {
+    console.log("Google Auth Response", googleUser);
+    // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+    var unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+      unsubscribe();
+      // Check if we are already signed-in Firebase with the correct user.
+      if (!isUserEqual(googleUser, firebaseUser)) {
+        // Build Firebase credential with the Google ID token.
+        var credential = firebase.auth.GoogleAuthProvider.credential(
+          googleUser.idToken,
+          googleUser.accessToken
+        );
+
+        // Sign in with credential from the Google user.
+        firebase
+          .auth()
+          .signInWithCredential(credential)
+          .then(function () {
+            console.log("User is Signed In");
+            const dbh = firebase.firestore();
+            dbh.collection("users").doc(googleUser.user.uid).set({
+              name: googleUser.user.name,
+              email: googleUser.user.email,
+              photo: googleUser.user.photoUrl,
+              givenName: googleUser.user.givenName,
+              familyName: googleUser.user.familyName,
+            });
+            SignInco();
+          })
+          .catch((error) => {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+          });
+      } else {
+        console.log("User already signed-in Firebase.");
+      }
+    });
+  }
+
+  function isUserEqual(googleUser, firebaseUser) {
+    if (firebaseUser) {
+      var providerData = firebaseUser.providerData;
+      for (var i = 0; i < providerData.length; i++) {
+        if (
+          providerData[i].providerId ===
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+          providerData[i].uid === googleUser.getBasicProfile().getId()
+        ) {
+          // We don't need to reauth the Firebase connection.
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  {
+    //SignIn With Google Close
+  }
 
   const setUser = async (value) => {
     try {
@@ -236,19 +385,19 @@ const SignIn = ({ navigation, route }) => {
               marginTop: 15,
             }}
           >
-            <View
+            {
+              //Facebook
+            }
+            <TouchableOpacity
               style={{
-                flexDirection: "row",
+                backgroundColor: "#F1E7FF",
+                height: 60,
+                width: 60,
+                borderRadius: 50,
+                justifyContent: "center",
               }}
+              onPress={() => fblogIn()}
             >
-              <View
-                style={{
-                  backgroundColor: "#F1E7FF",
-                  height: 60,
-                  width: 60,
-                  borderRadius: 50,
-                }}
-              ></View>
               <FontAwesome
                 name="facebook"
                 size={30}
@@ -256,23 +405,26 @@ const SignIn = ({ navigation, route }) => {
                 style={{
                   position: "absolute",
                   alignSelf: "center",
-                  paddingLeft: 20,
                 }}
               />
-            </View>
-            <View
+            </TouchableOpacity>
+            {
+              //Facebook close
+            }
+
+            {
+              //Google
+            }
+            <TouchableOpacity
               style={{
-                flexDirection: "row",
+                backgroundColor: "#F1E7FF",
+                height: 60,
+                width: 60,
+                borderRadius: 50,
+                justifyContent: "center",
               }}
+              onPress={() => signInWithGoogleAsync()}
             >
-              <View
-                style={{
-                  backgroundColor: "#F1E7FF",
-                  height: 60,
-                  width: 60,
-                  borderRadius: 50,
-                }}
-              ></View>
               <FontAwesome
                 name="google"
                 size={30}
@@ -280,23 +432,25 @@ const SignIn = ({ navigation, route }) => {
                 style={{
                   position: "absolute",
                   alignSelf: "center",
-                  paddingLeft: 18,
+                  //  paddingLeft: 18,
                 }}
               />
-            </View>
-            <View
+            </TouchableOpacity>
+            {
+              //Google close
+            }
+            {
+              //Twitter
+            }
+            <TouchableOpacity
               style={{
-                flexDirection: "row",
+                backgroundColor: "#F1E7FF",
+                height: 60,
+                width: 60,
+                borderRadius: 50,
+                justifyContent: "center",
               }}
             >
-              <View
-                style={{
-                  backgroundColor: "#F1E7FF",
-                  height: 60,
-                  width: 60,
-                  borderRadius: 50,
-                }}
-              ></View>
               <FontAwesome
                 name="twitter"
                 size={30}
@@ -304,10 +458,13 @@ const SignIn = ({ navigation, route }) => {
                 style={{
                   position: "absolute",
                   alignSelf: "center",
-                  paddingLeft: 16,
+                  //  paddingLeft: 16,
                 }}
               />
-            </View>
+            </TouchableOpacity>
+            {
+              //Twitter close
+            }
           </View>
           <View style={{ marginTop: 15, marginLeft: 25, flexDirection: "row" }}>
             <Text style={{ fontFamily: "OpenSans-SemiBold" }}>

@@ -264,7 +264,12 @@ const audiobrary = ({ navigation, route }) => {
             alignSelf: "center",
           }}
         >
-          <Ionicons name="ios-menu" size={40} color="black" />
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.openDrawer()}
+          >
+            <Ionicons name="ios-menu" size={40} color="black" />
+          </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate("audioSettings")}

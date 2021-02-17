@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Switch } from "react-native";
+import { View, Text, TouchableOpacity, Switch, Image } from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -25,6 +25,13 @@ export default function Slidebar({ ...props }) {
         justifyContent: "space-between",
       }}
     >
+      <Image
+        source={require("./assets/Drawer.png")}
+        style={{
+          marginTop: 5,
+          alignSelf: "center",
+        }}
+      />
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
         <DrawerItem label="Preferences" style={{ marginTop: -5 }} />
@@ -39,7 +46,7 @@ export default function Slidebar({ ...props }) {
           }}
         >
           <Text style={{ alignSelf: "center", color: "gray" }}>
-            Enhanced Mode
+            Enhanced Mode {isEnabled == true ? "on" : "off"}
           </Text>
           <Switch
             trackColor={{ false: "#767577", true: "#81b0ff" }}
