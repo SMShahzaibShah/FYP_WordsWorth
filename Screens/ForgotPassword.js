@@ -14,9 +14,24 @@ import colors from "../assets/colors/colors";
 
 const ForgotPassword = ({ navigation, route }) => {
   const [email, setemail] = useState("");
-  const [number, setnumber] = useState(0);
-  const [getmethod, setMethod] = useState("none");
+  //const [number, setnumber] = useState(0);
+  //const [getmethod, setMethod] = useState("none");
 
+  const forgotByEmail = () => {
+    var auth = firebase.auth();
+    var emailAddress = email;
+    console.log(emailAddress);
+    auth
+      .sendPasswordResetEmail(emailAddress)
+      .then(function () {
+        alert("Email Varification Sent to " + emailAddress);
+      })
+      .catch(function (error) {
+        // An error happened.
+      });
+  };
+  {
+    /**
   if (getmethod === "none") {
     return (
       <>
@@ -133,121 +148,129 @@ const ForgotPassword = ({ navigation, route }) => {
         </View>
       </>
     );
-  } else if (getmethod === "byEmail") {
-    return (
-      <View style={styles.container}>
-        <View style={{ flexDirection: "row", height: 100 }}>
-          <Image
-            source={require("../assets/main_top.png")}
-            style={{ position: "absolute", left: -140 }}
-          />
-          <View style={{ flexDirection: "column" }}>
-            <Text
-              style={{
-                marginTop: 70,
-                marginLeft: 90,
-                fontSize: 24,
-                fontFamily: "OpenSans-Bold",
-              }}
-            >
-              Forgot Password
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            marginLeft: 100,
-            height: 160,
-            marginTop: 28,
-          }}
-        >
-          <Image
-            source={require("../assets/forgot.png")}
-            style={{ height: 157, width: 201 }}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "column",
-            marginTop: 15,
-            marginLeft: 65,
-            height: 465,
-          }}
-        >
-          <View
+  } else 
+  
+  if (getmethod === "byEmail") {
+     */
+  }
+  return (
+    <View style={styles.container}>
+      <View style={{ flexDirection: "row", height: 100 }}>
+        <Image
+          source={require("../assets/main_top.png")}
+          style={{ position: "absolute", left: -140 }}
+        />
+        <View style={{ flexDirection: "column" }}>
+          <Text
             style={{
-              flexDirection: "row",
-              width: 265,
-              height: 45,
-              backgroundColor: "#F1E7FF",
-              borderRadius: 50,
-              paddingLeft: 10,
-              marginTop: 15,
+              marginTop: 70,
+              marginLeft: 90,
+              fontSize: 24,
+              fontFamily: "OpenSans-Bold",
             }}
           >
-            <Entypo
-              name="email"
-              size={24}
-              style={{ alignSelf: "center", marginRight: 5 }}
-              color="#653CA0"
-            />
-            <TextInput
-              placeholder="Enter Email"
-              style={{
-                width: 232,
-                height: 45,
-                borderRadius: 50,
-                paddingLeft: 10,
-                fontFamily: "OpenSans-Regular",
-              }}
-            ></TextInput>
-          </View>
-
-          <TouchableOpacity activeOpacity={0.7} onPress={() => {}}>
-            <Text style={{ marginTop: 15 }}>
-              <LinearGradient
-                colors={["#6E3AA7", "#23286B"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.doneButtonWrapper}
-              >
-                <Text style={styles.doneButtonText}>SEND EMAIL</Text>
-              </LinearGradient>
-            </Text>
-          </TouchableOpacity>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              width: "78%",
-              marginTop: 10,
-            }}
-          >
-            <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
-            <View>
-              <Text
-                style={{
-                  width: 25,
-                  textAlign: "center",
-                  fontFamily: "OpenSans-SemiBold",
-                }}
-              >
-                or
-              </Text>
-            </View>
-            <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
-          </View>
-          <View style={{ marginTop: 10, marginLeft: 10, flexDirection: "row" }}>
-            <Text style={{ fontFamily: "OpenSans-SemiBold" }}>
-              Back to Forgot Screen ?{" "}
-            </Text>
-            <TouchableOpacity onPress={() => setMethod("none")}>
-              <Text style={{ fontFamily: "OpenSans-Bold" }}>Forgot</Text>
-            </TouchableOpacity>
-          </View>
+            Forgot Password
+          </Text>
         </View>
       </View>
-    );
+      <View
+        style={{
+          marginLeft: 100,
+          height: 160,
+          marginTop: 28,
+        }}
+      >
+        <Image
+          source={require("../assets/forgot.png")}
+          style={{ height: 157, width: 201 }}
+        />
+      </View>
+      <View
+        style={{
+          flexDirection: "column",
+          marginTop: 15,
+          marginLeft: 65,
+          height: 465,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            width: 265,
+            height: 45,
+            backgroundColor: "#F1E7FF",
+            borderRadius: 50,
+            paddingLeft: 10,
+            marginTop: 15,
+          }}
+        >
+          <Entypo
+            name="email"
+            size={24}
+            style={{ alignSelf: "center", marginRight: 5 }}
+            color="#653CA0"
+          />
+          <TextInput
+            placeholder="Enter Email"
+            value={email}
+            onChangeText={(text) => setemail(text)}
+            style={{
+              width: 232,
+              height: 45,
+              borderRadius: 50,
+              paddingLeft: 10,
+              fontFamily: "OpenSans-Regular",
+            }}
+          ></TextInput>
+        </View>
+
+        <TouchableOpacity activeOpacity={0.7} onPress={() => forgotByEmail()}>
+          <Text style={{ marginTop: 15 }}>
+            <LinearGradient
+              colors={["#6E3AA7", "#23286B"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.doneButtonWrapper}
+            >
+              <Text style={styles.doneButtonText}>SEND EMAIL</Text>
+            </LinearGradient>
+          </Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            width: "78%",
+            marginTop: 10,
+          }}
+        >
+          <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
+          <View>
+            <Text
+              style={{
+                width: 25,
+                textAlign: "center",
+                fontFamily: "OpenSans-SemiBold",
+              }}
+            >
+              or
+            </Text>
+          </View>
+          <View style={{ flex: 1, height: 1, backgroundColor: "black" }} />
+        </View>
+        <View style={{ marginTop: 10, marginLeft: 10, flexDirection: "row" }}>
+          <Text style={{ fontFamily: "OpenSans-SemiBold" }}>
+            Back to Forgot Screen ?{" "}
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
+            <Text style={{ fontFamily: "OpenSans-Bold" }}>Sign in</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+  {
+    /**
   } else if (getmethod === "byPhone") {
     return (
       <View style={styles.container}>
@@ -490,6 +513,8 @@ const ForgotPassword = ({ navigation, route }) => {
         </View>
       </View>
     );
+  }
+   */
   }
 };
 

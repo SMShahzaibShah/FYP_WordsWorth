@@ -171,12 +171,11 @@ export default function App() {
   };
   const AuthStackScreen = () => (
     <AuthStack.Navigator
-      initialRouteName={"welcome"}
+      initialRouteName={"Signin"}
       screenOptions={{
         headerShown: false,
       }}
     >
-      <AuthStack.Screen name="welcome" component={WelcomeScreen} />
       <AuthStack.Screen name="Signin" component={SignIn} />
       <AuthStack.Screen name="Signup" component={SignUp} />
       <AuthStack.Screen name="ForgotPass" component={ForgotPassword} />

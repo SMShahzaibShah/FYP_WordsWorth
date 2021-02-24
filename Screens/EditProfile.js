@@ -135,6 +135,7 @@ const EditProfile = ({ navigation, route }) => {
 
   useEffect(() => {
     var user = firebase.auth().currentUser;
+    console.log(user);
     //  console.log(user);
     var disName = user.displayName;
     var disNamear = disName.split(",");

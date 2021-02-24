@@ -56,7 +56,7 @@ export default function searchFriends() {
       firebase
         .firestore()
         .collection("users")
-        .where("name.fName", ">=", getsearch)
+        .where("name", ">=", getsearch)
         .get()
         .then((Snapshot) => {
           let users = Snapshot.docs.map((doc) => {

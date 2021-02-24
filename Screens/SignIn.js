@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   TextInput,
   StyleSheet,
@@ -14,7 +14,7 @@ import {
 import CustomButton from "../component/ButtonComponent";
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-
+import { Octicons } from "@expo/vector-icons";
 import { AsyncStorage } from "react-native";
 import colors from "../assets/colors/colors";
 
@@ -25,12 +25,66 @@ import "firebase/firestore";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
 
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+try {
+  var firebaseConfig = {
+    apiKey: "AIzaSyBwEie5MWQm07oxnAoqIRV_LvSdvhzEMsM",
+    authDomain: "wordsworth-3566c.firebaseapp.com",
+    databaseURL: "https://wordsworth-3566c.firebaseio.com",
+    projectId: "wordsworth-3566c",
+    storageBucket: "wordsworth-3566c.appspot.com",
+    messagingSenderId: "754217307534",
+    appId: "1:754217307534:web:0b2df3b1faa91f1856a8df",
+  };
+  // Initialize Firebase
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+} catch (err) {
+  // ignore app already initialized error in snack
+}
+
 const SignIn = ({ navigation, route }) => {
-  const [email, setemail] = useState("shahzaib@gmail.com");
-  const [pass, setpass] = useState("shahzaib123");
+  const [email, setemail] = useState("osamazafar98@gmail.com");
+  const [pass, setpass] = useState("123456789");
   const [showPass, setShowPass] = useState(true);
   const [getModal, setModal] = useState(false);
+  const [getModal1, setModal1] = useState(false);
 
+  const [phoneNumber, setPhoneNumber] = useState("+92 3431793029");
+  const [code, setCode] = useState("");
+  const [verificationId, setVerificationId] = useState(null);
+  const recaptchaVerifier = useRef(null);
+
+  const sendVerification = async () => {
+    try {
+      const phoneProvider = new firebase.auth.PhoneAuthProvider();
+      const verificationId = await phoneProvider.verifyPhoneNumber(
+        phoneNumber,
+        recaptchaVerifier.current
+      );
+      setVerificationId(verificationId);
+      if (verificationId != null) {
+        alert("Verification code has been sent to your phone.");
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const confirmCode = async () => {
+    const credential = firebase
+      .auth()
+      .PhoneAuthProvider.credential(verificationId, code);
+    await firebase
+      .auth()
+      .signInWithCredential(credential)
+      .then((result) => {
+        console.log(result);
+        SignInco();
+      });
+  };
   const { SignInco } = React.useContext(AuthContext);
 
   {
@@ -57,13 +111,34 @@ const SignIn = ({ navigation, route }) => {
           .then(function () {
             firebase.auth().onAuthStateChanged((user) => {
               if (user != null) {
-                const dbh = firebase.firestore();
-                dbh.collection("users").doc(user.id).set({
-                  name: user.displayName,
-                  email: user.email,
-                  photo: user.photoURL,
-                });
+                //console.log(user);
+                firebase
+                  .firestore()
+                  .collection("users")
+                  .where("name", "==", user.displayName)
+                  .get()
+                  .then((Snapshot) => {
+                    let users = Snapshot.docs.map((doc) => {
+                      const data = doc.data();
+                      const id = doc.id;
+                      return { id, ...data };
+                    });
+                    console.log(users);
+                    if (users.length == 0) {
+                      console.log("not Found");
+                      const dbh = firebase.firestore();
+                      dbh.collection("users").doc(user.uid).set({
+                        name: user.displayName,
+                        email: user.email,
+                        photo: user.photoURL,
+                      });
+                    } else {
+                      console.log("Found");
+                    }
+                  });
+
                 SignInco();
+                //
               }
             });
           })
@@ -86,6 +161,7 @@ const SignIn = ({ navigation, route }) => {
       alert(`Facebook Login Error: ${message}`);
     }
   }
+
   {
     //Facebook SignIN Close
   }
@@ -189,6 +265,19 @@ const SignIn = ({ navigation, route }) => {
     console.log("Done.");
   };
 
+  const forgotByEmail = () => {
+    var auth = firebase.auth();
+    var emailAddress = email;
+
+    auth
+      .sendPasswordResetEmail(emailAddress)
+      .then(function () {
+        alert("Email Varification Sent to", email);
+      })
+      .catch(function (error) {
+        // An error happened.
+      });
+  };
   const onSignIn = () => {
     Keyboard.dismiss();
     if (email.length <= 0) {
@@ -200,8 +289,15 @@ const SignIn = ({ navigation, route }) => {
         .auth()
         .signInWithEmailAndPassword(email, pass)
         .then((user) => {
-          setModal(false);
-          SignInco();
+          console.log(user.emailVerified);
+
+          if (user.user.emailVerified == true) {
+            setModal(false);
+            SignInco();
+          } else {
+            setModal(false);
+            alert("Please Verify your Email via a link sent");
+          }
           // navigation.navigate("Dashboard");
         })
         .catch((error) => {
@@ -232,6 +328,128 @@ const SignIn = ({ navigation, route }) => {
             </View>
           </View>
         </Modal>
+        {
+          //Modal for Phone Number
+        }
+        <Modal
+          animationType="none"
+          transparent={true}
+          visible={getModal1}
+          onRequestClose={() => setModal1(false)}
+        >
+          <View style={styles.modalBackground1}>
+            <View style={styles.activityIndicatorWrapper1}>
+              <View
+                style={{
+                  flexDirection: "column",
+                  //   marginTop: 15,
+                  //  marginLeft: 65,
+                  //  height: 465,
+                  // backgroundColor: "red",
+                }}
+              >
+                <FirebaseRecaptchaVerifierModal
+                  ref={recaptchaVerifier}
+                  firebaseConfig={firebaseConfig}
+                />
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: 265,
+                    height: 45,
+                    backgroundColor: "#F1E7FF",
+                    borderRadius: 50,
+                    paddingLeft: 10,
+                    //     marginTop: 15,
+                  }}
+                >
+                  <FontAwesome
+                    name="phone"
+                    size={24}
+                    color="black"
+                    style={{ alignSelf: "center", marginRight: 5 }}
+                    color="#653CA0"
+                  />
+                  <TextInput
+                    placeholder="Enter Phone Number"
+                    keyboardType="phone-pad"
+                    value={phoneNumber}
+                    onChangeText={(text) => setPhoneNumber(text)}
+                    style={{
+                      width: 232,
+                      height: 45,
+                      borderRadius: 50,
+                      paddingLeft: 10,
+                      fontFamily: "OpenSans-Regular",
+                    }}
+                  ></TextInput>
+                </View>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={sendVerification}
+                >
+                  <Text style={{ marginTop: 15 }}>
+                    <LinearGradient
+                      colors={["#6E3AA7", "#23286B"]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={styles.doneButtonWrapper}
+                    >
+                      <Text style={styles.doneButtonText}>SEND CODE</Text>
+                    </LinearGradient>
+                  </Text>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: 265,
+                    height: 45,
+                    backgroundColor: "#F1E7FF",
+                    borderRadius: 50,
+                    paddingLeft: 10,
+                    marginTop: 15,
+                  }}
+                >
+                  <Octicons
+                    name="key"
+                    size={24}
+                    color="black"
+                    style={{ alignSelf: "center", marginRight: 5 }}
+                    color="#653CA0"
+                  />
+                  <TextInput
+                    placeholder="Enter OTP Code"
+                    keyboardType="phone-pad"
+                    value={code}
+                    onChangeText={(text) => setCode(text)}
+                    style={{
+                      width: 232,
+                      height: 45,
+                      borderRadius: 50,
+                      paddingLeft: 10,
+                      fontFamily: "OpenSans-Regular",
+                    }}
+                  ></TextInput>
+                </View>
+                <TouchableOpacity activeOpacity={0.7} onPress={confirmCode}>
+                  <Text style={{ marginTop: 15 }}>
+                    <LinearGradient
+                      colors={["#6E3AA7", "#23286B"]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={styles.doneButtonWrapper}
+                    >
+                      <Text style={styles.doneButtonText}>VERIFY</Text>
+                    </LinearGradient>
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        {
+          //Modal for Phone Number close
+        }
         <View style={{ flexDirection: "row", height: 100 }}>
           <Image source={require("../assets/main_top2.png")} />
           <View style={{ flexDirection: "column" }}>
@@ -450,9 +668,10 @@ const SignIn = ({ navigation, route }) => {
                 borderRadius: 50,
                 justifyContent: "center",
               }}
+              onPress={() => setModal1(true)}
             >
               <FontAwesome
-                name="twitter"
+                name="phone"
                 size={30}
                 color="#653CA0"
                 style={{
@@ -635,6 +854,25 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-around",
+  },
+  modalBackground1: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    backgroundColor: "#00000080",
+  },
+  activityIndicatorWrapper1: {
+    backgroundColor: "white",
+    height: "40%",
+    width: "80%",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#C0C0C0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    padding: 5,
   },
 });
 

@@ -26,6 +26,7 @@ export default function newsFeed() {
   const [getFeedData, setFeedData] = useState([]);
   const [getTime, setTime] = useState(0);
   const [getModal, setModal] = useState(false);
+  const [getHasData, setHasData] = useState(false);
 
   const fetchFeedData = () => {
     console.log("here1");
@@ -120,14 +121,20 @@ export default function newsFeed() {
           const id = doc.id;
           return id;
         });
-        fetchUsersInfo(following);
+        if (following.length > 0) {
+          fetchUsersInfo(following);
 
-        fectchUserposts(following);
-        //  console.log(getUsersPost);
-        setTimeout(() => {
-          console.log("here");
-          fetchFeedData();
-        }, 2000);
+          fectchUserposts(following);
+          //  console.log(getUsersPost);
+          setTimeout(() => {
+            console.log("here");
+            fetchFeedData();
+            setHasData(true);
+          }, 2000);
+        } else {
+          setModal(false);
+          setHasData(false);
+        }
 
         // console.log(getUsersPost);
       });
@@ -153,196 +160,228 @@ export default function newsFeed() {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           return (
-            <View
-              style={{
-                height: 455,
-                //width: "100%",
-                // backgroundColor: "red",
-                margin: 5,
-                paddingLeft: 10,
-                paddingRight: 10,
-                paddingBottom: 10,
-                paddingTop: 15,
-                //Shadow
-                borderWidth: 1,
-                borderRadius: 2,
-                borderColor: "#ddd",
-                borderBottomWidth: 0,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.8,
-                shadowRadius: 2,
-                elevation: 1,
-                marginLeft: 5,
-                marginRight: 5,
-                marginTop: 10,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
-              >
-                {
-                  //Picture
-                }
+            <>
+              {getFeedData.length > 0 ? (
                 <View
                   style={{
-                    // backgroundColor: "cyan",
-                    height: 40,
-                    width: 40,
-                    borderRadius: 50,
-                    //justifyContent: "center",
-                    //alignItems: "center",
-                    //alignSelf: "center",
-                    paddingTop: 10,
-                    paddingLeft: 8,
+                    height: 455,
+                    //width: "100%",
+                    // backgroundColor: "red",
+                    margin: 5,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    paddingBottom: 10,
+                    paddingTop: 15,
+                    //Shadow
+                    borderWidth: 1,
+                    borderRadius: 2,
+                    borderColor: "#ddd",
+                    borderBottomWidth: 0,
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 2,
+                    elevation: 1,
+                    marginLeft: 5,
+                    marginRight: 5,
+                    marginTop: 10,
                   }}
                 >
-                  <EvilIcons
-                    name="user"
-                    size={70}
-                    color="black"
-                    style={{ margin: -15 }}
-                  />
-                </View>
-                {
-                  //Picture Close
-                }
-                {
-                  //Name and Time
-                }
-                <View
-                  style={{
-                    //  backgroundColor: "yellow",
-                    height: 50,
-                    width: "83%",
-                  }}
-                >
-                  {
-                    //Name
-                  }
-                  <Text
+                  <View
                     style={{
-                      fontFamily: "OpenSans-SemiBold",
-                      fontSize: 14,
-                      color: colors.blue,
-                      marginTop: 5,
+                      flexDirection: "row",
+                      width: "100%",
+                      justifyContent: "space-between",
                     }}
                   >
-                    {item.userInformation.info.name.fName}{" "}
-                    {item.userInformation.info.name.LName}
-                  </Text>
+                    {
+                      //Picture
+                    }
+                    <View
+                      style={{
+                        // backgroundColor: "cyan",
+                        height: 40,
+                        width: 40,
+                        borderRadius: 50,
+                        //justifyContent: "center",
+                        //alignItems: "center",
+                        //alignSelf: "center",
+                        paddingTop: 10,
+                        paddingLeft: 8,
+                      }}
+                    >
+                      <EvilIcons
+                        name="user"
+                        size={70}
+                        color="black"
+                        style={{ margin: -15 }}
+                      />
+                    </View>
+                    {
+                      //Picture Close
+                    }
+                    {
+                      //Name and Time
+                    }
+                    <View
+                      style={{
+                        //  backgroundColor: "yellow",
+                        height: 50,
+                        width: "83%",
+                      }}
+                    >
+                      {
+                        //Name
+                      }
+                      <Text
+                        style={{
+                          fontFamily: "OpenSans-SemiBold",
+                          fontSize: 14,
+                          color: colors.blue,
+                          marginTop: 5,
+                        }}
+                      >
+                        {item.userInformation.info.name.fName}{" "}
+                        {item.userInformation.info.name.LName}
+                      </Text>
+                      {
+                        //Name close
+                      }
+                      {
+                        //Time
+                      }
+                      <Text
+                        style={{
+                          fontFamily: "OpenSans-Regular",
+                          fontSize: 12,
+                          color: colors.gray,
+                          marginTop: 2,
+                        }}
+                      >
+                        {Date(item.userPosts.creation)}
+                      </Text>
+                      {
+                        //Time close
+                      }
+                    </View>
+                    {
+                      //Name and Time Close
+                    }
+                  </View>
                   {
-                    //Name close
+                    //Image
                   }
-                  {
-                    //Time
-                  }
-                  <Text
+                  <View
                     style={{
-                      fontFamily: "OpenSans-Regular",
-                      fontSize: 12,
-                      color: colors.gray,
-                      marginTop: 2,
+                      height: 370,
+                      width: 345,
+                      //     backgroundColor: "cyan",
+                      margin: 10,
+                      alignSelf: "center",
                     }}
                   >
-                    {Date(item.userPosts.creation)}
-                  </Text>
-                  {
-                    //Time close
-                  }
-                </View>
-                {
-                  //Name and Time Close
-                }
-              </View>
-              {
-                //Image
-              }
-              <View
-                style={{
-                  height: 370,
-                  width: 345,
-                  //     backgroundColor: "cyan",
-                  margin: 10,
-                  alignSelf: "center",
-                }}
-              >
-                {
-                  //Caption
-                }
-                <Text
-                  style={{
-                    fontFamily: "OpenSans-Regular",
-                    fontSize: 14,
-                    color: colors.blue,
-                    marginTop: 2,
-                    marginBottom: 3,
-                    //marginTop: 5,
-                  }}
-                >
-                  {item.userPosts.getcaption}
-                </Text>
-                {
-                  //Caption Close
-                }
-                {
-                  //Image
-                }
-                <View
-                  style={{
-                    height: 320,
-                    //     backgroundColor: "blue",
-                  }}
-                >
-                  <Image
-                    source={{
-                      uri: item.userPosts.downloadURL,
-                    }}
-                    style={{
-                      height: 320,
-                      width: 200,
-                      borderRadius: 10,
-                      alignSelf: "center",
-                    }}
-                  />
-                </View>
-                {
-                  //Image Close
-                }
-                {
-                  //like Comment
-                }
-                <View
-                  style={{
-                    flexDirection: "row",
-                    //   backgroundColor: "yellow",
-                    width: 70,
-                    justifyContent: "space-between",
-                    marginTop: 2,
-                  }}
-                >
-                  <AntDesign
-                    name="hearto"
-                    size={24}
-                    color="black"
-                    style={{
-                      alignSelf: "center",
-                    }}
-                  />
-                </View>
-                {
-                  //like Comment
-                }
-              </View>
+                    {
+                      //Caption
+                    }
+                    <Text
+                      style={{
+                        fontFamily: "OpenSans-Regular",
+                        fontSize: 14,
+                        color: colors.blue,
+                        marginTop: 2,
+                        marginBottom: 3,
+                        //marginTop: 5,
+                      }}
+                    >
+                      {item.userPosts.getcaption}
+                    </Text>
+                    {
+                      //Caption Close
+                    }
+                    {
+                      //Image
+                    }
+                    <View
+                      style={{
+                        height: 320,
+                        //     backgroundColor: "blue",
+                      }}
+                    >
+                      <Image
+                        source={{
+                          uri: item.userPosts.downloadURL,
+                        }}
+                        style={{
+                          height: 320,
+                          width: 200,
+                          borderRadius: 10,
+                          alignSelf: "center",
+                        }}
+                      />
+                    </View>
+                    {
+                      //Image Close
+                    }
+                    {
+                      //like Comment
+                    }
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        //   backgroundColor: "yellow",
+                        width: 70,
+                        justifyContent: "space-between",
+                        marginTop: 2,
+                      }}
+                    >
+                      <AntDesign
+                        name="hearto"
+                        size={24}
+                        color="black"
+                        style={{
+                          alignSelf: "center",
+                        }}
+                      />
+                    </View>
+                    {
+                      //like Comment
+                    }
+                  </View>
 
-              {
-                //Image Close
-              }
-            </View>
+                  {
+                    //Image Close
+                  }
+                </View>
+              ) : (
+                <View
+                  style={{
+                    height: 455,
+                    //width: "100%",
+                    // backgroundColor: "red",
+                    margin: 5,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    paddingBottom: 10,
+                    paddingTop: 15,
+                    //Shadow
+                    borderWidth: 1,
+                    borderRadius: 2,
+                    borderColor: "#ddd",
+                    borderBottomWidth: 0,
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 2,
+                    elevation: 1,
+                    marginLeft: 5,
+                    marginRight: 5,
+                    marginTop: 10,
+                  }}
+                >
+                  <Text>Please Follow Someoe</Text>
+                </View>
+              )}
+            </>
           );
         }}
       />
