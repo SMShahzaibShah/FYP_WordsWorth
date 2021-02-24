@@ -19,13 +19,14 @@ import { AsyncStorage } from "react-native";
 import colors from "../assets/colors/colors";
 
 import { LinearGradient } from "expo-linear-gradient";
-import * as firebase from "firebase";
 import { AuthContext } from "../context";
 import "firebase/firestore";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
 
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
+import * as firebase from "firebase";
+
 try {
   var firebaseConfig = {
     apiKey: "AIzaSyBwEie5MWQm07oxnAoqIRV_LvSdvhzEMsM",
@@ -38,9 +39,7 @@ try {
   };
   // Initialize Firebase
 
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
+  firebase.initializeApp(firebaseConfig);
 } catch (err) {
   // ignore app already initialized error in snack
 }
@@ -52,11 +51,21 @@ const SignIn = ({ navigation, route }) => {
   const [getModal, setModal] = useState(false);
   const [getModal1, setModal1] = useState(false);
 
-  const [phoneNumber, setPhoneNumber] = useState("+92 3431793029");
-  const [code, setCode] = useState("");
-  const [verificationId, setVerificationId] = useState(null);
-  const recaptchaVerifier = useRef(null);
-
+  const recaptchaVerifier = React.useRef(null);
+  const [phoneNumber, setPhoneNumber] = React.useState("+92 3431793029");
+  const [verificationId, setVerificationId] = React.useState();
+  const [verificationCode, setVerificationCode] = React.useState();
+  const firebaseConfig = firebase.apps.length
+    ? firebase.app().options
+    : undefined;
+  const [message, showMessage] = React.useState(
+    !firebaseConfig || Platform.OS === "web"
+      ? {
+          text:
+            "To get started, provide a valid firebase config in App.js and open this snack on an iOS or Android device.",
+        }
+      : undefined
+  );
   const sendVerification = async () => {
     try {
       const phoneProvider = new firebase.auth.PhoneAuthProvider();
@@ -65,7 +74,7 @@ const SignIn = ({ navigation, route }) => {
         recaptchaVerifier.current
       );
       setVerificationId(verificationId);
-      if (verificationId != null) {
+      if (verificationId != undefined) {
         alert("Verification code has been sent to your phone.");
       }
     } catch (err) {
@@ -74,9 +83,14 @@ const SignIn = ({ navigation, route }) => {
   };
 
   const confirmCode = async () => {
+    console.log(verificationId);
+    console.log(code);
     const credential = firebase
       .auth()
-      .PhoneAuthProvider.credential(verificationId, code);
+      .PhoneAuthProvider.getCredential(verificationId, code);
+
+    console.log(credential);
+
     await firebase
       .auth()
       .signInWithCredential(credential)
@@ -386,7 +400,27 @@ const SignIn = ({ navigation, route }) => {
                 </View>
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  onPress={sendVerification}
+                  onPress={async () => {
+                    // The FirebaseRecaptchaVerifierModal ref implements the
+                    // FirebaseAuthApplicationVerifier interface and can be
+                    // passed directly to `verifyPhoneNumber`.
+                    try {
+                      const phoneProvider = new firebase.auth.PhoneAuthProvider();
+                      const verificationId = await phoneProvider.verifyPhoneNumber(
+                        phoneNumber,
+                        recaptchaVerifier.current
+                      );
+                      setVerificationId(verificationId);
+                      showMessage({
+                        text: "Verification code has been sent to your phone.",
+                      });
+                    } catch (err) {
+                      showMessage({
+                        text: `Error: ${err.message}`,
+                        color: "red",
+                      });
+                    }
+                  }}
                 >
                   <Text style={{ marginTop: 15 }}>
                     <LinearGradient
@@ -420,8 +454,8 @@ const SignIn = ({ navigation, route }) => {
                   <TextInput
                     placeholder="Enter OTP Code"
                     keyboardType="phone-pad"
-                    value={code}
-                    onChangeText={(text) => setCode(text)}
+                    value={verificationCode}
+                    onChangeText={(text) => setVerificationCode(text)}
                     style={{
                       width: 232,
                       height: 45,
@@ -431,7 +465,31 @@ const SignIn = ({ navigation, route }) => {
                     }}
                   ></TextInput>
                 </View>
-                <TouchableOpacity activeOpacity={0.7} onPress={confirmCode}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={async () => {
+                    try {
+                      const credential = firebase.auth.PhoneAuthProvider.credential(
+                        verificationId,
+                        verificationCode
+                      );
+                      await firebase
+                        .auth()
+                        .signInWithCredential(credential)
+                        .then(function () {
+                          SignInco();
+                        });
+                      showMessage({
+                        text: "Phone authentication successful 👍",
+                      });
+                    } catch (err) {
+                      showMessage({
+                        text: `Error: ${err.message}`,
+                        color: "red",
+                      });
+                    }
+                  }}
+                >
                   <Text style={{ marginTop: 15 }}>
                     <LinearGradient
                       colors={["#6E3AA7", "#23286B"]}
@@ -443,6 +501,26 @@ const SignIn = ({ navigation, route }) => {
                     </LinearGradient>
                   </Text>
                 </TouchableOpacity>
+                {message ? (
+                  <TouchableOpacity
+                    style={[
+                      StyleSheet.absoluteFill,
+                      { backgroundColor: 0xffffffee, justifyContent: "center" },
+                    ]}
+                    onPress={() => showMessage(undefined)}
+                  >
+                    <Text
+                      style={{
+                        color: message.color || "blue",
+                        fontSize: 17,
+                        textAlign: "center",
+                        margin: 20,
+                      }}
+                    >
+                      {message.text}
+                    </Text>
+                  </TouchableOpacity>
+                ) : undefined}
               </View>
             </View>
           </View>
